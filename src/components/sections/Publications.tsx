@@ -1,8 +1,9 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { publications } from '@/data/experience';
+import { publications as fallbackPubs, type Publication } from '@/data/experience';
 import { linkedInPosts } from '@/data/linkedInPosts';
+import { fetchMediumArticles, fetchYouTubeVideos } from '@/lib/feeds';
 import { ExternalLink, BookOpen, Layers, ThumbsUp, MessageCircle } from 'lucide-react';
 
 function getYouTubeId(url: string): string | null {

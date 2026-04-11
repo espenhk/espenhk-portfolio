@@ -9,13 +9,26 @@ const stats = [
   { label: 'Data Engineering', value: 92, category: 'tool' },
 ];
 
+function getPanelBg(themeId: string, isDark: boolean, theme: any): string {
+  if (!isDark) return theme.characterSheetTheme.panelBg;
+  switch (themeId) {
+    case 'cupertino':
+      return 'linear-gradient(145deg, #0C1222 0%, #111830 50%, #0E1428 100%)';
+    case 'arcadia':
+      return 'linear-gradient(180deg, #0F0C20 0%, #1A1438 100%)';
+    case 'nightcity':
+      return 'linear-gradient(135deg, #0A0818 0%, #140C28 50%, #0D1218 100%)';
+    case 'starfleet':
+      return 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)';
+    default:
+      return theme.characterSheetTheme.panelBg;
+  }
+}
+
 export default function CharacterSheet() {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
   const border = isDark ? c.border.dark : c.border.light;
-  const panelBg = theme.characterSheetTheme.panelBg;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -29,22 +42,61 @@ export default function CharacterSheet() {
   }, []);
 
   const rpmLabels = theme.characterSheetTheme.statLabels;
+  const panelBg = getPanelBg(theme.id, isDark, theme);
+  const isGradient = panelBg.includes('gradient');
+
+  // Theme-specific bar colors
+  const getBarBg = () => {
+    if (!isDark) return c.accent;
+    switch (theme.id) {
+      case 'nightcity':
+        return `linear-gradient(90deg, ${c.accent}, ${c.secondary || c.accent})`;
+      case 'starfleet':
+        return `linear-gradient(90deg, ${c.accent}, #FFCC99)`;
+      case 'arcadia':
+        return c.accent;
+      case 'cupertino':
+        return `linear-gradient(90deg, ${c.accent}, #5856D6)`;
+      default:
+        return c.accent;
+    }
+  };
 
   return (
     <div
       ref={ref}
       style={{
-        background: panelBg,
+        background: isGradient ? undefined : panelBg,
+        backgroundImage: isGradient ? panelBg : undefined,
         borderRadius: theme.radii.lg,
         padding: 32,
         maxWidth: 500,
         width: '100%',
-        boxShadow: theme.shadows.card,
-        border: `${theme.borders.width} ${theme.borders.style} ${border}`,
+        boxShadow: theme.id === 'nightcity' && isDark
+          ? `0 0 30px rgba(0,240,255,0.08), ${theme.shadows.card}`
+          : theme.id === 'starfleet' && isDark
+          ? `0 0 20px rgba(255,159,28,0.08), ${theme.shadows.card}`
+          : theme.shadows.card,
+        border: `${theme.borders.width} ${theme.borders.style} ${
+          theme.id === 'nightcity' && isDark ? `${c.accent}30` :
+          theme.id === 'starfleet' && isDark ? `${c.accent}20` :
+          border
+        }`,
         fontFamily: theme.fonts.sans,
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+      {/* Nightcity corner accent */}
+      {theme.id === 'nightcity' && isDark && (
+        <div style={{
+          position: 'absolute', top: 0, right: 0, width: 100, height: 100,
+          background: `radial-gradient(circle at 100% 0%, ${c.accent}10 0%, transparent 70%)`,
+          pointerEvents: 'none',
+        }} />
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, position: 'relative', zIndex: 1 }}>
         <img
           src="https://avatars.githubusercontent.com/u/9327813?v=4"
           alt="Portrait"
@@ -53,6 +105,7 @@ export default function CharacterSheet() {
             height: 60,
             borderRadius: theme.radii.full,
             border: `2px solid ${c.accent}`,
+            boxShadow: theme.id === 'nightcity' && isDark ? `0 0 10px ${c.accent}40` : undefined,
           }}
         />
         <div>
@@ -71,9 +124,12 @@ export default function CharacterSheet() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative', zIndex: 1 }}>
         {stats.map((stat, i) => {
           const label = rpmLabels && rpmLabels[i] ? `${rpmLabels[i]} · ${stat.label}` : stat.label;
+          const barBg = getBarBg();
+          const isBarGradient = barBg.includes('gradient');
+
           return (
             <div key={stat.label}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
@@ -92,7 +148,7 @@ export default function CharacterSheet() {
               </div>
               <div style={{
                 height: theme.id === 'arcadia' ? 16 : 8,
-                background: 'rgba(255,255,255,0.08)',
+                background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.08)',
                 borderRadius: theme.id === 'arcadia' ? 0 : 4,
                 overflow: 'hidden',
                 border: theme.id === 'arcadia' ? '2px solid rgba(255,255,255,0.15)' : 'none',
@@ -107,9 +163,8 @@ export default function CharacterSheet() {
                   }}
                   style={{
                     height: '100%',
-                    background: theme.id === 'nightcity'
-                      ? `linear-gradient(90deg, ${c.accent}, ${c.secondary || c.accent})`
-                      : c.accent,
+                    background: isBarGradient ? undefined : barBg,
+                    backgroundImage: isBarGradient ? barBg : undefined,
                     borderRadius: theme.id === 'arcadia' ? 0 : 4,
                     boxShadow: theme.characterSheetTheme.barGlow,
                   }}

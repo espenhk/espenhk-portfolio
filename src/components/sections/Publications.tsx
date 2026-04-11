@@ -22,7 +22,6 @@ const liTypeColor: Record<string, string> = {
   article: '#E7A33E',
 };
 
-// LinkedIn icon
 function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
@@ -33,10 +32,10 @@ function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?:
 
 const SCROLL_HIDE_CSS = `
 .transmissions-scroll::-webkit-scrollbar { display: none; }
+.li-scroll::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) {
   .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
 }
-.li-scroll::-webkit-scrollbar { display: none; }
 `;
 
 export default function Publications() {
@@ -97,7 +96,7 @@ export default function Publications() {
           Transmissions
         </h2>
 
-        {/* === Medium / YouTube carousel === */}
+        {/* === Medium / YouTube carousel — fixed offset === */}
         <div className="transmissions-scroll" style={{
           display: 'flex',
           gap: 16,
@@ -106,7 +105,7 @@ export default function Publications() {
           paddingBottom: 8,
           marginLeft: -24,
           marginRight: -24,
-          paddingLeft: 24,
+          paddingLeft: 32,
           paddingRight: 24,
           WebkitOverflowScrolling: 'touch',
           msOverflowStyle: 'none',
@@ -116,6 +115,7 @@ export default function Publications() {
             const color = typeColor[pub.type];
             const ytId = pub.type === 'video' ? getYouTubeId(pub.url) : null;
             const isVideo = !!ytId;
+            const hasHero = !!pub.heroImage;
 
             return (
               <motion.div
@@ -132,12 +132,13 @@ export default function Publications() {
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
-                  minWidth: '80vw',
-                  maxWidth: '80vw',
+                  minWidth: '78vw',
+                  maxWidth: '78vw',
                   scrollSnapAlign: 'start',
                   flexShrink: 0,
                 }}
               >
+                {/* Preview area */}
                 {isVideo ? (
                   <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%' }}>
                     <iframe
@@ -148,6 +149,52 @@ export default function Publications() {
                       style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                     />
                   </div>
+                ) : hasHero ? (
+                  <a
+                    href={pub.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'block',
+                      height: 160,
+                      overflow: 'hidden',
+                      position: 'relative',
+                    }}
+                  >
+                    <img
+                      src={pub.heroImage}
+                      alt={pub.title}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'top center',
+                      }}
+                    />
+                    {/* Gradient overlay at bottom */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: 40,
+                      background: isDark
+                        ? 'linear-gradient(transparent, #0C1228)'
+                        : 'linear-gradient(transparent, #FFFFFF)',
+                    }} />
+                    <div style={{
+                      position: 'absolute',
+                      top: 8, right: 8,
+                      width: 24, height: 24,
+                      borderRadius: '50%',
+                      background: 'rgba(0,0,0,0.4)',
+                      backdropFilter: 'blur(4px)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <ExternalLink size={12} color="#fff" />
+                    </div>
+                  </a>
                 ) : (
                   <a
                     href={pub.url}
@@ -170,6 +217,7 @@ export default function Publications() {
                   </a>
                 )}
 
+                {/* Info */}
                 <div style={{ padding: '12px 14px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                     <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color, textTransform: 'uppercase', letterSpacing: '0.05em', background: `${color}12`, padding: '2px 6px', borderRadius: theme.radii.sm }}>{pub.type}</span>
@@ -187,9 +235,7 @@ export default function Publications() {
 
         {/* === LinkedIn subsection === */}
         <div style={{ marginTop: 36 }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, justifyContent: 'center',
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, justifyContent: 'center' }}>
             <LinkedInIcon size={18} color={isDark ? '#5B9BD5' : '#0A66C2'} />
             <h3 style={{
               fontFamily: theme.fonts.display,
@@ -210,7 +256,7 @@ export default function Publications() {
             paddingBottom: 6,
             marginLeft: -24,
             marginRight: -24,
-            paddingLeft: 24,
+            paddingLeft: 32,
             paddingRight: 24,
             WebkitOverflowScrolling: 'touch',
             msOverflowStyle: 'none',
@@ -246,45 +292,25 @@ export default function Publications() {
                     cursor: 'pointer',
                   }}
                 >
-                  {/* Header: type badge + date */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{
-                      fontFamily: theme.fonts.mono,
-                      fontSize: '0.55rem',
-                      color: typeCol,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.06em',
-                      background: `${typeCol}12`,
-                      padding: '1px 5px',
-                      borderRadius: theme.radii.sm,
+                      fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: typeCol,
+                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                      background: `${typeCol}12`, padding: '1px 5px', borderRadius: theme.radii.sm,
                     }}>
                       {post.type === 'comment' ? '💬 comment' : post.type === 'article' ? '📝 article' : '📣 post'}
                     </span>
-                    <span style={{
-                      fontFamily: theme.fonts.mono,
-                      fontSize: '0.52rem',
-                      color: fg2,
-                    }}>
-                      {post.date}
-                    </span>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.52rem', color: fg2 }}>{post.date}</span>
                   </div>
 
-                  {/* Post text */}
                   <p style={{
-                    fontFamily: theme.fonts.sans,
-                    fontSize: '0.68rem',
-                    color: fg,
-                    lineHeight: 1.4,
-                    flex: 1,
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 4,
-                    WebkitBoxOrient: 'vertical',
+                    fontFamily: theme.fonts.sans, fontSize: '0.68rem', color: fg,
+                    lineHeight: 1.4, flex: 1, overflow: 'hidden',
+                    display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical',
                   }}>
                     {post.text}
                   </p>
 
-                  {/* Engagement */}
                   <div style={{
                     display: 'flex', gap: 10, alignItems: 'center',
                     borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,

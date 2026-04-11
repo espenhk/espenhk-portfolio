@@ -1,5 +1,5 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
-import ThemeToggle from '@/components/mwe/ThemeToggle';
+
 import HeroSection from '@/components/mwe/HeroSection';
 import FeaturedProjects from '@/components/sections/FeaturedProjects';
 import GitHubGraph from '@/components/sections/GitHubGraph';
@@ -24,9 +24,8 @@ function PageContent() {
       minHeight: '100vh',
       transition: `background ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
     }}>
-      <div style={{ position: 'fixed', top: 16, right: 16, zIndex: 999 }}>
-        <ThemeToggle />
-      </div>
+
+
 
       <NavBar />
       <HeroSection />

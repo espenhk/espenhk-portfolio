@@ -1,6 +1,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import ThemeToggle from '@/components/mwe/ThemeToggle';
 
 const navItems = [
   { label: 'Stats', id: 'character-sheet' },
@@ -70,31 +71,36 @@ export default function NavBar() {
         transition: 'background 0.3s, border-color 0.3s',
       }}
     >
-      {navItems.map(item => {
-        const isActive = activeId === item.id;
-        return (
-          <button
-            key={item.id}
-            onClick={() => handleClick(item.id)}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: theme.fonts.mono,
-              fontSize: '0.68rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: isActive ? fgActive : fg2,
-              padding: '6px 10px',
-              borderRadius: theme.radii.sm,
-              transition: 'color 0.2s',
-              fontWeight: isActive ? 700 : 400,
-            }}
-          >
-            {item.label}
-          </button>
-        );
-      })}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        {navItems.map(item => {
+          const isActive = activeId === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: theme.fonts.mono,
+                fontSize: '0.68rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                color: isActive ? fgActive : fg2,
+                padding: '6px 10px',
+                borderRadius: theme.radii.sm,
+                transition: 'color 0.2s',
+                fontWeight: isActive ? 700 : 400,
+              }}
+            >
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ position: 'absolute', right: 16 }}>
+        <ThemeToggle />
+      </div>
     </motion.nav>
   );
 }

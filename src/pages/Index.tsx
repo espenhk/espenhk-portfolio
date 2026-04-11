@@ -32,8 +32,8 @@ function PageContent() {
       <CharacterSheetFull />
       <Publications />
       <ContactCTA />
-      <GitHubGraph />
       <FeaturedProjects />
+      <GitHubGraph />
       <ExperienceTimeline />
       <FooterSection />
     </div>

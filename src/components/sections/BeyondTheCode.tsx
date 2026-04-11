@@ -14,8 +14,9 @@ const interests = [
   {
     icon: Trophy,
     title: 'Flag Football',
-    description: 'Active player on BGOSL. Sports geek through and through.',
+    description: 'Tromsø Flaggfotball player. Sports geek through and through.',
     color: '#FF9F1C',
+    link: 'https://tromsoflaggfotball.lovable.app',
   },
   {
     icon: Wine,

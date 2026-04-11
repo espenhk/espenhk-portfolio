@@ -6,6 +6,7 @@ import { siteConfig } from '@/data/siteConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Github, ExternalLink, Star, GitFork } from 'lucide-react';
+import GitHubGraph from './GitHubGraph';
 
 const langColors: Record<string, string> = {
   Python: '#3572A5',
@@ -273,6 +274,7 @@ export default function FeaturedProjects() {
             ))}
           </div>
         )}
+        <GitHubGraph />
       </div>
     </section>
   );

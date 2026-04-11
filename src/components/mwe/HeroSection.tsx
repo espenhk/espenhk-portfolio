@@ -1,4 +1,5 @@
 import { useTheme } from '@/context/ThemeContext';
+import profileImg from '@/assets/profile.jpeg';
 import { Github, Linkedin, Instagram, Facebook } from 'lucide-react';
 
 function MediumIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
@@ -83,7 +84,7 @@ export default function HeroSection() {
 
       <div style={{ maxWidth: 720, textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <img
-          src="https://avatars.githubusercontent.com/u/9327813?v=4"
+          src={profileImg}
           alt="Espen H. Kristensen"
           style={{
             width: 140, height: 140,

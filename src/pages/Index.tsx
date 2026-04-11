@@ -5,6 +5,7 @@ import FeaturedProjects from '@/components/sections/FeaturedProjects';
 import CharacterSheetFull from '@/components/sections/CharacterSheet';
 import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
 import Publications from '@/components/sections/Publications';
+import BeyondTheCode from '@/components/sections/BeyondTheCode';
 import FooterSection from '@/components/mwe/FooterSection';
 
 function PageContent() {
@@ -30,6 +31,7 @@ function PageContent() {
       <CharacterSheetFull />
       <ExperienceTimeline />
       <Publications />
+      <BeyondTheCode />
       <FooterSection />
     </div>
   );

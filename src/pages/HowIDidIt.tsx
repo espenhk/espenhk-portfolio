@@ -31,17 +31,17 @@ function MiniCharacterSheet() {
   const { theme, isDark } = useTheme();
   return (
     <div style={{
-      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
-      border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? `${theme.colors.surface.dark}CC` : 'rgba(0,0,0,0.03)',
+      border: `1px solid ${isDark ? `${theme.colors.accent}1A` : 'rgba(0,0,0,0.08)'}`,
       borderRadius: 8, padding: 14, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
         ▸ Character Sheet Preview
       </div>
-      <MiniStatBar label="Data Engineering" value={85} color="#CC99FF" />
-      <MiniStatBar label="Python" value={75} color="#FF9F1C" />
-      <MiniStatBar label="SQL" value={80} color="#FF9F1C" />
-      <MiniStatBar label="Azure Databricks" value={80} color="#99CCFF" />
+      <MiniStatBar label="Data Engineering" value={85} color={theme.colors.secondary || '#CC99FF'} />
+      <MiniStatBar label="Python" value={75} color={theme.colors.accent} />
+      <MiniStatBar label="SQL" value={80} color={theme.colors.accent} />
+      <MiniStatBar label="Azure Databricks" value={80} color={theme.colors.tertiary || '#99CCFF'} />
     </div>
   );
 }
@@ -50,25 +50,25 @@ function MiniRepoCard() {
   const { theme, isDark } = useTheme();
   return (
     <div style={{
-      background: isDark ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)' : '#fff',
-      border: `1px solid ${isDark ? 'rgba(255,159,28,0.08)' : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? `linear-gradient(145deg, ${theme.colors.surface.dark} 0%, ${theme.colors.surface.dark}EE 50%, ${theme.colors.surface.dark} 100%)` : theme.colors.surface.light,
+      border: `1px solid ${isDark ? `${theme.colors.accent}14` : 'rgba(0,0,0,0.08)'}`,
       borderRadius: 8, padding: 12, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
         ▸ Repository Card Preview
       </div>
-      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.78rem', fontWeight: 600, color: isDark ? '#F0EDDF' : '#1A1A2E', marginBottom: 4 }}>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.78rem', fontWeight: 600, color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light, marginBottom: 4 }}>
         espenhk/portfolio
       </div>
-      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.65rem', color: isDark ? '#9A9AAF' : '#5A5A6A', marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.65rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light, marginBottom: 8 }}>
         Personal portfolio site built with Lovable
       </div>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#3178C6', display: 'inline-block' }} />
-          <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>TypeScript</span>
+          <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>TypeScript</span>
         </span>
-        <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>⭐ 2</span>
+        <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>⭐ 2</span>
       </div>
     </div>
   );
@@ -79,13 +79,13 @@ function MiniNavBar() {
   const items = ['Stats', 'Posts', 'Contact', 'Repos', 'Work'];
   return (
     <div style={{
-      background: isDark ? 'rgba(6,10,24,0.85)' : 'rgba(255,255,255,0.9)',
+      background: isDark ? `${theme.colors.background.dark}D9` : `${theme.colors.background.light}E6`,
       backdropFilter: 'blur(12px)',
       borderRadius: 8, padding: '8px 14px',
       border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
       maxWidth: 320,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 6 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 6 }}>
         ▸ Nav Bar Preview
       </div>
       <div style={{ display: 'flex', gap: 4 }}>
@@ -95,7 +95,7 @@ function MiniNavBar() {
             fontSize: '0.55rem',
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
-            color: i === 0 ? '#FF9F1C' : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+            color: i === 0 ? theme.colors.accent : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
             padding: '3px 6px',
             fontWeight: i === 0 ? 700 : 400,
           }}>
@@ -115,11 +115,11 @@ function MiniTimeline() {
   ];
   return (
     <div style={{
-      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
-      border: `1px solid ${isDark ? 'rgba(255,159,28,0.08)' : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? `${theme.colors.surface.dark}CC` : 'rgba(0,0,0,0.03)',
+      border: `1px solid ${isDark ? `${theme.colors.accent}14` : 'rgba(0,0,0,0.08)'}`,
       borderRadius: 8, padding: 14, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
         ▸ Experience Preview
       </div>
       {jobs.map((j, i) => (
@@ -127,10 +127,10 @@ function MiniTimeline() {
           padding: '6px 0',
           borderTop: i > 0 ? `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}` : undefined,
         }}>
-          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', fontWeight: 600, color: isDark ? '#F0EDDF' : '#1A1A2E' }}>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', fontWeight: 600, color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light }}>
             {j.role}
           </div>
-          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.6rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.6rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>
             {j.company} · {j.period}
           </div>
         </div>
@@ -594,7 +594,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <div style={{
-        background: isDark ? 'rgba(19,26,46,0.7)' : 'rgba(255,255,255,0.8)',
+        background: isDark ? `${theme.colors.surface.dark}B3` : `${theme.colors.surface.light}CC`,
         border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
         borderRadius: 12,
         overflow: 'hidden',
@@ -633,7 +633,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
             </div>
             <div style={{
               fontFamily: theme.fonts.sans, fontWeight: 600, fontSize: '1.05rem',
-              color: isDark ? '#F0EDDF' : '#1A1A2E',
+              color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light,
             }}>
               {step.title}
             </div>
@@ -721,8 +721,8 @@ function PageContent() {
   const navigate = useNavigate();
 
   const mainBg = isDark
-    ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-    : '#F4F1EC';
+    ? `linear-gradient(180deg, ${theme.colors.background.dark} 0%, ${theme.colors.surface.dark} 50%, ${theme.colors.background.dark} 100%)`
+    : theme.colors.background.light;
 
   return (
     <div style={{
@@ -768,7 +768,7 @@ function PageContent() {
             fontFamily: theme.fonts.display,
             fontSize: 'clamp(2rem, 5vw, 3rem)',
             fontWeight: 400,
-            color: isDark ? '#F0EDDF' : '#1A1A2E',
+            color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light,
             lineHeight: 1.1, margin: 0,
           }}>
             How I Built This Site
@@ -797,7 +797,7 @@ function PageContent() {
           <div style={{
             position: 'absolute', left: 43, top: 56, bottom: 56, width: 1,
             background: isDark
-              ? 'linear-gradient(180deg, transparent, rgba(255,159,28,0.2), transparent)'
+              ? `linear-gradient(180deg, transparent, ${theme.colors.accent}33, transparent)`
               : 'linear-gradient(180deg, transparent, rgba(0,0,0,0.08), transparent)',
           }} />
           {steps.map((step, i) => (
@@ -813,8 +813,8 @@ function PageContent() {
           transition={{ delay: 0.3 }}
           style={{
             marginTop: 56, padding: '20px 24px', borderRadius: 12,
-            background: isDark ? 'rgba(255,159,28,0.06)' : 'rgba(255,159,28,0.08)',
-            border: `1px solid ${isDark ? 'rgba(255,159,28,0.12)' : 'rgba(255,159,28,0.15)'}`,
+            background: isDark ? `${theme.colors.accent}0F` : `${theme.colors.accent}14`,
+            border: `1px solid ${isDark ? `${theme.colors.accent}1F` : `${theme.colors.accent}26`}`,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
@@ -825,7 +825,7 @@ function PageContent() {
                 color: isDark ? 'rgba(208,208,208,0.75)' : 'rgba(0,0,0,0.6)',
                 margin: 0,
               }}>
-                <strong style={{ color: isDark ? '#F0EDDF' : '#1A1A2E' }}>Total time:</strong> ~8–10 hours from blank canvas to published site.
+                <strong style={{ color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light }}>Total time:</strong> ~8–10 hours from blank canvas to published site.
                 The key insight was front-loading effort into prompt design with Claude — a detailed, well-structured brief
                 let Lovable generate ~80% of the site in one shot, then iterative refinement handled the remaining 20%.
               </p>

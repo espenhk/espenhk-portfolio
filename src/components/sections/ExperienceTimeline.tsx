@@ -207,12 +207,19 @@ export default function ExperienceTimeline() {
                     border: `1px solid ${isDark ? 'rgba(153,204,255,0.08)' : border}`,
                   }}
                 >
-                  <span style={{ fontFamily: theme.fonts.sans, fontSize: '0.8rem', fontWeight: 600, color: fg }}>
-                    {edu.institution}
-                  </span>
-                  <p style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', color: fg2, marginTop: 2 }}>
-                    {edu.degree}
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontFamily: theme.fonts.sans, fontSize: '0.8rem', fontWeight: 600, color: fg }}>
+                      {edu.institution}
+                    </span>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#CC99FF' : c.accent, opacity: 0.85 }}>
+                      {edu.degree}
+                    </span>
+                  </div>
+                  {edu.details && (
+                    <p style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', color: fg2, marginTop: 2 }}>
+                      {edu.details}
+                    </p>
+                  )}
                   <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#99CCFF' : fg2 }}>
                     {edu.period}
                   </span>

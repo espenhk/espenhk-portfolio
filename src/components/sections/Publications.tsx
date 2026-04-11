@@ -279,35 +279,37 @@ export default function Publications() {
         </div>
 
         {/* Scroll arrows */}
+        {transScrolled && (
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
           style={{
             position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: fg2, opacity: 0.6, transition: 'opacity 0.2s',
+            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
+        )}
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
           style={{
             position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: fg2, opacity: 0.6, transition: 'opacity 0.2s',
+            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
         </button>

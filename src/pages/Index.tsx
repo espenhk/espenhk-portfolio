@@ -1,5 +1,5 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
-import ThemeToggle from '@/components/mwe/ThemeToggle';
+
 import HeroSection from '@/components/mwe/HeroSection';
 import FeaturedProjects from '@/components/sections/FeaturedProjects';
 import GitHubGraph from '@/components/sections/GitHubGraph';

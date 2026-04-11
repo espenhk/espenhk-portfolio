@@ -29,11 +29,11 @@ function PageContent() {
 
       <NavBar />
       <HeroSection />
+      <Publications />
       <CharacterSheetFull />
-      <ContactCTA />
       <FeaturedProjects />
       <ExperienceTimeline />
-      <Publications />
+      <ContactCTA />
       <FooterSection />
     </div>
   );

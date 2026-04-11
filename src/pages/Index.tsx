@@ -3,10 +3,9 @@ import ThemeToggle from '@/components/mwe/ThemeToggle';
 import HeroSection from '@/components/mwe/HeroSection';
 import FeaturedProjects from '@/components/sections/FeaturedProjects';
 import CharacterSheetFull from '@/components/sections/CharacterSheet';
+import ContactCTA from '@/components/sections/ContactCTA';
 import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
 import Publications from '@/components/sections/Publications';
-import BeyondTheCode from '@/components/sections/BeyondTheCode';
-import ContactCTA from '@/components/sections/ContactCTA';
 import FooterSection from '@/components/mwe/FooterSection';
 
 function PageContent() {
@@ -28,12 +27,11 @@ function PageContent() {
       </div>
 
       <HeroSection />
-      <FeaturedProjects />
       <CharacterSheetFull />
       <ContactCTA />
+      <FeaturedProjects />
       <ExperienceTimeline />
       <Publications />
-      <BeyondTheCode />
       <FooterSection />
     </div>
   );

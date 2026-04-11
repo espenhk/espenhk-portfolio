@@ -550,6 +550,11 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                     </span>
                   ))}
                 </div>
+
+                {/* Expandable sub-section (e.g. original prompt) */}
+                {step.expandableSection && (
+                  <ExpandablePrompt title={step.expandableSection.title} content={step.expandableSection.content} color={step.color} />
+                )}
               </div>
             </motion.div>
           )}

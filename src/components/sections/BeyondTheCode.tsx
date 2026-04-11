@@ -186,7 +186,7 @@ export default function BeyondTheCode() {
                   }}>
                     <Icon size={15} color={item.color} />
                   </div>
-                  <div>
+                  <div style={{ flex: 1 }}>
                     <h4 style={{
                       fontFamily: theme.fonts.sans, fontSize: '0.85rem',
                       fontWeight: 600, color: fg, marginBottom: 3,
@@ -198,6 +198,17 @@ export default function BeyondTheCode() {
                       color: fg2, lineHeight: 1.45,
                     }}>
                       {item.description}
+                      {item.link && (
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: 4, color: item.color, opacity: 0.8 }}
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <ExternalLink size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />
+                        </a>
+                      )}
                     </p>
                   </div>
                 </motion.div>

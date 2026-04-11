@@ -1,6 +1,16 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { Globe, Trophy, Wine, ExternalLink } from 'lucide-react';
+
+interface Interest {
+  icon: typeof Trophy;
+  title: string;
+  description: string;
+  color: string;
+  link?: string;
+}
+import { useEffect, useRef, useState } from 'react';
 import { Globe, Trophy, Wine } from 'lucide-react';
 
 const languages = [
@@ -10,7 +20,7 @@ const languages = [
   { name: 'Italian', level: 'Basic', value: 20 },
 ];
 
-const interests = [
+const interests: Interest[] = [
   {
     icon: Trophy,
     title: 'Flag Football',

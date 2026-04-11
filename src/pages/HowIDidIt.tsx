@@ -1,7 +1,7 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette, PenLine } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /* ── tiny inline previews of site components ────────────── */

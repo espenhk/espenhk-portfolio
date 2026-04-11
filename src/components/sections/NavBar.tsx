@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export default function NavBar() {
-  const { theme, isDark, toggleDark, setThemeById } = useTheme();
+  const { theme, isDark, toggleDark } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState('');
 

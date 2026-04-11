@@ -20,6 +20,13 @@ const typeColor: Record<string, string> = {
   series: '#CC99FF',
 };
 
+const SCROLL_HIDE_CSS = `
+.transmissions-scroll::-webkit-scrollbar { display: none; }
+@media (min-width: 768px) {
+  .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
+}
+`;
+
 export default function Publications() {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
@@ -43,19 +50,21 @@ export default function Publications() {
     : '#FFFFFF';
 
   return (
-    <section
-      id="publications"
-      ref={ref}
-      style={{
-        padding: '60px 24px',
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-          : undefined,
-        background: isDark ? undefined : c.background.light,
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <>
+      <style>{SCROLL_HIDE_CSS}</style>
+      <section
+        id="publications"
+        ref={ref}
+        style={{
+          padding: '60px 24px',
+          backgroundImage: isDark
+            ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
+            : undefined,
+          background: isDark ? undefined : c.background.light,
+          position: 'relative',
+          overflow: 'visible',
+        }}
+      >
       {isDark && (
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
@@ -77,9 +86,18 @@ export default function Publications() {
         </h2>
 
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
+          display: 'flex',
           gap: 16,
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          paddingBottom: 8,
+          marginLeft: -24,
+          marginRight: -24,
+          paddingLeft: 24,
+          paddingRight: 24,
+          WebkitOverflowScrolling: 'touch',
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
         }}>
           {publications.map((pub, i) => {
             const color = typeColor[pub.type];
@@ -89,8 +107,8 @@ export default function Publications() {
             return (
               <motion.div
                 key={pub.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={visible ? { opacity: 1, y: 0 } : {}}
+                initial={{ opacity: 0, x: 30 }}
+                animate={visible ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 style={{
                   background: isDark ? undefined : panelBg,
@@ -101,6 +119,10 @@ export default function Publications() {
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
+                  minWidth: '80vw',
+                  maxWidth: '80vw',
+                  scrollSnapAlign: 'start',
+                  flexShrink: 0,
                 }}
               >
                 {/* Preview area */}
@@ -222,5 +244,6 @@ export default function Publications() {
         </div>
       </div>
     </section>
+    </>
   );
 }

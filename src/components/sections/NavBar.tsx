@@ -120,7 +120,7 @@ export default function NavBar() {
         >
           {themes.map(t => (
             <option key={t.id} value={t.id} style={{ background: isDark ? '#1a1a2e' : '#fff', color: isDark ? '#ccc' : '#333' }}>
-              {t.name}
+              {t.label}
             </option>
           ))}
         </select>

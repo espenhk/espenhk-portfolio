@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const navItems = [
+  { label: 'Transmissions', id: 'publications' },
   { label: 'Dossier', id: 'character-sheet' },
   { label: 'Projects', id: 'projects' },
   { label: 'Service', id: 'experience' },
-  { label: 'Transmissions', id: 'publications' },
   { label: 'Contact', id: 'contact' },
 ];
 

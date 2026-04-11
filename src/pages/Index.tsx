@@ -29,6 +29,7 @@ function PageContent() {
       </div>
 
       <NavBar />
+      <StickyAvatarManager />
       <HeroSection />
       <Publications />
       <CharacterSheetFull />

@@ -1,7 +1,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { Globe, Football, Wine } from 'lucide-react';
+import { Globe, Trophy, Wine } from 'lucide-react';
 
 const languages = [
   { name: 'Norwegian', level: 'Native', value: 100 },
@@ -12,7 +12,7 @@ const languages = [
 
 const interests = [
   {
-    icon: Football,
+    icon: Trophy,
     title: 'Flag Football',
     description: 'Active player on BGOSL. Sports geek through and through.',
     color: '#FF9F1C',

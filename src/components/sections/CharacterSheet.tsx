@@ -1,7 +1,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { characterSheet, categoryLabels, categoryColors, type Stat } from '@/data/characterSheet';
+import { characterSheet, categoryLabels, categoryColors, spokenLanguages, offDutyInterests, type Stat } from '@/data/characterSheet';
 
 function StatBar({ stat, index, visible, accentColor }: {
   stat: Stat; index: number; visible: boolean; accentColor: string;
@@ -56,6 +56,7 @@ export default function CharacterSheetFull() {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
+  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
   const border = isDark ? c.border.dark : c.border.light;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export default function CharacterSheetFull() {
     return () => observer.disconnect();
   }, []);
 
-  const categories = ['language', 'framework', 'tool', 'soft-skill'] as const;
+  const categories = ['framework', 'tool', 'soft-skill'] as const;
   const grouped = categories.map(cat => ({
     key: cat,
     label: categoryLabels[cat],
@@ -77,6 +78,7 @@ export default function CharacterSheetFull() {
     stats: characterSheet.stats.filter(s => s.category === cat),
   }));
 
+  // Use a 3-column layout for 3 categories
   const panelBg = isDark
     ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
     : theme.characterSheetTheme.panelBg;
@@ -102,7 +104,7 @@ export default function CharacterSheetFull() {
         }} />
       )}
 
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <h2 style={{
           fontFamily: theme.fonts.display,
           fontSize: '1.8rem',
@@ -139,10 +141,10 @@ export default function CharacterSheetFull() {
             </div>
           )}
 
-          {/* 2-column grid of categories */}
+          {/* 3-column grid of categories */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '20px 28px',
           }}>
             {grouped.map((group, gi) => (
@@ -171,7 +173,7 @@ export default function CharacterSheetFull() {
                     <StatBar
                       key={stat.label}
                       stat={stat}
-                      index={gi * 4 + si}
+                      index={gi * 5 + si}
                       visible={visible}
                       accentColor={group.color}
                     />
@@ -180,6 +182,61 @@ export default function CharacterSheetFull() {
               </div>
             ))}
           </div>
+
+          {/* Language flags — bottom right */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: 8,
+            marginTop: 18,
+            paddingTop: 14,
+            borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+          }}>
+            <span style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: '0.65rem',
+              color: fg2,
+              alignSelf: 'center',
+              marginRight: 4,
+            }}>
+              LANGUAGES
+            </span>
+            {spokenLanguages.map(lang => (
+              <span
+                key={lang.name}
+                title={lang.name}
+                style={{ fontSize: '1.3rem', cursor: 'default' }}
+              >
+                {lang.flag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Off-duty interests strip */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 20,
+          marginTop: 16,
+        }}>
+          {offDutyInterests.map(item => (
+            <div
+              key={item.label}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                fontFamily: theme.fonts.sans,
+                fontSize: '0.82rem',
+                color: fg2,
+              }}
+            >
+              <span style={{ fontSize: '1.2rem' }}>{item.emoji}</span>
+              <span style={{ fontWeight: 600, color: fg }}>{item.label}</span>
+              <span style={{ fontSize: '0.72rem', opacity: 0.7 }}>— {item.detail}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

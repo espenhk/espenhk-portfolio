@@ -1,7 +1,7 @@
 export interface Stat {
   label: string;
   value: number;
-  category: 'language' | 'framework' | 'tool' | 'soft-skill';
+  category: 'framework' | 'tool' | 'soft-skill';
 }
 
 export const characterSheet = {
@@ -10,13 +10,6 @@ export const characterSheet = {
   portraitImage: 'https://avatars.githubusercontent.com/u/9327813?v=4',
   tagline: '"Sports geek · Cocktail nerd · Data wrangler"',
   stats: [
-    // Languages
-    { label: 'Python', value: 75, category: 'language' as const },
-    { label: 'SQL', value: 80, category: 'language' as const },
-    { label: 'Terraform', value: 45, category: 'language' as const },
-    { label: 'Java', value: 30, category: 'language' as const },
-    { label: 'Infrastructure as Code', value: 50, category: 'language' as const },
-
     // Platforms
     { label: 'Azure Databricks', value: 80, category: 'framework' as const },
     { label: 'Power BI', value: 60, category: 'framework' as const },
@@ -31,25 +24,37 @@ export const characterSheet = {
     { label: 'Machine Learning', value: 40, category: 'tool' as const },
     { label: 'CI/CD', value: 40, category: 'tool' as const },
 
-    // Life & Interests
-    { label: 'Communication', value: 75, category: 'soft-skill' as const },
-    { label: 'Technical Writing', value: 65, category: 'soft-skill' as const },
-    { label: 'Cocktail Mixing', value: 80, category: 'soft-skill' as const },
-    { label: 'American Football', value: 70, category: 'soft-skill' as const },
-    { label: 'Team Leadership', value: 70, category: 'soft-skill' as const },
+    // Tech & Code
+    { label: 'Python', value: 75, category: 'soft-skill' as const },
+    { label: 'SQL', value: 80, category: 'soft-skill' as const },
+    { label: 'Terraform', value: 45, category: 'soft-skill' as const },
+    { label: 'Infrastructure as Code', value: 50, category: 'soft-skill' as const },
+    { label: 'Java', value: 30, category: 'soft-skill' as const },
   ],
 };
 
 export const categoryLabels: Record<string, string> = {
-  'language': 'LANGUAGES',
   'framework': 'PLATFORMS',
   'tool': 'SKILLS & DOMAINS',
-  'soft-skill': 'LIFE & INTERESTS',
+  'soft-skill': 'TECH & CODE',
 };
 
 export const categoryColors: Record<string, string> = {
-  'language': '#FF9F1C',
   'framework': '#99CCFF',
   'tool': '#CC99FF',
-  'soft-skill': '#E8655A',
+  'soft-skill': '#FF9F1C',
 };
+
+// Languages spoken — shown as flag icons
+export const spokenLanguages = [
+  { flag: '🇳🇴', name: 'Norwegian' },
+  { flag: '🇬🇧', name: 'English' },
+  { flag: '🇩🇪', name: 'German' },
+  { flag: '🇮🇹', name: 'Italian' },
+];
+
+// Interests shown below stat sheet
+export const offDutyInterests = [
+  { emoji: '🏈', label: 'Flag Football', detail: 'BGOSL player' },
+  { emoji: '🍸', label: 'Cocktail Craft', detail: 'Negroni enthusiast' },
+];

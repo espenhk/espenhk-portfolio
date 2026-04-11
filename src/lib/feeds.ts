@@ -1,6 +1,6 @@
 import type { Publication } from '@/data/experience';
 
-const MEDIUM_RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@espen-haukeland-kristensen';
+const MEDIUM_RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@espenhk';
 const YOUTUBE_RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=UCS4IaI0EFrvHRk45XVYgzjw';
 
 function extractFirstImage(html: string): string | undefined {

@@ -110,8 +110,8 @@ function MiniNavBar() {
 function MiniTimeline() {
   const { theme, isDark } = useTheme();
   const jobs = [
-    { role: 'Manager', company: 'Bouvet', period: '2024–Present' },
-    { role: 'Sr. Consultant', company: 'Bouvet', period: '2021–2024' },
+    { role: 'Manager', company: 'PwC Norway', period: '2025–Present' },
+    { role: 'Data Engineer', company: 'Kantega AS', period: '2022–2025' },
   ];
   return (
     <div style={{
@@ -417,15 +417,15 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
     icon: <Sparkles size={20} />,
     title: 'First Generation in Lovable',
     description:
-      'Pasted the Claude-refined prompt into Lovable. The Starfleet theme — selected from the five candidates — came through clearly, and the first generation nailed the overall structure.',
+      'Pasted the Claude-refined prompt into Lovable. It generated five minimal working examples (MWEs) — one per theme — each with a hero, project card, character sheet bars, dark/light toggle, and footer. After comparing all five, Starfleet was the clear winner.',
     details: [
-      'Lovable generated the full single-page app with all sections from the detailed prompt',
-      'The Starfleet theme system (ThemeContext + starfleet.ts) was set up with dark/light mode',
-      'RPG-style Character Sheet with animated stat bars landed close to the vision on first try',
-      'Hero section with starfield background, gradient accent strip, and profile layout',
-      'Data files scaffolded: experience.ts, characterSheet.ts, siteConfig.tsx',
-      'GitHub API integration for live repository data was wired up immediately',
-      'Nav bar with scroll-aware blur and section highlighting',
+      'Lovable generated all five MWEs sharing the same component structure, differing only in theme.ts',
+      'Cupertino looked too corporate, Arcadia was fun but hard to read, Nightcity felt edgy but not "me"',
+      'Foxglen was beautiful but the runic aesthetic felt forced for a data engineer portfolio',
+      'Starfleet\'s LCARS amber/lavender/blue palette struck the right balance — structured but playful',
+      'Once selected, Lovable generated the full single-page app with all sections from the spec',
+      'The Starfleet theme system (ThemeContext + starfleet.ts) was set up with dark/light mode from the start',
+      'GitHub API integration, data files (experience.ts, characterSheet.ts, siteConfig.tsx), and nav bar were all scaffolded in the first full generation',
     ],
     toolsUsed: ['Lovable AI', 'React 18', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     color: '#FF9F1C',
@@ -434,18 +434,22 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
   {
     phase: 'Phase 2',
     icon: <Code2 size={20} />,
-    title: 'Iterative Refinement',
+    title: 'Iterative Refinement — The Long Phase',
     description:
-      'Dozens of follow-up prompts to tune every detail — mobile responsiveness, animation timing, 3D avatar, scroll interactions, and component polish.',
+      'This was where most of the time went. Dozens of follow-up prompts to fix mobile issues, tune animations, get the profile image right, and polish every section. Some things took many rounds to nail.',
     details: [
-      'Added Three.js / React Three Fiber for 3D section avatars',
-      'Built the GitHub Activity Log (contribution calendar) with live API data',
-      'Fixed mobile issues — canvas overflow on iPhone, profile image centering',
-      'Added horizontal scroll arrows for the Transmissions carousel on desktop',
-      'Tuned Character Sheet stat bars: glow on high stats, category grouping, color coding',
-      'Iterated on nav bar behavior — scroll-aware background, active section detection',
-      'Added "Off-Duty Interests" with clickable links (Tromsø Flaggfotball)',
-      'Dark/light theme toggle refinement across all sections',
+      '🔁 Profile image centering in the hero bubble took multiple rounds — face kept getting cut off, needed repeated nudging',
+      '🔁 Mobile responsiveness was a recurring battle — Three.js canvas overflow on iPhone, layout breaks at narrow widths',
+      '🔁 Activity Log (GitHub contribution graph) background color kept not matching the Repositories section — fixed multiple times',
+      '🔁 Flag football content and links needed several corrections across iterations',
+      '🔁 Section background consistency across the whole page required repeated passes',
+      'Added Three.js / React Three Fiber for 3D section avatars with sticky scroll behavior',
+      'Built the GitHub Activity Log with live contribution calendar data',
+      'Added horizontal scroll arrows for the Transmissions (LinkedIn posts) carousel on desktop',
+      'Tuned Character Sheet stat bars: glow effects on high stats, category grouping, color coding by category',
+      'Nav bar scroll-aware behavior: blur background, active section detection, mobile hamburger menu',
+      'Built "Off-Duty Interests" section with clickable link to Tromsø Flaggfotball',
+      'Dark/light theme toggle refinement across all sections — each section needed individual attention',
     ],
     toolsUsed: ['Lovable AI', 'Three.js', 'React Three Fiber', 'GitHub API'],
     color: '#99CCFF',
@@ -461,14 +465,15 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
     icon: <Layers size={20} />,
     title: 'Content & Data Population',
     description:
-      'Filled in real data — work experience, education history, skill ratings, LinkedIn posts, and project metadata for featured GitHub repos.',
+      'Filled in real data — work experience at PwC Norway, Kantega, Avella, and Kobler. Education from University of Oslo. LinkedIn posts, certifications, and project metadata.',
     details: [
-      'Wrote detailed experience entries with role descriptions and tech stacks',
-      'Configured project overrides for featured repositories',
-      'Added LinkedIn post data with titles, engagement metrics, and URLs',
+      'Wrote detailed experience entries: PwC Norway (Manager), Kantega AS (Data Engineer), Avella AS (Integration Consultant), Kobler AS (News Trend Analyst)',
+      'Configured project overrides for featured repos: MyFootballFlags, Python ODE Solver, War on Zombies',
+      'Added LinkedIn post data with titles, engagement metrics, and URLs for the Transmissions carousel',
+      '🔁 Academy section had a description stuck in Norwegian — translated to English and repositioned degree type into the title line',
+      'Added spoken languages (Norwegian, English, German, Italian), six certifications, and three education entries',
+      'Added Medium publications including the 4-part data anonymisation series and the Responsible AI book recommendations',
       'Uploaded CV as PDF and linked it to the download button',
-      'Translated Norwegian education descriptions to English',
-      'Added spoken languages, certifications, and education details',
     ],
     toolsUsed: ['Manual data entry', 'CV parsing', 'Content writing'],
     color: '#66CC99',
@@ -484,10 +489,10 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
     icon: <Rocket size={20} />,
     title: 'Polish & Ship',
     description:
-      'Final QA, documentation, and publishing to espenhk.lovable.app.',
+      'Final QA, comprehensive README, and publishing to espenhk.lovable.app.',
     details: [
       'Responsive QA across desktop and mobile viewports',
-      'Wrote comprehensive README documenting the architecture and theming system',
+      'Wrote comprehensive README documenting the architecture, theming system, and data pipeline',
       'Published via Lovable\'s one-click deploy to espenhk.lovable.app',
       'Built this very page you\'re reading right now 🤯',
     ],

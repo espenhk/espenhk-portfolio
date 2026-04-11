@@ -210,8 +210,9 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
       >
         <Code2 size={16} style={{ color, flexShrink: 0 }} />
         <span style={{
-          fontFamily: theme.fonts.mono, fontSize: '0.68rem',
-          color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+          fontFamily: theme.fonts.mono, fontSize: '0.75rem',
+          color: isDark ? color : 'rgba(0,0,0,0.6)',
+          fontWeight: 600, letterSpacing: '0.02em',
           flex: 1,
         }}>
           {title}

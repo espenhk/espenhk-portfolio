@@ -2,7 +2,6 @@ import { useTheme } from '@/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
-import { themes } from '@/config/themes';
 
 const navItems = [
   { label: 'Stats', id: 'character-sheet' },

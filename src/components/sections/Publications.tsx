@@ -37,6 +37,7 @@ const SCROLL_HIDE_CSS = `
 @media (min-width: 768px) {
   .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
   .scroll-arrow { display: flex !important; }
+  .li-arrow { display: flex !important; }
 }
 `;
 
@@ -50,6 +51,8 @@ export default function Publications() {
   const [publications, setPublications] = useState<Publication[]>(fallbackPubs);
   const ref = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const liScrollRef = useRef<HTMLDivElement>(null);
+  const [transScrolled, setTransScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

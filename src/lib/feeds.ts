@@ -39,19 +39,35 @@ export async function fetchMediumArticles(): Promise<Publication[]> {
   }
 }
 
+// YouTube RSS doesn't include duration; maintain a lookup here
+const ytDurations: Record<string, number> = {
+  'pXGPLKWdVls': 1129,  // ~18:49
+  'mrdj9-g1MX4': 1396,  // ~23:16
+  'ZclWqNVEegw': 2580,  // ~43:00
+};
+
+function getYtId(url: string): string | null {
+  const m = url.match(/[?&]v=([^&]+)/);
+  return m ? m[1] : null;
+}
+
 export async function fetchYouTubeVideos(): Promise<Publication[]> {
   try {
     const res = await fetch(YOUTUBE_RSS_URL);
     const data = await res.json();
     if (data.status !== 'ok' || !data.items) return [];
-    return data.items.map((item: any) => ({
-      title: item.title,
-      url: item.link,
-      date: formatDate(item.pubDate),
-      description: item.title,
-      type: 'video' as const,
-      heroImage: item.thumbnail,
-    }));
+    return data.items.map((item: any) => {
+      const vid = getYtId(item.link);
+      return {
+        title: item.title,
+        url: item.link,
+        date: formatDate(item.pubDate),
+        description: item.title,
+        type: 'video' as const,
+        heroImage: item.thumbnail,
+        durationSec: vid ? ytDurations[vid] : undefined,
+      };
+    });
   } catch (e) {
     console.error('Failed to fetch YouTube feed:', e);
     return [];

@@ -46,6 +46,7 @@ export default function Publications() {
   const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
   const border = isDark ? c.border.dark : c.border.light;
   const [visible, setVisible] = useState(false);
+  const [publications, setPublications] = useState<Publication[]>(fallbackPubs);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,6 +56,22 @@ export default function Publications() {
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const [medium, youtube] = await Promise.all([
+        fetchMediumArticles(),
+        fetchYouTubeVideos(),
+      ]);
+      const live = [...medium, ...youtube];
+      if (live.length > 0) {
+        // Deduplicate by URL, live feed takes priority
+        const seen = new Set(live.map(p => p.url));
+        const extra = fallbackPubs.filter(p => !seen.has(p.url));
+        setPublications([...live, ...extra]);
+      }
+    })();
   }, []);
 
   const panelBg = isDark

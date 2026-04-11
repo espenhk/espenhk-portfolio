@@ -235,7 +235,18 @@ export default function CharacterSheetFull() {
             >
               <span style={{ fontSize: '1.1rem' }}>{item.emoji}</span>
               <span style={{ fontWeight: 600, color: fg }}>{item.label}</span>
-              <span style={{ fontSize: '0.68rem', opacity: 0.7 }}>— {item.detail}</span>
+              {'link' in item && item.link ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: '0.68rem', opacity: 0.7, color: fg2, textDecoration: 'underline' }}
+                >
+                  — {item.detail}
+                </a>
+              ) : (
+                <span style={{ fontSize: '0.68rem', opacity: 0.7 }}>— {item.detail}</span>
+              )}
             </div>
           ))}
         </div>

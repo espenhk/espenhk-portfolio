@@ -30,11 +30,11 @@ function PageContent() {
 
       <NavBar />
       <HeroSection />
-      <GitHubGraph />
       <CharacterSheetFull />
       <Publications />
       <ContactCTA />
       <FeaturedProjects />
+      <GitHubGraph />
       <ExperienceTimeline />
       <FooterSection />
     </div>

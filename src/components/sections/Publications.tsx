@@ -2,16 +2,12 @@ import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { publications } from '@/data/experience';
-import { ExternalLink, BookOpen, Layers } from 'lucide-react';
+import { linkedInPosts } from '@/data/linkedInPosts';
+import { ExternalLink, BookOpen, Layers, ThumbsUp, MessageCircle } from 'lucide-react';
 
 function getYouTubeId(url: string): string | null {
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
   return match ? match[1] : null;
-}
-
-function getMediumPreviewImage(url: string): string {
-  // Use a gradient placeholder — Medium doesn't expose OG images easily
-  return '';
 }
 
 const typeColor: Record<string, string> = {
@@ -20,11 +16,27 @@ const typeColor: Record<string, string> = {
   series: '#CC99FF',
 };
 
+const liTypeColor: Record<string, string> = {
+  post: '#0A66C2',
+  comment: '#57A773',
+  article: '#E7A33E',
+};
+
+// LinkedIn icon
+function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  );
+}
+
 const SCROLL_HIDE_CSS = `
 .transmissions-scroll::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) {
   .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
 }
+.li-scroll::-webkit-scrollbar { display: none; }
 `;
 
 export default function Publications() {
@@ -85,7 +97,8 @@ export default function Publications() {
           Transmissions
         </h2>
 
-        <div style={{
+        {/* === Medium / YouTube carousel === */}
+        <div className="transmissions-scroll" style={{
           display: 'flex',
           gap: 16,
           overflowX: 'auto',
@@ -125,25 +138,14 @@ export default function Publications() {
                   flexShrink: 0,
                 }}
               >
-                {/* Preview area */}
                 {isVideo ? (
-                  <div style={{
-                    position: 'relative',
-                    width: '100%',
-                    paddingBottom: '56.25%',
-                  }}>
+                  <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%' }}>
                     <iframe
                       src={`https://www.youtube.com/embed/${ytId}`}
                       title={pub.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
-                      style={{
-                        position: 'absolute',
-                        top: 0, left: 0,
-                        width: '100%',
-                        height: '100%',
-                        border: 'none',
-                      }}
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                     />
                   </div>
                 ) : (
@@ -152,95 +154,157 @@ export default function Publications() {
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      display: 'block',
-                      height: 120,
+                      display: 'block', height: 120,
                       background: isDark
                         ? `linear-gradient(135deg, ${color}15, ${color}08)`
                         : `linear-gradient(135deg, ${color}10, ${color}05)`,
-                      position: 'relative',
-                      overflow: 'hidden',
+                      position: 'relative', overflow: 'hidden',
                     }}
                   >
-                    <div style={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                      {pub.type === 'series' ? (
-                        <Layers size={32} color={color} style={{ opacity: 0.4 }} />
-                      ) : (
-                        <BookOpen size={32} color={color} style={{ opacity: 0.4 }} />
-                      )}
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {pub.type === 'series' ? <Layers size={32} color={color} style={{ opacity: 0.4 }} /> : <BookOpen size={32} color={color} style={{ opacity: 0.4 }} />}
                     </div>
-                    <div style={{
-                      position: 'absolute',
-                      top: 8, right: 8,
-                      width: 24, height: 24,
-                      borderRadius: '50%',
-                      background: 'rgba(0,0,0,0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
+                    <div style={{ position: 'absolute', top: 8, right: 8, width: 24, height: 24, borderRadius: '50%', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <ExternalLink size={12} color="#fff" />
                     </div>
                   </a>
                 )}
 
-                {/* Info */}
                 <div style={{ padding: '12px 14px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6,
-                  }}>
-                    <span style={{
-                      fontFamily: theme.fonts.mono, fontSize: '0.6rem',
-                      color, textTransform: 'uppercase', letterSpacing: '0.05em',
-                      background: `${color}12`,
-                      padding: '2px 6px',
-                      borderRadius: theme.radii.sm,
-                    }}>
-                      {pub.type}
-                    </span>
-                    <span style={{
-                      fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2,
-                    }}>
-                      {pub.date}
-                    </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color, textTransform: 'uppercase', letterSpacing: '0.05em', background: `${color}12`, padding: '2px 6px', borderRadius: theme.radii.sm }}>{pub.type}</span>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>{pub.date}</span>
                   </div>
-
-                  <a
-                    href={pub.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <h3 style={{
-                      fontFamily: theme.fonts.sans,
-                      fontSize: '0.82rem',
-                      fontWeight: 600,
-                      color: fg,
-                      lineHeight: 1.35,
-                      marginBottom: 4,
-                    }}>
-                      {pub.title}
-                    </h3>
+                  <a href={pub.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                    <h3 style={{ fontFamily: theme.fonts.sans, fontSize: '0.82rem', fontWeight: 600, color: fg, lineHeight: 1.35, marginBottom: 4 }}>{pub.title}</h3>
                   </a>
-
-                  <p style={{
-                    fontFamily: theme.fonts.sans,
-                    fontSize: '0.72rem',
-                    color: fg2,
-                    lineHeight: 1.45,
-                    flex: 1,
-                  }}>
-                    {pub.description}
-                  </p>
+                  <p style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', color: fg2, lineHeight: 1.45, flex: 1 }}>{pub.description}</p>
                 </div>
               </motion.div>
             );
           })}
+        </div>
+
+        {/* === LinkedIn subsection === */}
+        <div style={{ marginTop: 36 }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, justifyContent: 'center',
+          }}>
+            <LinkedInIcon size={18} color={isDark ? '#5B9BD5' : '#0A66C2'} />
+            <h3 style={{
+              fontFamily: theme.fonts.display,
+              fontSize: '1.1rem',
+              color: isDark ? '#5B9BD5' : '#0A66C2',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+            }}>
+              On LinkedIn
+            </h3>
+          </div>
+
+          <div className="li-scroll" style={{
+            display: 'flex',
+            gap: 10,
+            overflowX: 'auto',
+            scrollSnapType: 'x mandatory',
+            paddingBottom: 6,
+            marginLeft: -24,
+            marginRight: -24,
+            paddingLeft: 24,
+            paddingRight: 24,
+            WebkitOverflowScrolling: 'touch',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+          }}>
+            {linkedInPosts.map((post, i) => {
+              const typeCol = liTypeColor[post.type];
+              return (
+                <motion.a
+                  key={i}
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={visible ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.3, delay: 0.3 + i * 0.06 }}
+                  whileHover={{ y: -2 }}
+                  style={{
+                    background: isDark ? undefined : panelBg,
+                    backgroundImage: isDark ? panelBg : undefined,
+                    borderRadius: theme.radii.md,
+                    border: `1px solid ${isDark ? `${typeCol}18` : border}`,
+                    boxShadow: isDark ? theme.shadows.card : '0 1px 3px rgba(0,0,0,0.05)',
+                    padding: '12px 14px',
+                    minWidth: 180,
+                    maxWidth: 180,
+                    scrollSnapAlign: 'start',
+                    flexShrink: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 8,
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {/* Header: type badge + date */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{
+                      fontFamily: theme.fonts.mono,
+                      fontSize: '0.55rem',
+                      color: typeCol,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                      background: `${typeCol}12`,
+                      padding: '1px 5px',
+                      borderRadius: theme.radii.sm,
+                    }}>
+                      {post.type === 'comment' ? '💬 comment' : post.type === 'article' ? '📝 article' : '📣 post'}
+                    </span>
+                    <span style={{
+                      fontFamily: theme.fonts.mono,
+                      fontSize: '0.52rem',
+                      color: fg2,
+                    }}>
+                      {post.date}
+                    </span>
+                  </div>
+
+                  {/* Post text */}
+                  <p style={{
+                    fontFamily: theme.fonts.sans,
+                    fontSize: '0.68rem',
+                    color: fg,
+                    lineHeight: 1.4,
+                    flex: 1,
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 4,
+                    WebkitBoxOrient: 'vertical',
+                  }}>
+                    {post.text}
+                  </p>
+
+                  {/* Engagement */}
+                  <div style={{
+                    display: 'flex', gap: 10, alignItems: 'center',
+                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
+                    paddingTop: 6,
+                  }}>
+                    {post.likes != null && (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontFamily: theme.fonts.mono, fontSize: '0.58rem', color: fg2 }}>
+                        <ThumbsUp size={10} /> {post.likes}
+                      </span>
+                    )}
+                    {post.comments != null && (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontFamily: theme.fonts.mono, fontSize: '0.58rem', color: fg2 }}>
+                        <MessageCircle size={10} /> {post.comments}
+                      </span>
+                    )}
+                  </div>
+                </motion.a>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

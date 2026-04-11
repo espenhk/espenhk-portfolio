@@ -17,22 +17,10 @@ export default function GitHubGraph() {
   return (
     <div
       style={{
-        padding: '32px 24px 40px',
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-          : undefined,
-        background: isDark ? undefined : c.background.light,
-        position: 'relative',
-        overflow: 'hidden',
+        padding: '32px 0 40px',
         textAlign: 'center',
       }}
     >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: '#66CC99', opacity: 0.6,
-        }} />
-      )}
 
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{

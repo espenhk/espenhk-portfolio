@@ -6,6 +6,7 @@ import CharacterSheetFull from '@/components/sections/CharacterSheet';
 import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
 import Publications from '@/components/sections/Publications';
 import BeyondTheCode from '@/components/sections/BeyondTheCode';
+import ContactCTA from '@/components/sections/ContactCTA';
 import FooterSection from '@/components/mwe/FooterSection';
 
 function PageContent() {
@@ -32,6 +33,7 @@ function PageContent() {
       <ExperienceTimeline />
       <Publications />
       <BeyondTheCode />
+      <ContactCTA />
       <FooterSection />
     </div>
   );

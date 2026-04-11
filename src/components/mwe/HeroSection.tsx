@@ -69,7 +69,7 @@ export default function HeroSection() {
             width: 140, height: 140,
             borderRadius: theme.radii.full,
             objectFit: 'cover',
-            objectPosition: 'center 35%',
+            objectPosition: 'center 25%',
             margin: '0 auto 24px',
             border: `2px solid ${c.accent}`,
             boxShadow: isDark ? `0 0 20px rgba(255,159,28,0.2)` : theme.shadows.card,

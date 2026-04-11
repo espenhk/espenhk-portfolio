@@ -1,6 +1,14 @@
 import { useTheme } from '@/context/ThemeContext';
 import { siteConfig, socialLinks } from '@/data/siteConfig';
 
+const brandColors: Record<string, string> = {
+  GitHub: '#333333',
+  LinkedIn: '#0A66C2',
+  Medium: '#000000',
+  Bluesky: '#0085FF',
+  Instagram: '#E1306C',
+};
+
 export default function FooterSection() {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
@@ -37,8 +45,8 @@ export default function FooterSection() {
             href={s.url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: fg2 }}
-            onMouseEnter={e => (e.currentTarget.style.color = c.accent)}
+            style={{ color: fg2, transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = brandColors[s.label] || c.accent)}
             onMouseLeave={e => (e.currentTarget.style.color = fg2)}
           >
             <s.icon size={18} />

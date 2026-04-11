@@ -50,20 +50,21 @@ export default function Publications() {
     : '#FFFFFF';
 
   return (
-    <section
-      id="publications"
-      ref={ref}>
+    <>
       <style>{SCROLL_HIDE_CSS}</style>
-      <div style={{
-        padding: '60px 24px',
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-          : undefined,
-        background: isDark ? undefined : c.background.light,
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+      <section
+        id="publications"
+        ref={ref}
+        style={{
+          padding: '60px 24px',
+          backgroundImage: isDark
+            ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
+            : undefined,
+          background: isDark ? undefined : c.background.light,
+          position: 'relative',
+          overflow: 'visible',
+        }}
+      >
       {isDark && (
         <div style={{
           position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,

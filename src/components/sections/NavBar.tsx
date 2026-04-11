@@ -1,7 +1,8 @@
 import { useTheme } from '@/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
+import { Sun, Moon } from 'lucide-react';
+import { themes } from '@/config/themes';
 
 const navItems = [
   { label: 'Stats', id: 'character-sheet' },
@@ -12,7 +13,7 @@ const navItems = [
 ];
 
 export default function NavBar() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, toggleDark, setThemeById } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState('');
 
@@ -71,7 +72,7 @@ export default function NavBar() {
         transition: 'background 0.3s, border-color 0.3s',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, justifyContent: 'center' }}>
         {navItems.map(item => {
           const isActive = activeId === item.id;
           return (
@@ -97,6 +98,47 @@ export default function NavBar() {
             </button>
           );
         })}
+      </div>
+
+      {/* Theme toggle + dark mode */}
+      <div style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: 4 }}>
+        <select
+          value={theme.id}
+          onChange={e => setThemeById(e.target.value)}
+          style={{
+            background: 'transparent',
+            border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`,
+            borderRadius: theme.radii.sm,
+            padding: '4px 6px',
+            cursor: 'pointer',
+            color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+            fontFamily: theme.fonts.mono,
+            fontSize: '0.58rem',
+            outline: 'none',
+            maxWidth: 80,
+          }}
+        >
+          {themes.map(t => (
+            <option key={t.id} value={t.id} style={{ background: isDark ? '#1a1a2e' : '#fff', color: isDark ? '#ccc' : '#333' }}>
+              {t.label}
+            </option>
+          ))}
+        </select>
+        <button
+          onClick={toggleDark}
+          style={{
+            background: 'none',
+            border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`,
+            borderRadius: theme.radii.sm,
+            padding: '4px 6px',
+            cursor: 'pointer',
+            color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {isDark ? <Sun size={13} /> : <Moon size={13} />}
+        </button>
       </div>
     </motion.nav>
   );

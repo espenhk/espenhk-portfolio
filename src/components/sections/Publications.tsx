@@ -37,6 +37,7 @@ const SCROLL_HIDE_CSS = `
 @media (min-width: 768px) {
   .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
   .scroll-arrow { display: flex !important; }
+  .li-arrow { display: flex !important; }
 }
 `;
 
@@ -50,6 +51,8 @@ export default function Publications() {
   const [publications, setPublications] = useState<Publication[]>(fallbackPubs);
   const ref = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const liScrollRef = useRef<HTMLDivElement>(null);
+  const [transScrolled, setTransScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -58,6 +61,14 @@ export default function Publications() {
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => setTransScrolled(el.scrollLeft > 10);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -268,35 +279,37 @@ export default function Publications() {
         </div>
 
         {/* Scroll arrows */}
+        {transScrolled && (
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
           style={{
             position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: fg2, opacity: 0.6, transition: 'opacity 0.2s',
+            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
+        )}
         <button
           onClick={() => scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
           style={{
             position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: fg2, opacity: 0.6, transition: 'opacity 0.2s',
+            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
         </button>
@@ -317,7 +330,8 @@ export default function Publications() {
             </h3>
           </div>
 
-          <div className="li-scroll" style={{
+          <div style={{ position: 'relative' }}>
+          <div ref={liScrollRef} className="li-scroll" style={{
             display: 'flex',
             gap: 10,
             overflowX: 'auto',
@@ -401,6 +415,41 @@ export default function Publications() {
                 </motion.a>
               );
             })}
+          </div>
+
+          {/* LinkedIn scroll arrows */}
+          <button
+            onClick={() => liScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
+              width: 28, height: 28, borderRadius: '50%',
+              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              border: 'none', cursor: 'pointer', display: 'none',
+              alignItems: 'center', justifyContent: 'center',
+              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            }}
+            className="li-arrow"
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button
+            onClick={() => liScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
+              width: 28, height: 28, borderRadius: '50%',
+              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              border: 'none', cursor: 'pointer', display: 'none',
+              alignItems: 'center', justifyContent: 'center',
+              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            }}
+            className="li-arrow"
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
           </div>
         </div>
       </div>

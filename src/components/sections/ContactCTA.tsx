@@ -13,7 +13,7 @@ function MediumIcon({ size = 18, color = 'currentColor' }: { size?: number; colo
 }
 
 const links = [
-  { icon: Linkedin, label: 'LinkedIn', href: siteConfig.socials.linkedin, color: '#99CCFF' },
+  { icon: Linkedin, label: 'LinkedIn', href: siteConfig.socials.linkedin, color: '#0A66C2' },
   { icon: Github, label: 'GitHub', href: siteConfig.socials.github, color: '#CC99FF' },
   { icon: MediumIcon, label: 'Medium', href: siteConfig.socials.medium, color: '#FF9F1C' },
 ];

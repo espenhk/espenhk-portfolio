@@ -63,19 +63,21 @@ export const jobs: Job[] = [
 export const education: Education[] = [
   {
     institution: 'University of Oslo',
-    degree: 'Single courses (master): Language Technology & Machine Learning',
+    degree: 'Single courses (master)',
     period: '2022',
     details: 'Reinforcement Learning, Decision Making Under Uncertainty, Responsible Data Science. Grade A.',
   },
   {
     institution: 'University of Oslo',
-    degree: 'Enkeltemner (master): Språkteknologi og maskinlæring',
+    degree: 'Single courses (master)',
     period: '08.2018 – 01.2020',
+    details: 'Language Technology & Machine Learning.',
   },
   {
     institution: 'University of Oslo',
-    degree: 'Bachelor Mathematics, Informatics and Technology',
+    degree: 'Bachelor',
     period: '08.2014 – 06.2018',
+    details: 'Mathematics, Informatics and Technology.',
   },
 ];
 

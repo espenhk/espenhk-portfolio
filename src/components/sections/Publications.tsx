@@ -53,6 +53,7 @@ export default function Publications() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const liScrollRef = useRef<HTMLDivElement>(null);
   const [transScrolled, setTransScrolled] = useState(false);
+  const [liScrolled, setLiScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -72,6 +73,14 @@ export default function Publications() {
   }, []);
 
   useEffect(() => {
+    const el = liScrollRef.current;
+    if (!el) return;
+    const onScroll = () => setLiScrolled(el.scrollLeft > 10);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
     (async () => {
       const [medium, youtube] = await Promise.all([
         fetchMediumArticles(),
@@ -83,7 +92,6 @@ export default function Publications() {
         const seen = new Set(live.map(p => stripQs(p.url)));
         const extra = fallbackPubs.filter(p => !seen.has(stripQs(p.url)));
         const all = [...live, ...extra];
-        // Sort by date descending
         all.sort((a, b) => {
           const parse = (d: string) => {
             const [m, y] = d.split('.');
@@ -418,6 +426,7 @@ export default function Publications() {
           </div>
 
           {/* LinkedIn scroll arrows */}
+          {liScrolled && (
           <button
             onClick={() => liScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
             style={{
@@ -434,6 +443,7 @@ export default function Publications() {
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
+          )}
           <button
             onClick={() => liScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
             style={{

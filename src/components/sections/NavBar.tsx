@@ -1,6 +1,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import ThemeToggle from '@/components/mwe/ThemeToggle';
 
 const navItems = [
   { label: 'Stats', id: 'character-sheet' },

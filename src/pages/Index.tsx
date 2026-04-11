@@ -24,9 +24,8 @@ function PageContent() {
       minHeight: '100vh',
       transition: `background ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
     }}>
-      <div style={{ position: 'fixed', top: 16, right: 16, zIndex: 999 }}>
-        <ThemeToggle />
-      </div>
+
+
 
       <NavBar />
       <HeroSection />

@@ -26,6 +26,7 @@ export interface Publication {
   type: 'article' | 'video' | 'series';
   heroImage?: string;
   readTimeMin?: number;
+  durationSec?: number;
 }
 
 export const jobs: Job[] = [

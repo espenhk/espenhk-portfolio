@@ -426,6 +426,7 @@ export default function Publications() {
           </div>
 
           {/* LinkedIn scroll arrows */}
+          {liScrolled && (
           <button
             onClick={() => liScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
             style={{
@@ -442,6 +443,7 @@ export default function Publications() {
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
+          )}
           <button
             onClick={() => liScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
             style={{

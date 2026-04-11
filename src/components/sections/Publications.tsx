@@ -73,6 +73,13 @@ export default function Publications() {
   }, []);
 
   useEffect(() => {
+    const el = liScrollRef.current;
+    if (!el) return;
+    const onScroll = () => setLiScrolled(el.scrollLeft > 10);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
     (async () => {
       const [medium, youtube] = await Promise.all([
         fetchMediumArticles(),

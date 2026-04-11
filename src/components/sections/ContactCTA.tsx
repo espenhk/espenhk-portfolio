@@ -77,7 +77,6 @@ export default function ContactCTA() {
           }}
         >
           Interested in data engineering, AI, or just want to talk cocktails?
-          <br />Hailing frequencies are always open.
         </motion.p>
 
         <motion.a

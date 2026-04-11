@@ -259,8 +259,8 @@ function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: s
     <div style={{
       margin: '12px 0',
       padding: '12px 16px',
-      borderLeft: `3px solid ${isDark ? `${color}60` : `${color}80`}`,
-      background: isDark ? `${color}0A` : `${color}0F`,
+      borderLeft: `3px solid ${isDark ? `${color}90` : `${color}90`}`,
+      background: isDark ? `${color}18` : `${color}1A`,
       borderRadius: '0 8px 8px 0',
       display: 'flex',
       alignItems: 'flex-start',

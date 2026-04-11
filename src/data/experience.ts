@@ -24,6 +24,7 @@ export interface Publication {
   date: string;
   description: string;
   type: 'article' | 'video' | 'series';
+  heroImage?: string;
 }
 
 export const jobs: Job[] = [
@@ -92,6 +93,7 @@ export const publications: Publication[] = [
     date: '11.2025',
     description: 'Analysis of Norway\'s ten guiding principles for AI policy by think tank Langsikt.',
     type: 'article',
+    heroImage: 'https://miro.medium.com/v2/resize:fit:1200/1*NoMw54--jpsJGfBXk6FOvQ.png',
   },
   {
     title: 'Anonymizing Data in Practice (4-part series)',
@@ -99,6 +101,7 @@ export const publications: Publication[] = [
     date: '10.2024',
     description: 'Comprehensive series covering the why, how, what, and message of data anonymisation.',
     type: 'series',
+    heroImage: 'https://miro.medium.com/v2/resize:fit:1200/1*2-9W0WSeaAAG5wZAU8eRbA.png',
   },
   {
     title: 'Exploring the Responsible AI Landscape: Books for Every Level',
@@ -106,6 +109,7 @@ export const publications: Publication[] = [
     date: '10.2023',
     description: 'Curated book recommendations on responsible AI. Also published on Kantega\'s blog.',
     type: 'article',
+    heroImage: 'https://miro.medium.com/v2/resize:fit:1200/1*Enkb2biazyYrpMfzHb1gfw.jpeg',
   },
   {
     title: 'Breaking down AlphaGo – Reinforcement Learning in Games',

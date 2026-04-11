@@ -1,8 +1,191 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
+/* ── tiny inline previews of site components ────────────── */
+
+function MiniStatBar({ label, value, color }: { label: string; value: number; color: string }) {
+  const { theme } = useTheme();
+  return (
+    <div style={{ marginBottom: 6 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+        <span style={{ color: '#D0D0D0', fontSize: '0.6rem', fontFamily: theme.fonts.mono }}>{label}</span>
+        <span style={{ color, fontSize: '0.6rem', fontFamily: theme.fonts.mono, fontWeight: 700 }}>{value}</span>
+      </div>
+      <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: `${value}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          style={{ height: '100%', background: `linear-gradient(90deg, ${color}, ${color}99)`, borderRadius: 2 }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function MiniCharacterSheet() {
+  const { theme, isDark } = useTheme();
+  return (
+    <div style={{
+      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
+      border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : 'rgba(0,0,0,0.08)'}`,
+      borderRadius: 8, padding: 14, maxWidth: 260,
+    }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+        ▸ Character Sheet Preview
+      </div>
+      <MiniStatBar label="Data Engineering" value={85} color="#CC99FF" />
+      <MiniStatBar label="Python" value={75} color="#FF9F1C" />
+      <MiniStatBar label="SQL" value={80} color="#FF9F1C" />
+      <MiniStatBar label="Azure Databricks" value={80} color="#99CCFF" />
+    </div>
+  );
+}
+
+function MiniRepoCard() {
+  const { theme, isDark } = useTheme();
+  return (
+    <div style={{
+      background: isDark ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)' : '#fff',
+      border: `1px solid ${isDark ? 'rgba(255,159,28,0.08)' : 'rgba(0,0,0,0.08)'}`,
+      borderRadius: 8, padding: 12, maxWidth: 260,
+    }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+        ▸ Repository Card Preview
+      </div>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.78rem', fontWeight: 600, color: isDark ? '#F0EDDF' : '#1A1A2E', marginBottom: 4 }}>
+        espenhk/portfolio
+      </div>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.65rem', color: isDark ? '#9A9AAF' : '#5A5A6A', marginBottom: 8 }}>
+        Personal portfolio site built with Lovable
+      </div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#3178C6', display: 'inline-block' }} />
+          <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>TypeScript</span>
+        </span>
+        <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>⭐ 2</span>
+      </div>
+    </div>
+  );
+}
+
+function MiniNavBar() {
+  const { theme, isDark } = useTheme();
+  const items = ['Stats', 'Posts', 'Contact', 'Repos', 'Work'];
+  return (
+    <div style={{
+      background: isDark ? 'rgba(6,10,24,0.85)' : 'rgba(255,255,255,0.9)',
+      backdropFilter: 'blur(12px)',
+      borderRadius: 8, padding: '8px 14px',
+      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+      maxWidth: 320,
+    }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 6 }}>
+        ▸ Nav Bar Preview
+      </div>
+      <div style={{ display: 'flex', gap: 4 }}>
+        {items.map((item, i) => (
+          <span key={item} style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: '0.55rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            color: i === 0 ? '#FF9F1C' : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+            padding: '3px 6px',
+            fontWeight: i === 0 ? 700 : 400,
+          }}>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MiniTimeline() {
+  const { theme, isDark } = useTheme();
+  const jobs = [
+    { role: 'Manager', company: 'Bouvet', period: '2024–Present' },
+    { role: 'Sr. Consultant', company: 'Bouvet', period: '2021–2024' },
+  ];
+  return (
+    <div style={{
+      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
+      border: `1px solid ${isDark ? 'rgba(255,159,28,0.08)' : 'rgba(0,0,0,0.08)'}`,
+      borderRadius: 8, padding: 14, maxWidth: 260,
+    }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF9F1C', marginBottom: 8 }}>
+        ▸ Experience Preview
+      </div>
+      {jobs.map((j, i) => (
+        <div key={i} style={{
+          padding: '6px 0',
+          borderTop: i > 0 ? `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}` : undefined,
+        }}>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', fontWeight: 600, color: isDark ? '#F0EDDF' : '#1A1A2E' }}>
+            {j.role}
+          </div>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.6rem', color: isDark ? '#9A9AAF' : '#5A5A6A' }}>
+            {j.company} · {j.period}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MiniThemeSwatches() {
+  const { theme, isDark } = useTheme();
+  const themes = [
+    { name: 'Starfleet', colors: ['#FF9F1C', '#CC99FF', '#99CCFF', '#0A0E1A'], selected: true },
+    { name: 'Noir', colors: ['#E0E0E0', '#888', '#555', '#111'] },
+    { name: 'Cyberpunk', colors: ['#00FF87', '#FF0080', '#00D4FF', '#0D0221'] },
+    { name: 'Earth', colors: ['#8B6914', '#4A7C59', '#C4956A', '#2C1810'] },
+    { name: 'Arctic', colors: ['#64B5F6', '#E1BEE7', '#80CBC4', '#E8EAF6'] },
+  ];
+  return (
+    <div style={{
+      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
+      border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : 'rgba(0,0,0,0.08)'}`,
+      borderRadius: 8, padding: 14, maxWidth: 320,
+    }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#CC99FF', marginBottom: 10 }}>
+        ▸ Theme Candidates
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {themes.map(t => (
+          <div key={t.name} style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '5px 8px',
+            borderRadius: 6,
+            background: t.selected ? (isDark ? 'rgba(255,159,28,0.08)' : 'rgba(255,159,28,0.06)') : 'transparent',
+            border: t.selected ? '1px solid rgba(255,159,28,0.2)' : '1px solid transparent',
+          }}>
+            <div style={{ display: 'flex', gap: 3 }}>
+              {t.colors.map((c, i) => (
+                <div key={i} style={{ width: 12, height: 12, borderRadius: 3, background: c, border: '1px solid rgba(255,255,255,0.1)' }} />
+              ))}
+            </div>
+            <span style={{
+              fontFamily: theme.fonts.mono, fontSize: '0.6rem',
+              color: t.selected ? '#FF9F1C' : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+              fontWeight: t.selected ? 700 : 400,
+            }}>
+              {t.name} {t.selected && '✓'}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── step data ──────────────────────────────────────────── */
 
 interface Step {
   phase: string;
@@ -12,92 +195,113 @@ interface Step {
   details: string[];
   toolsUsed: string[];
   color: string;
+  preview?: React.ReactNode;
 }
 
 const steps: Step[] = [
   {
     phase: 'Phase 0',
     icon: <Brain size={20} />,
-    title: 'Crafting the Prompt with Claude Opus 4.6',
+    title: 'Prompt Engineering with Claude Opus 4.6',
     description:
-      'Before touching Lovable, I spent time with Claude Opus 4.6 iterating on the perfect system prompt — a detailed brief describing every section, the RPG-inspired design language, and the Starfleet theme.',
+      'Before opening Lovable, I spent time with Claude Opus 4.6 designing the portfolio concept and writing a detailed prompt. Claude proposed five distinct visual themes to choose from.',
     details: [
-      'Started with a rough idea: "portfolio site that feels like an RPG character sheet"',
-      'Asked Claude to brainstorm section structures — Hero, Stats, Transmissions, Repositories, Experience Timeline',
-      'Iterated on the visual identity: dark sci-fi palette, VT323 display font, amber (#FF9F1C) accent',
-      'Had Claude generate a comprehensive prompt covering layout, color tokens, typography, animations, and data schema',
-      'Refined the prompt across ~8-10 rounds until it was specific enough to hand off to Lovable in one shot',
-      'The final prompt was ~2,000 words covering every section, interaction, and design detail',
+      'Started with a loose brief: "I want a portfolio that feels like an RPG character sheet"',
+      'Claude generated five visual theme directions: Starfleet (sci-fi amber), Noir (monochrome elegance), Cyberpunk (neon glitch), Earth (warm naturals), and Arctic (cool minimal)',
+      'Each theme came with a color palette, font pairing, and layout philosophy',
+      'We iterated on the Starfleet concept — it had the right balance of personality and professionalism',
+      'Over ~8 rounds, refined the prompt to cover every section: Hero, Character Sheet, Transmissions, Repositories, Experience, Contact',
+      'The final prompt was ~2,000 words specifying layout, design tokens (VT323, Outfit, JetBrains Mono), color system (#FF9F1C amber, #CC99FF purple, #99CCFF blue), animations, and data schema',
+      'No code was written — this phase was entirely about design thinking and prompt craft',
     ],
-    toolsUsed: ['Claude Opus 4.6', 'Iterative prompt engineering', 'Design thinking'],
+    toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
     color: '#CC99FF',
   },
   {
     phase: 'Phase 1',
     icon: <Sparkles size={20} />,
-    title: 'Initial Generation in Lovable',
+    title: 'First Generation in Lovable',
     description:
-      'Pasted the refined prompt into Lovable and got a working first draft with all major sections scaffolded — Hero, Character Sheet, Publications, Projects, Experience, and Contact.',
+      'Pasted the Claude-refined prompt into Lovable. The Starfleet theme — selected from the five candidates — came through clearly, and the first generation nailed the overall structure.',
     details: [
-      'Lovable generated the full page structure from the detailed prompt',
-      'Theme system (ThemeContext + starfleet.ts) was set up with dark/light mode support',
-      'Data files (experience.ts, characterSheet.ts) were created with placeholder content',
-      'GitHub API integration was scaffolded for live repository data',
-      'The RPG stat bars and Character Sheet layout landed close to the vision on first try',
+      'Lovable generated the full single-page app with all sections from the detailed prompt',
+      'The Starfleet theme system (ThemeContext + starfleet.ts) was set up with dark/light mode',
+      'RPG-style Character Sheet with animated stat bars landed close to the vision on first try',
+      'Hero section with starfield background, gradient accent strip, and profile layout',
+      'Data files scaffolded: experience.ts, characterSheet.ts, siteConfig.tsx',
+      'GitHub API integration for live repository data was wired up immediately',
+      'Nav bar with scroll-aware blur and section highlighting',
     ],
     toolsUsed: ['Lovable AI', 'React 18', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     color: '#FF9F1C',
+    preview: <MiniThemeSwatches />,
   },
   {
     phase: 'Phase 2',
     icon: <Code2 size={20} />,
     title: 'Iterative Refinement',
     description:
-      'Dozens of follow-up prompts to dial in the details — fixing mobile layout, tuning animations, adjusting colors, adding the 3D avatar, and polishing every micro-interaction.',
+      'Dozens of follow-up prompts to tune every detail — mobile responsiveness, animation timing, 3D avatar, scroll interactions, and component polish.',
     details: [
-      'Added Three.js / React Three Fiber for the 3D section avatars',
+      'Added Three.js / React Three Fiber for 3D section avatars',
       'Built the GitHub Activity Log (contribution calendar) with live API data',
-      'Tuned the nav bar — scroll-aware background blur, active section highlighting',
-      'Fixed responsive issues on iPhone — canvas overflow, profile image centering',
-      'Added horizontal scroll arrows for the Transmissions (LinkedIn posts) carousel',
-      'Iterated on the Character Sheet stat bars, labels, and "Off-Duty Interests" section',
+      'Fixed mobile issues — canvas overflow on iPhone, profile image centering',
+      'Added horizontal scroll arrows for the Transmissions carousel on desktop',
+      'Tuned Character Sheet stat bars: glow on high stats, category grouping, color coding',
+      'Iterated on nav bar behavior — scroll-aware background, active section detection',
+      'Added "Off-Duty Interests" with clickable links (Tromsø Flaggfotball)',
+      'Dark/light theme toggle refinement across all sections',
     ],
     toolsUsed: ['Lovable AI', 'Three.js', 'React Three Fiber', 'GitHub API'],
     color: '#99CCFF',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <MiniCharacterSheet />
+        <MiniNavBar />
+      </div>
+    ),
   },
   {
     phase: 'Phase 3',
     icon: <Layers size={20} />,
-    title: 'Content & Data',
+    title: 'Content & Data Population',
     description:
-      'Populated real data — work experience, education, skill ratings, LinkedIn post links, and project overrides for the GitHub repos.',
+      'Filled in real data — work experience, education history, skill ratings, LinkedIn posts, and project metadata for featured GitHub repos.',
     details: [
-      'Wrote experience entries with role descriptions and tech stacks',
-      'Configured project overrides (projectOverrides.ts) for featured repos',
-      'Added real LinkedIn post data with titles and URLs',
-      'Uploaded CV PDF and linked it to the download button',
-      'Translated Norwegian descriptions to English',
-      'Added clickable links for off-duty interests (Tromsø Flaggfotball, etc.)',
+      'Wrote detailed experience entries with role descriptions and tech stacks',
+      'Configured project overrides for featured repositories',
+      'Added LinkedIn post data with titles, engagement metrics, and URLs',
+      'Uploaded CV as PDF and linked it to the download button',
+      'Translated Norwegian education descriptions to English',
+      'Added spoken languages, certifications, and education details',
     ],
     toolsUsed: ['Manual data entry', 'CV parsing', 'Content writing'],
     color: '#66CC99',
+    preview: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <MiniTimeline />
+        <MiniRepoCard />
+      </div>
+    ),
   },
   {
     phase: 'Phase 4',
     icon: <Rocket size={20} />,
-    title: 'Ship It',
+    title: 'Polish & Ship',
     description:
-      'Final polish pass, README documentation, and publish to espenhk.lovable.app.',
+      'Final QA, documentation, and publishing to espenhk.lovable.app.',
     details: [
-      'Wrote comprehensive README.md documenting the tech stack and architecture',
-      'Final responsive QA across desktop and mobile viewports',
-      'Published via Lovable\'s one-click deploy',
+      'Responsive QA across desktop and mobile viewports',
+      'Wrote comprehensive README documenting the architecture and theming system',
+      'Published via Lovable\'s one-click deploy to espenhk.lovable.app',
       'Built this very page you\'re reading right now 🤯',
     ],
     toolsUsed: ['Lovable Publish', 'GitHub', 'Custom domain'],
     color: '#E8655A',
   },
 ];
+
+/* ── step card ──────────────────────────────────────────── */
 
 function StepCard({ step, index }: { step: Step; index: number }) {
   const [open, setOpen] = useState(false);
@@ -110,16 +314,13 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <div
-        style={{
-          background: isDark ? 'rgba(19,26,46,0.7)' : 'rgba(255,255,255,0.8)',
-          border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
-          borderRadius: 12,
-          overflow: 'hidden',
-          backdropFilter: 'blur(8px)',
-        }}
-      >
-        {/* Header */}
+      <div style={{
+        background: isDark ? 'rgba(19,26,46,0.7)' : 'rgba(255,255,255,0.8)',
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
+        borderRadius: 12,
+        overflow: 'hidden',
+        backdropFilter: 'blur(8px)',
+      }}>
         <button
           onClick={() => setOpen(!open)}
           style={{
@@ -134,37 +335,25 @@ function StepCard({ step, index }: { step: Step; index: number }) {
             textAlign: 'left',
           }}
         >
-          <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              background: `${step.color}20`,
-              border: `1px solid ${step.color}40`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: step.color,
-              flexShrink: 0,
-            }}
-          >
+          <div style={{
+            width: 40, height: 40, borderRadius: 10,
+            background: `${step.color}20`,
+            border: `1px solid ${step.color}40`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: step.color, flexShrink: 0,
+          }}>
             {step.icon}
           </div>
           <div style={{ flex: 1 }}>
             <div style={{
-              fontFamily: theme.fonts.mono,
-              fontSize: '0.65rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              color: step.color,
-              marginBottom: 2,
+              fontFamily: theme.fonts.mono, fontSize: '0.65rem',
+              textTransform: 'uppercase', letterSpacing: '0.1em',
+              color: step.color, marginBottom: 2,
             }}>
               {step.phase}
             </div>
             <div style={{
-              fontFamily: theme.fonts.sans,
-              fontWeight: 600,
-              fontSize: '1.05rem',
+              fontFamily: theme.fonts.sans, fontWeight: 600, fontSize: '1.05rem',
               color: isDark ? '#F0EDDF' : '#1A1A2E',
             }}>
               {step.title}
@@ -175,7 +364,6 @@ function StepCard({ step, index }: { step: Step; index: number }) {
           </div>
         </button>
 
-        {/* Body */}
         <AnimatePresence>
           {open && (
             <motion.div
@@ -187,31 +375,28 @@ function StepCard({ step, index }: { step: Step; index: number }) {
             >
               <div style={{ padding: '0 24px 24px' }}>
                 <p style={{
-                  fontFamily: theme.fonts.sans,
-                  fontSize: '0.88rem',
-                  lineHeight: 1.7,
+                  fontFamily: theme.fonts.sans, fontSize: '0.88rem', lineHeight: 1.7,
                   color: isDark ? 'rgba(208,208,208,0.8)' : 'rgba(0,0,0,0.6)',
                   marginBottom: 16,
                 }}>
                   {step.description}
                 </p>
 
+                {/* Mini preview */}
+                {step.preview && (
+                  <div style={{ marginBottom: 16 }}>
+                    {step.preview}
+                  </div>
+                )}
+
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px' }}>
                   {step.details.map((d, i) => (
                     <li key={i} style={{
-                      fontFamily: theme.fonts.sans,
-                      fontSize: '0.82rem',
-                      lineHeight: 1.6,
+                      fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
                       color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
-                      padding: '4px 0 4px 16px',
-                      position: 'relative',
+                      padding: '4px 0 4px 16px', position: 'relative',
                     }}>
-                      <span style={{
-                        position: 'absolute',
-                        left: 0,
-                        color: step.color,
-                        fontWeight: 700,
-                      }}>›</span>
+                      <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
                       {d}
                     </li>
                   ))}
@@ -220,12 +405,9 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {step.toolsUsed.map(t => (
                     <span key={t} style={{
-                      fontFamily: theme.fonts.mono,
-                      fontSize: '0.6rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      padding: '3px 8px',
-                      borderRadius: 4,
+                      fontFamily: theme.fonts.mono, fontSize: '0.6rem',
+                      textTransform: 'uppercase', letterSpacing: '0.05em',
+                      padding: '3px 8px', borderRadius: 4,
                       background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
                       color: isDark ? 'rgba(208,208,208,0.6)' : 'rgba(0,0,0,0.45)',
                     }}>
@@ -241,6 +423,8 @@ function StepCard({ step, index }: { step: Step; index: number }) {
     </motion.div>
   );
 }
+
+/* ── page ────────────────────────────────────────────────── */
 
 function PageContent() {
   const { theme, isDark } = useTheme();
@@ -265,19 +449,12 @@ function PageContent() {
           transition={{ delay: 0.2 }}
           onClick={() => navigate('/')}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontFamily: theme.fonts.mono,
-            fontSize: '0.72rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
+            background: 'none', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 6,
+            fontFamily: theme.fonts.mono, fontSize: '0.72rem',
+            textTransform: 'uppercase', letterSpacing: '0.08em',
             color: isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)',
-            marginBottom: 48,
-            padding: '6px 0',
+            marginBottom: 48, padding: '6px 0',
           }}
         >
           <ArrowLeft size={14} /> Back to portfolio
@@ -291,12 +468,9 @@ function PageContent() {
           style={{ marginBottom: 20 }}
         >
           <div style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: '0.65rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.15em',
-            color: theme.colors.accent,
-            marginBottom: 12,
+            fontFamily: theme.fonts.mono, fontSize: '0.65rem',
+            textTransform: 'uppercase', letterSpacing: '0.15em',
+            color: theme.colors.accent, marginBottom: 12,
           }}>
             Behind the scenes
           </div>
@@ -305,8 +479,7 @@ function PageContent() {
             fontSize: 'clamp(2rem, 5vw, 3rem)',
             fontWeight: 400,
             color: isDark ? '#F0EDDF' : '#1A1A2E',
-            lineHeight: 1.1,
-            margin: 0,
+            lineHeight: 1.1, margin: 0,
           }}>
             How I Built This Site
           </h1>
@@ -317,35 +490,26 @@ function PageContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           style={{
-            fontFamily: theme.fonts.sans,
-            fontSize: '0.95rem',
-            lineHeight: 1.7,
+            fontFamily: theme.fonts.sans, fontSize: '0.95rem', lineHeight: 1.7,
             color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.55)',
-            marginBottom: 48,
-            maxWidth: 580,
+            marginBottom: 48, maxWidth: 580,
           }}
         >
           This portfolio was built entirely with{' '}
           <a href="https://lovable.dev" target="_blank" rel="noopener" style={{ color: theme.colors.accent, textDecoration: 'none' }}>
             Lovable <ExternalLink size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />
           </a>
-          , with the initial prompt carefully crafted through multiple rounds of iteration with Claude Opus 4.6. Here's the full breakdown.
+          , with the initial prompt carefully crafted through multiple rounds of iteration with Claude Opus 4.6. Five visual themes were proposed, one was selected, and the rest was iterative refinement. Here's the full breakdown.
         </motion.p>
 
         {/* Timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }}>
-          {/* Vertical line */}
           <div style={{
-            position: 'absolute',
-            left: 43,
-            top: 56,
-            bottom: 56,
-            width: 1,
+            position: 'absolute', left: 43, top: 56, bottom: 56, width: 1,
             background: isDark
               ? 'linear-gradient(180deg, transparent, rgba(255,159,28,0.2), transparent)'
               : 'linear-gradient(180deg, transparent, rgba(0,0,0,0.08), transparent)',
           }} />
-
           {steps.map((step, i) => (
             <StepCard key={i} step={step} index={i} />
           ))}
@@ -358,9 +522,7 @@ function PageContent() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
           style={{
-            marginTop: 56,
-            padding: '20px 24px',
-            borderRadius: 12,
+            marginTop: 56, padding: '20px 24px', borderRadius: 12,
             background: isDark ? 'rgba(255,159,28,0.06)' : 'rgba(255,159,28,0.08)',
             border: `1px solid ${isDark ? 'rgba(255,159,28,0.12)' : 'rgba(255,159,28,0.15)'}`,
           }}
@@ -369,15 +531,13 @@ function PageContent() {
             <MessageSquare size={18} style={{ color: theme.colors.accent, marginTop: 2, flexShrink: 0 }} />
             <div>
               <p style={{
-                fontFamily: theme.fonts.sans,
-                fontSize: '0.85rem',
-                lineHeight: 1.7,
+                fontFamily: theme.fonts.sans, fontSize: '0.85rem', lineHeight: 1.7,
                 color: isDark ? 'rgba(208,208,208,0.75)' : 'rgba(0,0,0,0.6)',
                 margin: 0,
               }}>
-                <strong style={{ color: isDark ? '#F0EDDF' : '#1A1A2E' }}>Total time:</strong> ~4 hours from blank canvas to published site.
-                The key insight was front-loading effort into the prompt — a detailed, well-structured brief
-                lets Lovable generate 80% of the site in one shot, then you iterate on the remaining 20%.
+                <strong style={{ color: isDark ? '#F0EDDF' : '#1A1A2E' }}>Total time:</strong> ~8–10 hours from blank canvas to published site.
+                The key insight was front-loading effort into prompt design with Claude — a detailed, well-structured brief
+                let Lovable generate ~80% of the site in one shot, then iterative refinement handled the remaining 20%.
               </p>
             </div>
           </div>

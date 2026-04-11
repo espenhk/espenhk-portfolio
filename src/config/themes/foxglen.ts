@@ -19,7 +19,7 @@ export const theme: Theme = {
     error: '#C4907C',
   },
   fonts: {
-    display: "'Uncial Antiqua', 'MedievalSharp', serif",
+    display: "'Cinzel Decorative', 'Playfair Display', serif",
     sans: "'Nunito', 'Karla', system-ui, sans-serif",
     mono: "'Fira Code', monospace",
     runic: "'Noto Sans Runic', sans-serif",
@@ -34,6 +34,6 @@ export const theme: Theme = {
   characterSheetTheme: {
     panelBg: '#2A2520',
     barGlow: '0 0 8px rgba(212,184,123,0.3)',
-    nameFont: "'Uncial Antiqua', serif",
+    nameFont: "'Cinzel Decorative', serif",
   },
 };

@@ -3,6 +3,8 @@ import ThemeToggle from '@/components/mwe/ThemeToggle';
 import HeroSection from '@/components/mwe/HeroSection';
 import FeaturedProjects from '@/components/sections/FeaturedProjects';
 import CharacterSheetFull from '@/components/sections/CharacterSheet';
+import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
+import Publications from '@/components/sections/Publications';
 import FooterSection from '@/components/mwe/FooterSection';
 
 function PageContent() {
@@ -26,6 +28,8 @@ function PageContent() {
       <HeroSection />
       <FeaturedProjects />
       <CharacterSheetFull />
+      <ExperienceTimeline />
+      <Publications />
       <FooterSection />
     </div>
   );

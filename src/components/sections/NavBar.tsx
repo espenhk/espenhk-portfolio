@@ -100,30 +100,8 @@ export default function NavBar() {
         })}
       </div>
 
-      {/* Theme toggle + dark mode */}
+      {/* Dark mode toggle */}
       <div style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: 4 }}>
-        <select
-          value={theme.id}
-          onChange={e => setThemeById(e.target.value)}
-          style={{
-            background: 'transparent',
-            border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`,
-            borderRadius: theme.radii.sm,
-            padding: '4px 6px',
-            cursor: 'pointer',
-            color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
-            fontFamily: theme.fonts.mono,
-            fontSize: '0.58rem',
-            outline: 'none',
-            maxWidth: 80,
-          }}
-        >
-          {themes.map(t => (
-            <option key={t.id} value={t.id} style={{ background: isDark ? '#1a1a2e' : '#fff', color: isDark ? '#ccc' : '#333' }}>
-              {t.label}
-            </option>
-          ))}
-        </select>
         <button
           onClick={toggleDark}
           style={{

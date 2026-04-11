@@ -53,6 +53,7 @@ export default function Publications() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const liScrollRef = useRef<HTMLDivElement>(null);
   const [transScrolled, setTransScrolled] = useState(false);
+  const [liScrolled, setLiScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

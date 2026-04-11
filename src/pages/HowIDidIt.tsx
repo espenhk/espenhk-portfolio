@@ -272,7 +272,7 @@ function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: s
         fontSize: '0.8rem',
         fontStyle: 'italic',
         lineHeight: 1.6,
-        color: isDark ? `${color}B3` : `${color}B3`,
+        color: isDark ? `${color}E6` : `${color}`,
       }}>
         {prompt}
       </span>

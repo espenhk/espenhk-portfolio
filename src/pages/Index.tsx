@@ -33,6 +33,7 @@ function PageContent() {
       <ExperienceTimeline />
       <Publications />
       <BeyondTheCode />
+      <ContactCTA />
       <FooterSection />
     </div>
   );

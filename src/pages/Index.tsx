@@ -14,20 +14,20 @@ function getSectionBg(themeId: string, isDark: boolean, type: 'surface' | 'backg
   switch (themeId) {
     case 'cupertino':
       return type === 'surface'
-        ? 'linear-gradient(180deg, #1C1C1E 0%, #161618 100%)'
-        : 'linear-gradient(180deg, #0D1117 0%, #0A0A0A 100%)';
+        ? 'linear-gradient(180deg, #0C1222 0%, #0E1830 50%, #0C1222 100%)'
+        : 'linear-gradient(180deg, #060A14 0%, #0A1428 50%, #060A14 100%)';
     case 'arcadia':
       return type === 'surface'
-        ? 'linear-gradient(180deg, #1A1A2E 0%, #151530 100%)'
-        : 'linear-gradient(180deg, #0F0F1B 0%, #12102A 100%)';
+        ? 'linear-gradient(180deg, #14102A 0%, #1A1438 50%, #14102A 100%)'
+        : 'linear-gradient(180deg, #0A0818 0%, #10082A 50%, #0A0818 100%)';
     case 'nightcity':
       return type === 'surface'
-        ? 'linear-gradient(180deg, #1A1A2E 0%, #141428 50%, #1A1020 100%)'
-        : 'linear-gradient(135deg, #0D0E14 0%, #0F1520 50%, #0D0E14 100%)';
+        ? 'linear-gradient(180deg, #10081E 0%, #180C30 50%, #0D1218 100%)'
+        : 'linear-gradient(135deg, #0A0010 0%, #0D0820 50%, #0A0010 100%)';
     case 'starfleet':
       return type === 'surface'
-        ? 'linear-gradient(180deg, #131A2E 0%, #0F1628 100%)'
-        : 'linear-gradient(180deg, #0A0E1A 0%, #0C1020 100%)';
+        ? 'linear-gradient(180deg, #0E1428 0%, #121A38 50%, #0E1428 100%)'
+        : 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)';
     case 'foxglen':
       return type === 'surface'
         ? 'linear-gradient(180deg, #2A2520 0%, #252018 100%)'
@@ -80,15 +80,32 @@ function MWEContent() {
         {/* Nightcity accent line */}
         {theme.id === 'nightcity' && isDark && (
           <div style={{
-            position: 'absolute', top: 0, left: '10%', right: '10%', height: 1,
-            background: `linear-gradient(90deg, transparent, ${c.accent}40, transparent)`,
+            position: 'absolute', top: 0, left: '5%', right: '5%', height: 1,
+            background: `linear-gradient(90deg, transparent, ${c.accent}60, transparent)`,
           }} />
         )}
         {/* Starfleet side accent */}
         {theme.id === 'starfleet' && isDark && (
           <div style={{
             position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-            background: '#99CCFF', opacity: 0.5,
+            background: '#99CCFF', opacity: 0.6,
+          }} />
+        )}
+        {/* Cupertino subtle glow */}
+        {theme.id === 'cupertino' && isDark && (
+          <div style={{
+            position: 'absolute', top: '20%', left: '50%', width: 400, height: 400,
+            transform: 'translateX(-50%)',
+            background: 'radial-gradient(circle, rgba(0,113,227,0.06) 0%, transparent 70%)',
+            borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none',
+          }} />
+        )}
+        {/* Arcadia corner glow */}
+        {theme.id === 'arcadia' && isDark && (
+          <div style={{
+            position: 'absolute', top: 0, right: 0, width: 200, height: 200,
+            background: 'radial-gradient(circle at 100% 0%, rgba(146,204,65,0.08) 0%, transparent 70%)',
+            pointerEvents: 'none',
           }} />
         )}
         <h2 style={{
@@ -119,14 +136,21 @@ function MWEContent() {
       }}>
         {theme.id === 'nightcity' && isDark && (
           <div style={{
-            position: 'absolute', top: 0, left: '10%', right: '10%', height: 1,
-            background: `linear-gradient(90deg, transparent, ${c.secondary}40, transparent)`,
+            position: 'absolute', top: 0, left: '5%', right: '5%', height: 1,
+            background: `linear-gradient(90deg, transparent, ${c.secondary}60, transparent)`,
           }} />
         )}
         {theme.id === 'starfleet' && isDark && (
           <div style={{
             position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-            background: '#CC99FF', opacity: 0.5,
+            background: '#CC99FF', opacity: 0.6,
+          }} />
+        )}
+        {theme.id === 'cupertino' && isDark && (
+          <div style={{
+            position: 'absolute', bottom: '10%', right: '20%', width: 300, height: 300,
+            background: 'radial-gradient(circle, rgba(88,86,214,0.05) 0%, transparent 70%)',
+            borderRadius: '50%', filter: 'blur(50px)', pointerEvents: 'none',
           }} />
         )}
         <h2 style={{

@@ -1,7 +1,7 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette, PenLine } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette, PenLine, Quote } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /* ── tiny inline previews of site components ────────────── */
@@ -251,7 +251,7 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
   );
 }
 
-/* ── author prompt placeholder ──────────────────────────── */
+/* ── author prompt / reflection ─────────────────────────── */
 
 function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: string }) {
   const { theme, isDark } = useTheme();
@@ -280,6 +280,33 @@ function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: s
   );
 }
 
+function AuthorReflection({ text, color = '#CC99FF' }: { text: string; color?: string }) {
+  const { theme, isDark } = useTheme();
+  return (
+    <div style={{
+      margin: '12px 0',
+      padding: '14px 18px',
+      borderLeft: `3px solid ${isDark ? `${color}CC` : `${color}CC`}`,
+      background: isDark ? `${color}22` : `${color}20`,
+      borderRadius: '0 8px 8px 0',
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 10,
+    }}>
+      <Quote size={14} style={{ color, marginTop: 3, flexShrink: 0, opacity: 0.8 }} />
+      <span style={{
+        fontFamily: theme.fonts.sans,
+        fontSize: '0.82rem',
+        fontStyle: 'normal',
+        lineHeight: 1.7,
+        color: isDark ? 'rgba(230,230,230,0.9)' : 'rgba(30,30,30,0.85)',
+      }}>
+        {text}
+      </span>
+    </div>
+  );
+}
+
 /* ── step data ──────────────────────────────────────────── */
 
 interface Step {
@@ -287,7 +314,7 @@ interface Step {
   icon: React.ReactNode;
   title: string;
   description: string;
-  details: (string | { prompt: string })[];
+  details: (string | { prompt: string } | { reflection: string })[];
   toolsUsed: string[];
   color: string;
   preview?: React.ReactNode;
@@ -303,15 +330,15 @@ const steps: Step[] = [
       'It started, as these things do, with a blank chat window. I had a vague idea — "my portfolio should feel like an RPG character sheet" — and a lot of opinions. So I opened Claude and started talking.',
     details: [
       'The first draft was loose. Something like: "I want a portfolio that feels like an RPG character sheet, with stat bars and a sci-fi aesthetic." Not exactly a spec.',
-      { prompt: 'What made you reach for Claude here instead of just starting to build? What were you hoping the back-and-forth would surface?' },
+      { reflection: 'My experience is that when I skip the prompt build/plan phase, I quickly accept a direction I maybe didn\'t want because I get caught up in the finer details. And in the end, after a lot of iteration I end up with something I\'m only 4/6 happy with.' },
       'Claude came back with five fully distinct visual directions — not just color swaps, but completely different design philosophies: Cupertino (Apple minimalism), Arcadia (8-bit pixel art), Nightcity (cyberpunk neon), Starfleet (LCARS command console), and Foxglen (Tunic-inspired mythical manual)',
       'Each theme came with a full theme.ts config: palette, fonts, border radii, shadow philosophy, character sheet variant, layout strategy. It was like being handed five mood boards by five different designers.',
-      { prompt: 'How did it feel to see five fully formed directions appear from a rough idea? Was anything surprising about what Claude proposed?' },
+      { reflection: 'Building MWEs quickly with the graphical templates was super handy, because I could see a realization of each theme as it would end up — and iterate on them until I had something I was properly happy with. I was slightly disappointed with how samey the themes looked at first, background colors for instance were all quite the same (eggshell white and midnight blue for all).' },
       'Starfleet pulled ahead quickly. The LCARS amber/lavender/blue palette had this quality of being deeply nerdy but somehow still professional. The other four were good, but this one felt like *me*.',
-      { prompt: 'Why Starfleet specifically? Was there a moment where it clicked, or was it more of a gradual "yeah, this is it"?' },
+      { reflection: 'I picked Starfleet because it retained a feeling of playfulness, while staying safely planted in the nerd/computer geek space, resonating with gamer identity.' },
       'Over ~8 rounds of iteration, the prompt grew from a rough brief into a 4,500-word specification: 17 parts covering data architecture, component library, theming, deployment paths, animations, even the exact LCARS capsule border-radii (24px 8px 8px 24px)',
       'Fonts were locked: Antonio for display, Outfit for body, JetBrains Mono for code. Colors codified: #FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue.',
-      { prompt: 'At what point did the prompt start feeling "done"? Was there a moment you caught yourself over-engineering, or did it feel like every detail earned its place?' },
+      { reflection: 'The prompt felt more done when I had finished iterating on all of it, and could generate the initial "make MWE sections" in the end. Knowing I had specified intent, desired output, core values behind choices and several technologies considered, was good.' },
       'No code was written in this phase. Just design thinking, prompt craft, and a slowly crystallizing vision.',
     ],
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
@@ -635,8 +662,10 @@ function StepCard({ step, index }: { step: Step; index: number }) {
 
                 <div style={{ margin: '0 0 16px' }}>
                   {step.details.map((d, i) => (
-                    typeof d === 'object' && 'prompt' in d ? (
-                      <AuthorPrompt key={i} prompt={d.prompt} color={step.color} />
+                    typeof d === 'object' && 'reflection' in d ? (
+                      <AuthorReflection key={i} text={(d as { reflection: string }).reflection} color={step.color} />
+                    ) : typeof d === 'object' && 'prompt' in d ? (
+                      <AuthorPrompt key={i} prompt={(d as { prompt: string }).prompt} color={step.color} />
                     ) : (
                       <div key={i} style={{
                         fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,

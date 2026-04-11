@@ -7,6 +7,7 @@ import ContactCTA from '@/components/sections/ContactCTA';
 import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
 import Publications from '@/components/sections/Publications';
 import FooterSection from '@/components/mwe/FooterSection';
+import NavBar from '@/components/sections/NavBar';
 
 function PageContent() {
   const { theme, isDark } = useTheme();

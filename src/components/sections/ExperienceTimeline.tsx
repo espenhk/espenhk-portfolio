@@ -231,7 +231,7 @@ export default function ExperienceTimeline() {
                 Commendations
               </span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {certifications.map((cert, i) => (
                 <motion.div
                   key={cert.name}
@@ -239,18 +239,19 @@ export default function ExperienceTimeline() {
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.3, delay: 0.6 + i * 0.06 }}
                   style={{
-                    background: isDark ? 'rgba(232,101,90,0.04)' : panelBg,
-                    borderRadius: theme.radii.sm,
-                    padding: '8px 12px',
-                    border: `1px solid ${isDark ? 'rgba(232,101,90,0.1)' : border}`,
+                    background: isDark ? undefined : panelBg,
+                    backgroundImage: isDark ? panelBg : undefined,
+                    borderRadius: theme.radii.md,
+                    padding: '10px 14px',
+                    border: `1px solid ${isDark ? 'rgba(153,204,255,0.08)' : border}`,
                   }}
                 >
-                  <p style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', color: fg, fontWeight: 500 }}>
+                  <span style={{ fontFamily: theme.fonts.sans, fontSize: '0.8rem', fontWeight: 600, color: fg }}>
                     {cert.name}
-                  </p>
-                  <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.62rem', color: isDark ? '#E8655A' : fg2 }}>
-                    {cert.date}
                   </span>
+                  <p style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#99CCFF' : fg2, marginTop: 2 }}>
+                    {cert.date}
+                  </p>
                 </motion.div>
               ))}
             </div>

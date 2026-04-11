@@ -142,11 +142,11 @@ function MiniTimeline() {
 function MiniThemeSwatches() {
   const { theme, isDark } = useTheme();
   const themes = [
+    { name: 'Cupertino', colors: ['#0071E3', '#34C759', '#FF9F0A', '#0A0A0A'] },
+    { name: 'Arcadia', colors: ['#209CEE', '#92CC41', '#F7D51D', '#0F0F1B'] },
+    { name: 'Nightcity', colors: ['#00F0FF', '#FF2A6D', '#FCEE0A', '#0D0E14'] },
     { name: 'Starfleet', colors: ['#FF9F1C', '#CC99FF', '#99CCFF', '#0A0E1A'], selected: true },
-    { name: 'Noir', colors: ['#E0E0E0', '#888', '#555', '#111'] },
-    { name: 'Cyberpunk', colors: ['#00FF87', '#FF0080', '#00D4FF', '#0D0221'] },
-    { name: 'Earth', colors: ['#8B6914', '#4A7C59', '#C4956A', '#2C1810'] },
-    { name: 'Arctic', colors: ['#64B5F6', '#E1BEE7', '#80CBC4', '#E8EAF6'] },
+    { name: 'Foxglen', colors: ['#D4B87B', '#8CAA7E', '#C4907C', '#1E1B17'] },
   ];
   return (
     <div style={{
@@ -268,11 +268,11 @@ const steps: Step[] = [
       'Before opening Lovable, I spent time with Claude Opus 4.6 designing the portfolio concept and writing a detailed prompt. Claude proposed five distinct visual themes to choose from.',
     details: [
       'Started with a loose brief: "I want a portfolio that feels like an RPG character sheet"',
-      'Claude generated five visual theme directions: Starfleet (sci-fi amber), Noir (monochrome elegance), Cyberpunk (neon glitch), Earth (warm naturals), and Arctic (cool minimal)',
-      'Each theme came with a color palette, font pairing, and layout philosophy',
-      'We iterated on the Starfleet concept — it had the right balance of personality and professionalism',
-      'Over ~8 rounds, refined the prompt to cover every section: Hero, Character Sheet, Transmissions, Repositories, Experience, Contact',
-      'The final prompt was ~2,000 words specifying layout, design tokens (VT323, Outfit, JetBrains Mono), color system (#FF9F1C amber, #CC99FF purple, #99CCFF blue), animations, and data schema',
+      'Claude generated five visual theme directions: Cupertino (Apple-flat minimalism), Arcadia (8-bit retro pixel art), Nightcity (cyberpunk neon terminal), Starfleet (sci-fi command console), and Foxglen (Tunic-inspired mythical manual)',
+      'Each theme came with a full theme.ts config — color palette, font pairing, border radii, shadow style, character sheet variant, and layout philosophy',
+      'We iterated on the Starfleet concept — the LCARS-inspired amber/lavender/blue palette had the right balance of personality and professionalism',
+      'Over ~8 rounds, refined the prompt from a rough brief into a 4,500-word specification covering all 17 parts: data architecture, component library, deployment paths, and more',
+      'The final prompt specified everything: fonts (Antonio/Outfit/JetBrains Mono), color system (#FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue), LCARS capsule radii, animations, and data schema',
       'No code was written — this phase was entirely about design thinking and prompt craft',
     ],
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],

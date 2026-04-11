@@ -8,6 +8,7 @@ import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
 import Publications from '@/components/sections/Publications';
 import FooterSection from '@/components/mwe/FooterSection';
 import NavBar from '@/components/sections/NavBar';
+import StickyAvatarManager from '@/components/3d/StickyAvatarManager';
 
 function PageContent() {
   const { theme, isDark } = useTheme();

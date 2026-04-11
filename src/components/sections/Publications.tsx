@@ -80,6 +80,7 @@ export default function Publications() {
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
     (async () => {
       const [medium, youtube] = await Promise.all([
         fetchMediumArticles(),
@@ -91,7 +92,6 @@ export default function Publications() {
         const seen = new Set(live.map(p => stripQs(p.url)));
         const extra = fallbackPubs.filter(p => !seen.has(stripQs(p.url)));
         const all = [...live, ...extra];
-        // Sort by date descending
         all.sort((a, b) => {
           const parse = (d: string) => {
             const [m, y] = d.split('.');

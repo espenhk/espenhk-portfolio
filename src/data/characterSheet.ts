@@ -55,6 +55,6 @@ export const spokenLanguages = [
 
 // Interests shown below stat sheet
 export const offDutyInterests = [
-  { emoji: '🏈', label: 'Flag Football', detail: 'BGOSL player' },
+  { emoji: '🏈', label: 'Flag Football', detail: 'Tromsø Flaggfotball player', link: 'https://tromsoflaggfotball.lovable.app' },
   { emoji: '🍸', label: 'Cocktail Craft', detail: 'Negroni enthusiast' },
 ];

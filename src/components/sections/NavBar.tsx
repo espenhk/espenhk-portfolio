@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const navItems = [
-  { label: 'Transmissions', id: 'publications' },
   { label: 'Dossier', id: 'character-sheet' },
+  { label: 'Transmissions', id: 'publications' },
+  { label: 'Contact', id: 'contact' },
   { label: 'Projects', id: 'projects' },
   { label: 'Service', id: 'experience' },
-  { label: 'Contact', id: 'contact' },
 ];
 
 export default function NavBar() {

@@ -29,9 +29,9 @@ function PageContent() {
 
       <NavBar />
       <HeroSection />
+      <CharacterSheetFull />
       <Publications />
       <ContactCTA />
-      <CharacterSheetFull />
       <FeaturedProjects />
       <ExperienceTimeline />
       <FooterSection />

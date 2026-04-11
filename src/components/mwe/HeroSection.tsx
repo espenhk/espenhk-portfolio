@@ -1,30 +1,5 @@
 import { useTheme } from '@/context/ThemeContext';
-import profileImg from '@/assets/profile.jpeg';
-import { Github, Linkedin, Instagram } from 'lucide-react';
-
-function MediumIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
-      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
-    </svg>
-  );
-}
-
-function BlueskyIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
-      <path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.785 2.627 3.6 3.476 6.178 3.126-4.476.742-8.463 3.058-4.741 8.627 4.476 5.103 7.192-1.386 8.063-3.584.127-.327.18-.49.226-.413.046-.077.099.086.226.413.87 2.198 3.587 8.687 8.063 3.584 3.722-5.569-.265-7.885-4.741-8.627 2.578.35 5.393-.499 6.178-3.126C20.622 9.418 21 4.458 21 3.768c0-.69-.139-1.861-.902-2.203-.659-.3-1.664-.621-4.3 1.24C13.046 4.747 10.087 8.686 9 10.8h3z"/>
-    </svg>
-  );
-}
-
-const socials = [
-  { icon: Github, url: 'https://github.com/espenhk', label: 'GitHub' },
-  { icon: Linkedin, url: 'https://linkedin.com/in/espen-h-kristensen-4770a525', label: 'LinkedIn' },
-  { icon: MediumIcon, url: 'https://medium.com/@espen-haukeland-kristensen', label: 'Medium' },
-  { icon: BlueskyIcon, url: 'https://bsky.app/profile/bgosl.bsky.social', label: 'Bluesky' },
-  { icon: Instagram, url: 'https://instagram.com/bgosl', label: 'Instagram' },
-];
+import { siteConfig, socialLinks } from '@/data/siteConfig';
 
 export default function HeroSection() {
   const { theme, isDark } = useTheme();
@@ -53,7 +28,6 @@ export default function HeroSection() {
         transition: `all ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
       }}
     >
-      {/* Star field */}
       {isDark && (
         <>
           <div style={{
@@ -69,19 +43,16 @@ export default function HeroSection() {
               radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
               radial-gradient(1.5px 1.5px at 15% 75%, rgba(232,101,90,0.4) 0%, transparent 100%)`,
           }} />
-          {/* LCARS accent bar */}
           <div style={{
             position: 'absolute', left: 0, top: 0, bottom: 0, width: 6, zIndex: 2,
             background: `linear-gradient(180deg, #FF9F1C 0%, #CC99FF 40%, #99CCFF 70%, #E8655A 100%)`,
             opacity: 0.8,
           }} />
-          {/* Amber glow */}
           <div style={{
             position: 'absolute', top: '-10%', right: '20%', width: 300, height: 300,
             background: 'radial-gradient(circle, rgba(255,159,28,0.08) 0%, transparent 70%)',
             borderRadius: '50%', filter: 'blur(50px)', zIndex: 0, pointerEvents: 'none',
           }} />
-          {/* Lavender glow */}
           <div style={{
             position: 'absolute', bottom: '5%', left: '15%', width: 250, height: 250,
             background: 'radial-gradient(circle, rgba(204,153,255,0.08) 0%, transparent 70%)',
@@ -92,8 +63,8 @@ export default function HeroSection() {
 
       <div style={{ maxWidth: 720, textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <img
-          src={profileImg}
-          alt="Espen H. Kristensen"
+          src={siteConfig.profileImage}
+          alt={siteConfig.name}
           style={{
             width: 140, height: 140,
             borderRadius: theme.radii.full,
@@ -112,13 +83,13 @@ export default function HeroSection() {
           textTransform: 'uppercase',
           textShadow: isDark ? '0 0 20px rgba(255,159,28,0.15)' : undefined,
         }}>
-          Espen H. Kristensen
+          {siteConfig.name}
         </h1>
         <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
-          Data Engineer · Manager @ PwC Norway
+          {siteConfig.tagline}
         </p>
         <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
-          Passionate about data engineering, LLMs and responsible AI. Mathematical background, sports geek, cocktail nerd.
+          {siteConfig.bio}
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
           <a
@@ -139,7 +110,7 @@ export default function HeroSection() {
             View Projects
           </a>
           <a
-            href="#"
+            href={siteConfig.resumeUrl}
             style={{
               background: 'transparent',
               color: c.accent,
@@ -157,7 +128,7 @@ export default function HeroSection() {
           </a>
         </div>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          {socials.map(s => (
+          {socialLinks.map(s => (
             <a
               key={s.label}
               href={s.url}

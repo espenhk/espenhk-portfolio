@@ -196,6 +196,7 @@ interface Step {
   toolsUsed: string[];
   color: string;
   preview?: React.ReactNode;
+  expandableSection?: { title: string; content: string };
 }
 
 const steps: Step[] = [

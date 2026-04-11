@@ -253,26 +253,26 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
 
 /* ── author prompt placeholder ──────────────────────────── */
 
-function AuthorPrompt({ prompt }: { prompt: string }) {
+function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: string }) {
   const { theme, isDark } = useTheme();
   return (
     <div style={{
       margin: '12px 0',
       padding: '12px 16px',
-      borderLeft: `3px solid ${isDark ? '#CC99FF60' : '#CC99FF80'}`,
-      background: isDark ? 'rgba(204,153,255,0.04)' : 'rgba(204,153,255,0.06)',
+      borderLeft: `3px solid ${isDark ? `${color}60` : `${color}80`}`,
+      background: isDark ? `${color}0A` : `${color}0F`,
       borderRadius: '0 8px 8px 0',
       display: 'flex',
       alignItems: 'flex-start',
       gap: 10,
     }}>
-      <PenLine size={14} style={{ color: '#CC99FF', marginTop: 3, flexShrink: 0 }} />
+      <PenLine size={14} style={{ color, marginTop: 3, flexShrink: 0 }} />
       <span style={{
         fontFamily: theme.fonts.sans,
         fontSize: '0.8rem',
         fontStyle: 'italic',
         lineHeight: 1.6,
-        color: isDark ? 'rgba(204,153,255,0.7)' : 'rgba(120,80,160,0.7)',
+        color: isDark ? `${color}B3` : `${color}B3`,
       }}>
         {prompt}
       </span>
@@ -636,7 +636,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                 <div style={{ margin: '0 0 16px' }}>
                   {step.details.map((d, i) => (
                     typeof d === 'object' && 'prompt' in d ? (
-                      <AuthorPrompt key={i} prompt={d.prompt} />
+                      <AuthorPrompt key={i} prompt={d.prompt} color={step.color} />
                     ) : (
                       <div key={i} style={{
                         fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,

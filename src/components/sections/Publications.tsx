@@ -251,6 +251,7 @@ export default function Publications() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                     <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color, textTransform: 'uppercase', letterSpacing: '0.05em', background: `${color}12`, padding: '2px 6px', borderRadius: theme.radii.sm }}>{pub.type}</span>
                     <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>{pub.date}</span>
+                    {pub.readTimeMin && <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>· {pub.readTimeMin} min read</span>}
                   </div>
                   <a href={pub.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                     <h3 style={{ fontFamily: theme.fonts.sans, fontSize: '0.82rem', fontWeight: 600, color: fg, lineHeight: 1.35, marginBottom: 4 }}>{pub.title}</h3>

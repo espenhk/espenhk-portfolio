@@ -1,5 +1,5 @@
 import { useTheme } from '@/context/ThemeContext';
-import GitHubCalendar from 'react-github-calendar';
+import { GitHubCalendar } from 'react-github-calendar';
 import { siteConfig } from '@/data/siteConfig';
 
 export default function GitHubGraph() {

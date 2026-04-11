@@ -10,8 +10,6 @@ interface Interest {
   color: string;
   link?: string;
 }
-import { useEffect, useRef, useState } from 'react';
-import { Globe, Trophy, Wine } from 'lucide-react';
 
 const languages = [
   { name: 'Norwegian', level: 'Native', value: 100 },

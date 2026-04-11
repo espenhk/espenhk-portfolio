@@ -16,7 +16,7 @@ export const characterSheet = {
     { label: 'Java', value: 40, category: 'language' as const },
     { label: 'Bicep / IaC', value: 55, category: 'language' as const },
 
-    { label: 'Azure Data', value: 85, category: 'framework' as const },
+    { label: 'Azure Databricks', value: 85, category: 'framework' as const },
     { label: 'Power BI', value: 70, category: 'framework' as const },
     { label: 'Kafka / Confluent', value: 45, category: 'framework' as const },
     { label: 'GitHub Actions', value: 40, category: 'framework' as const },

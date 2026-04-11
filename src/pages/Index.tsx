@@ -30,10 +30,10 @@ function PageContent() {
       <HeroSection />
       <FeaturedProjects />
       <CharacterSheetFull />
+      <ContactCTA />
       <ExperienceTimeline />
       <Publications />
       <BeyondTheCode />
-      <ContactCTA />
       <FooterSection />
     </div>
   );

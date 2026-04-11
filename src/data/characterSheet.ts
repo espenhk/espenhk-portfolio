@@ -38,7 +38,7 @@ export const characterSheet = {
 
 export const categoryLabels: Record<string, string> = {
   'language': 'LANGUAGES',
-  'framework': 'FRAMEWORKS & PLATFORMS',
+  'framework': 'PLATFORMS',
   'tool': 'SKILLS & DOMAINS',
   'soft-skill': 'LIFE & INTERESTS',
 };

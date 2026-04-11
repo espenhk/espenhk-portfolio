@@ -30,10 +30,10 @@ function PageContent() {
       <NavBar />
       <HeroSection />
       <Publications />
+      <ContactCTA />
       <CharacterSheetFull />
       <FeaturedProjects />
       <ExperienceTimeline />
-      <ContactCTA />
       <FooterSection />
     </div>
   );

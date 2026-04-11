@@ -69,7 +69,16 @@ export default function Publications() {
         // Deduplicate by URL, live feed takes priority
         const seen = new Set(live.map(p => p.url));
         const extra = fallbackPubs.filter(p => !seen.has(p.url));
-        setPublications([...live, ...extra]);
+        const all = [...live, ...extra];
+        // Sort by date descending
+        all.sort((a, b) => {
+          const parse = (d: string) => {
+            const [m, y] = d.split('.');
+            return new Date(`${y}-${m}-01`).getTime();
+          };
+          return parse(b.date) - parse(a.date);
+        });
+        setPublications(all);
       }
     })();
   }, []);

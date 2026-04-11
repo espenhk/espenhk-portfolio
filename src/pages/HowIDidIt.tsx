@@ -633,18 +633,22 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                   </div>
                 )}
 
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px' }}>
+                <div style={{ margin: '0 0 16px' }}>
                   {step.details.map((d, i) => (
-                    <li key={i} style={{
-                      fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
-                      color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
-                      padding: '4px 0 4px 16px', position: 'relative',
-                    }}>
-                      <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
-                      {d}
-                    </li>
+                    typeof d === 'object' && 'prompt' in d ? (
+                      <AuthorPrompt key={i} prompt={d.prompt} />
+                    ) : (
+                      <div key={i} style={{
+                        fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
+                        color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                        padding: '4px 0 4px 16px', position: 'relative',
+                      }}>
+                        <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
+                        {d}
+                      </div>
+                    )
                   ))}
-                </ul>
+                </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {step.toolsUsed.map(t => (

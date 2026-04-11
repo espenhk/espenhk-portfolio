@@ -559,10 +559,10 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
       'The finishing line is a lie — there\'s always one more thing. But at some point you have to call it, push it live, and let people see it.',
     details: [
       'Responsive QA across desktop, tablet, and mobile viewports. Every breakpoint is a chance for something to quietly fall apart.',
-      { prompt: 'What was the last thing you fixed before publishing? Was there a "good enough" moment, or did you keep finding things?' },
+      { reflection: 'The last thing to fix was all of it. Just going through small things, looking at how hovers and such worked, where a lot of smaller adjustments were necessary. I tried to pool a set of feedback with each prompt, so I didn\'t wait too long.' },
       'Published via Lovable\'s one-click deploy to espenhk.lovable.app',
       'Built this very page you\'re reading right now 🤯 — a meta-layer that documents how the thing was built, inside the thing itself',
-      { prompt: 'Why build this page? Is it for other developers, for recruiters, for yourself, or just because it\'s fun to be recursive?' },
+      { reflection: 'I built this page much for myself, to test tools like Lovable that touch upon a way of coding that is new for me. It\'s also potentially useful for recruiters, colleagues, new clients etc. to showcase what I know.' },
     ],
     toolsUsed: ['Lovable Publish', 'GitHub', 'Custom domain'],
     color: '#E8655A',

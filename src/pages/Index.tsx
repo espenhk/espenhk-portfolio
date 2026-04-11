@@ -27,6 +27,7 @@ function PageContent() {
         <ThemeToggle />
       </div>
 
+      <NavBar />
       <HeroSection />
       <CharacterSheetFull />
       <ContactCTA />

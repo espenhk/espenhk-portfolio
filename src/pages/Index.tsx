@@ -18,8 +18,8 @@ function getSectionBg(themeId: string, isDark: boolean, type: 'surface' | 'backg
         : 'linear-gradient(180deg, #060A14 0%, #0A1428 50%, #060A14 100%)';
     case 'arcadia':
       return type === 'surface'
-        ? 'linear-gradient(180deg, #14102A 0%, #1A1438 50%, #14102A 100%)'
-        : 'linear-gradient(180deg, #0A0818 0%, #10082A 50%, #0A0818 100%)';
+        ? 'linear-gradient(180deg, #18102A 0%, #1A1230 30%, #1A1008 60%, #18102A 100%)'
+        : 'linear-gradient(180deg, #0A0818 0%, #120C18 30%, #140E08 55%, #0A0818 100%)';
     case 'nightcity':
       return type === 'surface'
         ? 'linear-gradient(180deg, #10081E 0%, #180C30 50%, #0D1218 100%)'
@@ -102,11 +102,18 @@ function MWEContent() {
         )}
         {/* Arcadia corner glow */}
         {theme.id === 'arcadia' && isDark && (
-          <div style={{
-            position: 'absolute', top: 0, right: 0, width: 200, height: 200,
-            background: 'radial-gradient(circle at 100% 0%, rgba(146,204,65,0.08) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }} />
+          <>
+            <div style={{
+              position: 'absolute', top: 0, right: 0, width: 200, height: 200,
+              background: 'radial-gradient(circle at 100% 0%, rgba(231,110,85,0.1) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, width: 200, height: 200,
+              background: 'radial-gradient(circle at 0% 100%, rgba(247,213,29,0.06) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+          </>
         )}
         <h2 style={{
           fontFamily: theme.fonts.display,

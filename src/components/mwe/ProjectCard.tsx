@@ -7,7 +7,7 @@ function getCardBg(themeId: string, isDark: boolean, c: any): string {
     case 'cupertino':
       return 'linear-gradient(145deg, #101828 0%, #141E32 100%)';
     case 'arcadia':
-      return 'linear-gradient(180deg, #16122E 0%, #1E1840 100%)';
+      return 'linear-gradient(180deg, #18102E 0%, #1C1438 50%, #1A1008 100%)';
     case 'nightcity':
       return 'linear-gradient(135deg, #100820 0%, #18102E 50%, #101420 100%)';
     case 'starfleet':

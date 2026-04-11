@@ -101,6 +101,7 @@ All colors MUST be HSL.
 
   html, body {
     @apply bg-background text-foreground;
+    background-color: #060A18;
   }
 }
 

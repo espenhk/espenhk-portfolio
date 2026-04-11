@@ -244,5 +244,6 @@ export default function Publications() {
         </div>
       </div>
     </section>
+    </>
   );
 }

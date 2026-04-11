@@ -1,6 +1,6 @@
 import { useTheme } from '@/context/ThemeContext';
 import profileImg from '@/assets/profile.jpeg';
-import { Github, Linkedin, Instagram, Facebook } from 'lucide-react';
+import { Github, Linkedin, Instagram } from 'lucide-react';
 
 function MediumIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
   return (
@@ -24,7 +24,6 @@ const socials = [
   { icon: MediumIcon, url: 'https://medium.com/@espen-haukeland-kristensen', label: 'Medium' },
   { icon: BlueskyIcon, url: 'https://bsky.app/profile/bgosl.bsky.social', label: 'Bluesky' },
   { icon: Instagram, url: 'https://instagram.com/bgosl', label: 'Instagram' },
-  { icon: Facebook, url: 'https://facebook.com/espenhk', label: 'Facebook' },
 ];
 
 export default function HeroSection() {

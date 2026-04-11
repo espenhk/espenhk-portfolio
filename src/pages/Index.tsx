@@ -33,8 +33,8 @@ function PageContent() {
       <CharacterSheetFull />
       <Publications />
       <ContactCTA />
-      <FeaturedProjects />
       <GitHubGraph />
+      <FeaturedProjects />
       <ExperienceTimeline />
       <FooterSection />
     </div>

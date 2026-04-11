@@ -1,5 +1,5 @@
 import { useTheme } from '@/context/ThemeContext';
-import { Github, Linkedin, Instagram, Facebook } from 'lucide-react';
+import { Github, Linkedin, Instagram } from 'lucide-react';
 
 function MediumIcon({ size = 18, color = 'currentColor' }: { size?: number; color?: string }) {
   return (
@@ -23,7 +23,6 @@ const socials = [
   { icon: MediumIcon, url: 'https://medium.com/@espen-haukeland-kristensen' },
   { icon: BlueskyIcon, url: 'https://bsky.app/profile/bgosl.bsky.social' },
   { icon: Instagram, url: 'https://instagram.com/bgosl' },
-  { icon: Facebook, url: 'https://facebook.com/espenhk' },
 ];
 
 export default function FooterSection() {

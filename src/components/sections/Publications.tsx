@@ -20,6 +20,13 @@ const typeColor: Record<string, string> = {
   series: '#CC99FF',
 };
 
+const SCROLL_HIDE_CSS = `
+.transmissions-scroll::-webkit-scrollbar { display: none; }
+@media (min-width: 768px) {
+  .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
+}
+`;
+
 export default function Publications() {
   const { theme, isDark } = useTheme();
   const c = theme.colors;

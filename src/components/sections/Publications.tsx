@@ -66,9 +66,9 @@ export default function Publications() {
       ]);
       const live = [...medium, ...youtube];
       if (live.length > 0) {
-        // Deduplicate by URL, live feed takes priority
-        const seen = new Set(live.map(p => p.url));
-        const extra = fallbackPubs.filter(p => !seen.has(p.url));
+        const stripQs = (u: string) => u.split('?')[0];
+        const seen = new Set(live.map(p => stripQs(p.url)));
+        const extra = fallbackPubs.filter(p => !seen.has(stripQs(p.url)));
         const all = [...live, ...extra];
         // Sort by date descending
         all.sort((a, b) => {

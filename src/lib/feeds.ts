@@ -8,6 +8,12 @@ function extractFirstImage(html: string): string | undefined {
   return match?.[1];
 }
 
+function estimateReadTime(html: string): number {
+  const text = html.replace(/<[^>]+>/g, '');
+  const words = text.trim().split(/\s+/).length;
+  return Math.max(1, Math.round(words / 230));
+}
+
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
   return `${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
@@ -25,6 +31,7 @@ export async function fetchMediumArticles(): Promise<Publication[]> {
       description: item.description?.replace(/<[^>]+>/g, '').slice(0, 160) + '…',
       type: 'article' as const,
       heroImage: item.thumbnail || extractFirstImage(item.content || item.description || ''),
+      readTimeMin: estimateReadTime(item.content || item.description || ''),
     }));
   } catch (e) {
     console.error('Failed to fetch Medium feed:', e);

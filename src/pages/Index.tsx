@@ -2,6 +2,7 @@ import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import ThemeToggle from '@/components/mwe/ThemeToggle';
 import HeroSection from '@/components/mwe/HeroSection';
 import FeaturedProjects from '@/components/sections/FeaturedProjects';
+import GitHubGraph from '@/components/sections/GitHubGraph';
 import CharacterSheetFull from '@/components/sections/CharacterSheet';
 import ContactCTA from '@/components/sections/ContactCTA';
 import ExperienceTimeline from '@/components/sections/ExperienceTimeline';
@@ -29,6 +30,7 @@ function PageContent() {
 
       <NavBar />
       <HeroSection />
+      <GitHubGraph />
       <CharacterSheetFull />
       <Publications />
       <ContactCTA />

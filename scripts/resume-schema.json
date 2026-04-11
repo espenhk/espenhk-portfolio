@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Portfolio Resume Input",
+  "description": "JSON schema consumed by scripts/import-resume.ts to generate src/data/experience.ts. Based on JSON Resume (https://jsonresume.org) with the fields this portfolio actually uses.",
+  "type": "object",
+  "properties": {
+    "work": {
+      "type": "array",
+      "description": "Work experience entries, most recent first.",
+      "items": {
+        "type": "object",
+        "required": ["name", "position", "startDate"],
+        "properties": {
+          "name":       { "type": "string", "description": "Company or organisation name.", "examples": ["PwC Norway"] },
+          "position":   { "type": "string", "description": "Job title / role.", "examples": ["Manager"] },
+          "startDate":  { "type": "string", "format": "date", "description": "ISO 8601 date (YYYY-MM-DD).", "examples": ["2025-08-01"] },
+          "endDate":    { "type": ["string", "null"], "format": "date", "description": "ISO 8601 date or null/empty for current role.", "examples": ["2025-07-31", null] },
+          "summary":    { "type": "string", "description": "1-3 sentence description of the role." },
+          "highlights": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Skill tags / key achievements shown as pills.",
+            "examples": [["Data Engineering", "Python", "Azure"]]
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "description": "Education entries, most recent first.",
+      "items": {
+        "type": "object",
+        "required": ["institution", "startDate"],
+        "properties": {
+          "institution": { "type": "string", "examples": ["University of Oslo"] },
+          "studyType":   { "type": "string", "description": "Degree level.", "examples": ["Bachelor", "Master", "Single courses (master)"] },
+          "area":        { "type": "string", "description": "Field of study.", "examples": ["Mathematics, Informatics and Technology"] },
+          "startDate":   { "type": "string", "format": "date" },
+          "endDate":     { "type": ["string", "null"], "format": "date" },
+          "courses":     {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Notable courses or details.",
+            "examples": [["Reinforcement Learning", "NLP", "Machine Learning"]]
+          }
+        }
+      }
+    },
+    "certificates": {
+      "type": "array",
+      "description": "Professional certifications.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name":   { "type": "string", "examples": ["PL-300 Microsoft Certified: Power BI Data Analyst"] },
+          "date":   { "type": "string", "format": "date", "description": "Date obtained (YYYY-MM-DD)." },
+          "issuer": { "type": "string", "examples": ["Microsoft"] }
+        }
+      }
+    }
+  }
+}

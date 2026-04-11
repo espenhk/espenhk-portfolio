@@ -196,14 +196,19 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
       <button
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
         style={{
-          background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
-          border: `1px solid ${isDark ? `${color}25` : `${color}20`}`,
-          borderRadius: 8, padding: '10px 14px', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+          background: isDark
+            ? `linear-gradient(135deg, ${color}12, ${color}06)`
+            : `linear-gradient(135deg, ${color}10, ${color}05)`,
+          border: `1px solid ${isDark ? `${color}35` : `${color}25`}`,
+          borderRadius: 10, padding: '14px 18px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 10, width: '100%',
           textAlign: 'left',
+          transition: 'all 0.2s ease',
         }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = `${color}60`; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? `${color}35` : `${color}25`; }}
       >
-        <Code2 size={14} style={{ color, flexShrink: 0 }} />
+        <Code2 size={16} style={{ color, flexShrink: 0 }} />
         <span style={{
           fontFamily: theme.fonts.mono, fontSize: '0.68rem',
           color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
@@ -278,7 +283,7 @@ const steps: Step[] = [
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
     color: '#CC99FF',
     expandableSection: {
-      title: 'View the Original Prompt (v4)',
+      title: '📋 View the Original Prompt — All 4,500 Words',
       content: `# Personal Developer Portfolio — Complete Specification v4
 
 **Owner:** Espen H. Kristensen

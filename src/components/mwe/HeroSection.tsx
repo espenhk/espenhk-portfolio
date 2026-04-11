@@ -81,26 +81,32 @@ function getThemeOverlay(themeId: string, isDark: boolean, c: any): React.ReactN
           {/* Pixel grid */}
           <div style={{
             position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', opacity: 0.06,
-            backgroundImage: 'linear-gradient(rgba(146,204,65,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(146,204,65,0.2) 1px, transparent 1px)',
+            backgroundImage: 'linear-gradient(rgba(247,213,29,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(247,213,29,0.3) 1px, transparent 1px)',
             backgroundSize: '4px 4px',
           }} />
-          {/* Green phosphor glow */}
+          {/* Orange/amber central glow */}
           <div style={{
-            position: 'absolute', top: '30%', left: '50%', width: 500, height: 300,
+            position: 'absolute', top: '25%', left: '50%', width: 500, height: 400,
             transform: 'translate(-50%, -50%)',
-            background: 'radial-gradient(ellipse, rgba(146,204,65,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(231,110,85,0.1) 0%, rgba(247,213,29,0.04) 40%, transparent 70%)',
             borderRadius: '50%', zIndex: 0, pointerEvents: 'none',
           }} />
-          {/* Blue accent corners */}
+          {/* Blue accent — top left */}
           <div style={{
-            position: 'absolute', top: 0, left: 0, width: 200, height: 200,
-            background: 'radial-gradient(circle at 0% 0%, rgba(32,156,238,0.08) 0%, transparent 70%)',
+            position: 'absolute', top: 0, left: 0, width: 250, height: 250,
+            background: 'radial-gradient(circle at 0% 0%, rgba(32,156,238,0.1) 0%, transparent 70%)',
             zIndex: 0, pointerEvents: 'none',
           }} />
+          {/* Orange accent — bottom right */}
           <div style={{
-            position: 'absolute', bottom: 0, right: 0, width: 200, height: 200,
-            background: 'radial-gradient(circle at 100% 100%, rgba(231,110,85,0.08) 0%, transparent 70%)',
+            position: 'absolute', bottom: 0, right: 0, width: 300, height: 300,
+            background: 'radial-gradient(circle at 100% 100%, rgba(231,110,85,0.12) 0%, rgba(247,213,29,0.05) 40%, transparent 70%)',
             zIndex: 0, pointerEvents: 'none',
+          }} />
+          {/* Horizontal scanline band */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', opacity: 0.03,
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(231,110,85,0.4) 3px, rgba(231,110,85,0.4) 4px)',
           }} />
         </>
       );

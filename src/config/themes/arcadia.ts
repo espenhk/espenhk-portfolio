@@ -25,8 +25,8 @@ export const theme: Theme = {
   radii: { sm: '0px', md: '0px', lg: '0px', full: '0px' },
   borders: { width: '4px', style: 'solid' },
   shadows: {
-    card: '4px 4px 0px rgba(0,0,0,0.25)',
-    cardHover: '2px 2px 0px rgba(0,0,0,0.25)',
+    card: '4px 4px 0px rgba(231,110,85,0.3)',
+    cardHover: '2px 2px 0px rgba(231,110,85,0.3)',
   },
   motion: { timingFunction: 'steps(6)', durationFast: '100ms', durationNormal: '200ms' },
   characterSheetTheme: {

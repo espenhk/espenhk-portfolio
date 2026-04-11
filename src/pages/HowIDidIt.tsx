@@ -594,7 +594,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <div style={{
-        background: isDark ? 'rgba(19,26,46,0.7)' : 'rgba(255,255,255,0.8)',
+        background: isDark ? `${theme.colors.surface.dark}B3` : `${theme.colors.surface.light}CC`,
         border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
         borderRadius: 12,
         overflow: 'hidden',

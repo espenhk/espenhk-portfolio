@@ -7,13 +7,20 @@ function StatBar({ stat, index, visible, accentColor }: {
   stat: Stat; index: number; visible: boolean; accentColor: string;
 }) {
   const { theme } = useTheme();
+  const isHigh = stat.value >= 75;
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
         <span style={{ color: '#D0D0D0', fontSize: '0.72rem', fontFamily: theme.fonts.mono }}>
           {stat.label}
         </span>
-        <span style={{ color: accentColor, fontSize: '0.72rem', fontFamily: theme.fonts.mono, fontWeight: 700 }}>
+        <span style={{
+          color: accentColor,
+          fontSize: '0.72rem',
+          fontFamily: theme.fonts.mono,
+          fontWeight: 700,
+          textShadow: isHigh ? `0 0 8px ${accentColor}60` : undefined,
+        }}>
           {stat.value}
         </span>
       </div>
@@ -26,7 +33,9 @@ function StatBar({ stat, index, visible, accentColor }: {
             height: '100%',
             backgroundImage: `linear-gradient(90deg, ${accentColor}, ${accentColor}99)`,
             borderRadius: 2,
-            boxShadow: `0 0 6px ${accentColor}25`,
+            boxShadow: isHigh
+              ? `0 0 10px ${accentColor}50, 0 0 20px ${accentColor}25`
+              : `0 0 6px ${accentColor}25`,
           }}
         />
       </div>

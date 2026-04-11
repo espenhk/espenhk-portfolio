@@ -16,17 +16,17 @@ export const characterSheet = {
     { label: 'Java', value: 30, category: 'language' as const },
     { label: 'Infrastructure as Code', value: 45, category: 'language' as const },
 
-    // Frameworks & Platforms
+    // Platforms
     { label: 'Azure Databricks', value: 80, category: 'framework' as const },
     { label: 'Power BI', value: 60, category: 'framework' as const },
     { label: 'Kafka / Confluent', value: 35, category: 'framework' as const },
-    { label: 'CI/CD', value: 40, category: 'framework' as const },
+    { label: 'AI Foundry', value: 45, category: 'framework' as const },
 
     // Skills & Domains
     { label: 'Data Engineering', value: 85, category: 'tool' as const },
     { label: 'Integration', value: 60, category: 'tool' as const },
     { label: 'RAG / GenAI', value: 50, category: 'tool' as const },
-    { label: 'Machine Learning', value: 40, category: 'tool' as const },
+    { label: 'CI/CD', value: 40, category: 'tool' as const },
 
     // Life & Interests
     { label: 'Communication', value: 75, category: 'soft-skill' as const },
@@ -38,7 +38,7 @@ export const characterSheet = {
 
 export const categoryLabels: Record<string, string> = {
   'language': 'LANGUAGES',
-  'framework': 'FRAMEWORKS & PLATFORMS',
+  'framework': 'PLATFORMS',
   'tool': 'SKILLS & DOMAINS',
   'soft-skill': 'LIFE & INTERESTS',
 };

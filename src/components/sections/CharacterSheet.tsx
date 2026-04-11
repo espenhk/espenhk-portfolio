@@ -24,18 +24,27 @@ function StatBar({ stat, index, visible, accentColor }: {
           {stat.value}
         </span>
       </div>
-      <div style={{ height: 5, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
+      <div style={{
+        height: 6,
+        background: 'rgba(255,255,255,0.06)',
+        borderRadius: 3,
+        overflow: 'hidden',
+        position: 'relative',
+      }}>
         <motion.div
           initial={{ width: 0 }}
           animate={visible ? { width: `${stat.value}%` } : { width: 0 }}
           transition={{ duration: 0.8, delay: index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
             height: '100%',
-            backgroundImage: `linear-gradient(90deg, ${accentColor}, ${accentColor}99)`,
-            borderRadius: 2,
+            backgroundImage: isHigh
+              ? `linear-gradient(90deg, ${accentColor}AA, ${accentColor})`
+              : `linear-gradient(90deg, ${accentColor}, ${accentColor}99)`,
+            borderRadius: 3,
             boxShadow: isHigh
-              ? `0 0 10px ${accentColor}50, 0 0 20px ${accentColor}25`
+              ? `0 0 12px ${accentColor}80, 0 0 24px ${accentColor}40, 0 0 4px ${accentColor}`
               : `0 0 6px ${accentColor}25`,
+            filter: isHigh ? `brightness(1.2)` : undefined,
           }}
         />
       </div>

@@ -2,13 +2,17 @@ import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { publications } from '@/data/experience';
-import { ExternalLink, BookOpen, Video, Layers } from 'lucide-react';
+import { ExternalLink, BookOpen, Layers } from 'lucide-react';
 
-const typeIcon = {
-  article: BookOpen,
-  video: Video,
-  series: Layers,
-} as const;
+function getYouTubeId(url: string): string | null {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  return match ? match[1] : null;
+}
+
+function getMediumPreviewImage(url: string): string {
+  // Use a gradient placeholder — Medium doesn't expose OG images easily
+  return '';
+}
 
 const typeColor: Record<string, string> = {
   article: '#FF9F1C',
@@ -43,7 +47,7 @@ export default function Publications() {
       id="publications"
       ref={ref}
       style={{
-        padding: '80px 24px',
+        padding: '60px 24px',
         backgroundImage: isDark
           ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
           : undefined,
@@ -64,7 +68,7 @@ export default function Publications() {
           fontFamily: theme.fonts.display,
           fontSize: '1.8rem',
           color: fg,
-          marginBottom: 40,
+          marginBottom: 24,
           textTransform: 'uppercase',
           letterSpacing: '0.06em',
           textAlign: 'center',
@@ -72,101 +76,147 @@ export default function Publications() {
           Transmissions
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 16,
+        }}>
           {publications.map((pub, i) => {
-            const Icon = typeIcon[pub.type];
             const color = typeColor[pub.type];
+            const ytId = pub.type === 'video' ? getYouTubeId(pub.url) : null;
+            const isVideo = !!ytId;
 
             return (
-              <motion.a
+              <motion.div
                 key={pub.title}
-                href={pub.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 20 }}
                 animate={visible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
                 style={{
-                  textDecoration: 'none',
                   background: isDark ? undefined : panelBg,
                   backgroundImage: isDark ? panelBg : undefined,
                   borderRadius: theme.radii.md,
-                  padding: '20px 22px',
                   border: `1px solid ${isDark ? `${color}15` : border}`,
                   boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
-                  display: 'block',
-                  transition: `all ${theme.motion.durationFast} ease`,
-                }}
-                whileHover={{
-                  scale: 1.01,
-                  boxShadow: isDark
-                    ? `0 0 20px ${color}15, ${theme.shadows.cardHover}`
-                    : theme.shadows.cardHover,
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
-                <div style={{
-                  display: 'flex', alignItems: 'flex-start', gap: 14,
-                }}>
+                {/* Preview area */}
+                {isVideo ? (
                   <div style={{
-                    width: 36, height: 36, borderRadius: theme.radii.sm,
-                    background: `${color}12`,
-                    border: `1px solid ${color}25`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                    marginTop: 2,
+                    position: 'relative',
+                    width: '100%',
+                    paddingBottom: '56.25%',
                   }}>
-                    <Icon size={16} color={color} />
+                    <iframe
+                      src={`https://www.youtube.com/embed/${ytId}`}
+                      title={pub.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{
+                        position: 'absolute',
+                        top: 0, left: 0,
+                        width: '100%',
+                        height: '100%',
+                        border: 'none',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <a
+                    href={pub.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'block',
+                      height: 120,
+                      background: isDark
+                        ? `linear-gradient(135deg, ${color}15, ${color}08)`
+                        : `linear-gradient(135deg, ${color}10, ${color}05)`,
+                      position: 'relative',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      {pub.type === 'series' ? (
+                        <Layers size={32} color={color} style={{ opacity: 0.4 }} />
+                      ) : (
+                        <BookOpen size={32} color={color} style={{ opacity: 0.4 }} />
+                      )}
+                    </div>
+                    <div style={{
+                      position: 'absolute',
+                      top: 8, right: 8,
+                      width: 24, height: 24,
+                      borderRadius: '50%',
+                      background: 'rgba(0,0,0,0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <ExternalLink size={12} color="#fff" />
+                    </div>
+                  </a>
+                )}
+
+                {/* Info */}
+                <div style={{ padding: '12px 14px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6,
+                  }}>
+                    <span style={{
+                      fontFamily: theme.fonts.mono, fontSize: '0.6rem',
+                      color, textTransform: 'uppercase', letterSpacing: '0.05em',
+                      background: `${color}12`,
+                      padding: '2px 6px',
+                      borderRadius: theme.radii.sm,
+                    }}>
+                      {pub.type}
+                    </span>
+                    <span style={{
+                      fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2,
+                    }}>
+                      {pub.date}
+                    </span>
                   </div>
 
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
-                      gap: 8, marginBottom: 4, flexWrap: 'wrap',
-                    }}>
-                      <h3 style={{
-                        fontFamily: theme.fonts.sans,
-                        fontSize: '0.92rem',
-                        fontWeight: 600,
-                        color: fg,
-                        lineHeight: 1.35,
-                      }}>
-                        {pub.title}
-                      </h3>
-                      <span style={{
-                        fontFamily: theme.fonts.mono,
-                        fontSize: '0.68rem',
-                        color,
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                      }}>
-                        {pub.date}
-                      </span>
-                    </div>
-                    <p style={{
+                  <a
+                    href={pub.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <h3 style={{
                       fontFamily: theme.fonts.sans,
                       fontSize: '0.82rem',
-                      color: fg2,
-                      lineHeight: 1.5,
-                      marginBottom: 6,
+                      fontWeight: 600,
+                      color: fg,
+                      lineHeight: 1.35,
+                      marginBottom: 4,
                     }}>
-                      {pub.description}
-                    </p>
-                    <div style={{
-                      display: 'flex', alignItems: 'center', gap: 6,
-                    }}>
-                      <span style={{
-                        fontFamily: theme.fonts.mono,
-                        fontSize: '0.68rem',
-                        color,
-                        textTransform: 'uppercase',
-                      }}>
-                        {pub.type}
-                      </span>
-                      <ExternalLink size={12} color={fg2} style={{ opacity: 0.5 }} />
-                    </div>
-                  </div>
+                      {pub.title}
+                    </h3>
+                  </a>
+
+                  <p style={{
+                    fontFamily: theme.fonts.sans,
+                    fontSize: '0.72rem',
+                    color: fg2,
+                    lineHeight: 1.45,
+                    flex: 1,
+                  }}>
+                    {pub.description}
+                  </p>
                 </div>
-              </motion.a>
+              </motion.div>
             );
           })}
         </div>

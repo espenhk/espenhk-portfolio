@@ -20,7 +20,7 @@ export const theme: Theme = {
     error: '#E8655A',
   },
   fonts: {
-    display: "'Antonio', 'Chakra Petch', system-ui, sans-serif",
+    display: "'VT323', 'Antonio', system-ui, sans-serif",
     sans: "'Outfit', 'Inter', system-ui, sans-serif",
     mono: "'JetBrains Mono', monospace",
   },
@@ -34,6 +34,6 @@ export const theme: Theme = {
   characterSheetTheme: {
     panelBg: '#131A2E',
     barGlow: 'none',
-    nameFont: "'Antonio', sans-serif",
+    nameFont: "'VT323', sans-serif",
   },
 };

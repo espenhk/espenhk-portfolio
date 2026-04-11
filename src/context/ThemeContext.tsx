@@ -11,7 +11,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeId, setThemeId] = useState('cupertino');
+  const [themeId, setThemeId] = useState('starfleet');
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {

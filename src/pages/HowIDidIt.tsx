@@ -185,6 +185,66 @@ function MiniThemeSwatches() {
   );
 }
 
+/* ── expandable prompt sub-section ───────────────────────── */
+
+function ExpandablePrompt({ title, content, color }: { title: string; content: string; color: string }) {
+  const [open, setOpen] = useState(false);
+  const { theme, isDark } = useTheme();
+
+  return (
+    <div style={{ marginTop: 16 }}>
+      <button
+        onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+        style={{
+          background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+          border: `1px solid ${isDark ? `${color}25` : `${color}20`}`,
+          borderRadius: 8, padding: '10px 14px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+          textAlign: 'left',
+        }}
+      >
+        <Code2 size={14} style={{ color, flexShrink: 0 }} />
+        <span style={{
+          fontFamily: theme.fonts.mono, fontSize: '0.68rem',
+          color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+          flex: 1,
+        }}>
+          {title}
+        </span>
+        <span style={{ color: isDark ? 'rgba(208,208,208,0.4)' : 'rgba(0,0,0,0.25)' }}>
+          {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              marginTop: 8, padding: 16, borderRadius: 8,
+              background: isDark ? 'rgba(6,10,24,0.9)' : 'rgba(0,0,0,0.02)',
+              border: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}`,
+              maxHeight: 500, overflowY: 'auto',
+            }}>
+              <pre style={{
+                fontFamily: theme.fonts.mono, fontSize: '0.62rem', lineHeight: 1.65,
+                color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0,
+              }}>
+                {content}
+              </pre>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ── step data ──────────────────────────────────────────── */
 
 interface Step {

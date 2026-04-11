@@ -185,6 +185,66 @@ function MiniThemeSwatches() {
   );
 }
 
+/* ── expandable prompt sub-section ───────────────────────── */
+
+function ExpandablePrompt({ title, content, color }: { title: string; content: string; color: string }) {
+  const [open, setOpen] = useState(false);
+  const { theme, isDark } = useTheme();
+
+  return (
+    <div style={{ marginTop: 16 }}>
+      <button
+        onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+        style={{
+          background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+          border: `1px solid ${isDark ? `${color}25` : `${color}20`}`,
+          borderRadius: 8, padding: '10px 14px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+          textAlign: 'left',
+        }}
+      >
+        <Code2 size={14} style={{ color, flexShrink: 0 }} />
+        <span style={{
+          fontFamily: theme.fonts.mono, fontSize: '0.68rem',
+          color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+          flex: 1,
+        }}>
+          {title}
+        </span>
+        <span style={{ color: isDark ? 'rgba(208,208,208,0.4)' : 'rgba(0,0,0,0.25)' }}>
+          {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{
+              marginTop: 8, padding: 16, borderRadius: 8,
+              background: isDark ? 'rgba(6,10,24,0.9)' : 'rgba(0,0,0,0.02)',
+              border: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}`,
+              maxHeight: 500, overflowY: 'auto',
+            }}>
+              <pre style={{
+                fontFamily: theme.fonts.mono, fontSize: '0.62rem', lineHeight: 1.65,
+                color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0,
+              }}>
+                {content}
+              </pre>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ── step data ──────────────────────────────────────────── */
 
 interface Step {
@@ -196,6 +256,7 @@ interface Step {
   toolsUsed: string[];
   color: string;
   preview?: React.ReactNode;
+  expandableSection?: { title: string; content: string };
 }
 
 const steps: Step[] = [
@@ -216,6 +277,140 @@ const steps: Step[] = [
     ],
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
     color: '#CC99FF',
+    expandableSection: {
+      title: 'View the Original Prompt (v4)',
+      content: `# Personal Developer Portfolio — Complete Specification v4
+
+**Owner:** Espen H. Kristensen
+**GitHub:** \`espenhk\` · **Medium:** \`espen-haukeland-kristensen\` · **Instagram/Bluesky:** \`@bgosl\` · **Facebook:** \`espenhk\`
+
+---
+
+# PART 0 — GRAPHICAL PROFILES & BUILD STRATEGY
+
+## 0.1 Build Strategy: Minimal Working Example First
+
+> **INSTRUCTION TO THE BUILDER (human or AI):**
+>
+> **Do NOT build the full site immediately.**
+>
+> First, build **five minimal working examples (MWEs)** — one per graphical profile below. Each MWE must contain:
+>
+> 1. A **hero section** with profile image, name, tagline, and one CTA button.
+> 2. One **project card** (hardcoded sample data).
+> 3. One **character sheet stat bar** (3–4 bars, animated on scroll).
+> 4. A **dark/light mode toggle** demonstrating both modes.
+> 5. A **footer** with social icons.
+>
+> Each MWE must be a single-page, self-contained deployment. All five share the same component code — the *only* difference is the \`theme.ts\` file loaded.
+>
+> **Present all five MWEs for review.** Once a profile is approved, proceed with the full build using that theme. The full spec (Parts 1–17) describes the complete site.
+
+---
+
+## 0.2 Graphical Profile A — "CUPERTINO" · Apple-Flat Minimalism
+
+**Mood:** Clean, corporate, confident. The portfolio as a product page.
+
+| Element | Treatment |
+|---|---|
+| Headings | \`Inter\` — medium weight, generous letter-spacing |
+| Body | \`Inter\` — regular weight, max readability |
+| Mono | \`JetBrains Mono\` |
+| Palette | Near-white \`#FAFAFA\` / void-black \`#0A0A0A\`. Accent: electric blue \`#0071E3\`. |
+| Corners | Rounded: \`8–20px\` |
+| Shadows | Soft: \`0 2px 12px rgba(0,0,0,0.06)\` |
+| Borders | Subtle \`1px\` border in light grey |
+| Motion | Smooth \`ease-out\` fades, scale-ups on hover |
+| Character sheet | Clean horizontal bars, accent fill, no glow |
+| Light mode | Primary — pure, airy white |
+| Dark mode | Deep black, high contrast text |
+
+---
+
+## 0.3 Graphical Profile B — "ARCADIA" · 8-Bit Retro Pixel Art
+
+**Mood:** Nostalgic, playful. The portfolio as a retro game cartridge. Think NES-era UI.
+
+| Element | Treatment |
+|---|---|
+| Headings | \`Press Start 2P\` — all-caps, chunky pixel letterforms |
+| Body | \`IBM Plex Mono\` — readable monospace |
+| Palette | NES-inspired: blue \`#209CEE\`, green \`#92CC41\`, gold \`#F7D51D\`, red \`#E76E55\` |
+| Corners | \`0px\` everywhere — hard right angles |
+| Shadows | Chunky: \`4px 4px 0px rgba(0,0,0,0.25)\` |
+| Borders | Thick \`4px\` solid — NES dialog box style |
+| Motion | \`steps(6)\` timing — frame-by-frame feel |
+| Character sheet | RPG stat screen. Labels: STR / DEX / INT / WIS |
+
+---
+
+## 0.4 Graphical Profile C — "NIGHTCITY" · Cyberpunk Neon Terminal
+
+**Mood:** Edgy, technical. Blade Runner meets a senior engineer's GitHub.
+
+| Element | Treatment |
+|---|---|
+| Headings | \`Rajdhani\` / \`Orbitron\` — uppercase, tracked wide |
+| Body | \`Exo 2\` / \`Inter\` — clean sans for dark backgrounds |
+| Palette | Cyan \`#00F0FF\`, magenta \`#FF2A6D\`, amber \`#FCEE0A\`. Background: \`#0D0E14\` |
+| Corners | Asymmetric: \`0 12px 0 12px\` — cyberpunk "cut corner" |
+| Shadows | Glow: \`0 0 20px rgba(0,240,255,0.15)\` on hover |
+| Motion | \`cubic-bezier(0.77, 0, 0.175, 1)\`. Optional glitch entrance. |
+| Character sheet | HUD overlay. Neon cyan fill + sweep animation. |
+
+---
+
+## 0.5 Graphical Profile D — "STARFLEET" · Sci-Fi Command Console (LCARS / Mass Effect)
+
+**Mood:** Structured, information-dense, exploratory. The portfolio as a starship personnel file.
+
+| Element | Treatment |
+|---|---|
+| Headings | \`Antonio\` / \`Chakra Petch\` — semi-condensed futuristic sans |
+| Body | \`Outfit\` / \`Inter\` — max readability |
+| Palette | LCARS amber \`#FF9F1C\`, lavender \`#CC99FF\`, sky-blue \`#99CCFF\`, coral \`#E8655A\`, tan \`#FFCC99\` |
+| Corners | LCARS capsule: \`24px 8px 8px 24px\` |
+| Borders | None — colour blocks *are* the borders |
+| Motion | \`ease-out\`, elements slide from left |
+| Character sheet | Crew personnel dossier. "PERSONNEL FILE" header in amber. |
+
+---
+
+## 0.6 Graphical Profile E — "FOXGLEN" · Tunic-Inspired Mythical Manual
+
+**Mood:** Gentle mystery. The portfolio as a discovered instruction booklet.
+
+| Element | Treatment |
+|---|---|
+| Headings | \`Uncial Antiqua\` or \`MedievalSharp\` — uncial letterforms |
+| Body | \`Nunito\` or \`Karla\` — soft, rounded sans-serif |
+| Decorative | \`Noto Sans Runic\` — aesthetic glyphs, not translatable |
+| Palette | Parchment \`#F2EDE4\`, sage \`#8CAA7E\`, dusty rose \`#C4907C\`, slate blue \`#7B95A5\`, soft gold \`#D4B87B\` |
+| Corners | Rounded \`16px\`. Inner shadow simulating manual-page indentation. |
+| Backgrounds | Subtle parchment texture overlay at ~5% opacity |
+| Character sheet | "The Hero's Page" — styled as a discovered manual page |
+
+---
+
+## 0.7 Theme Comparison Matrix
+
+| Feature | CUPERTINO | ARCADIA | NIGHTCITY | STARFLEET | FOXGLEN |
+|---|---|---|---|---|---|
+| Mood | Clean, corporate | Nostalgic, playful | Edgy, technical | Structured, exploratory | Gentle, mysterious |
+| Dark feel | Void black | NES cartridge | Blade Runner | Starship bridge | Charcoal on vellum |
+| Key gimmick | None — pure clarity | Pixel borders | Neon glow, glitch | Colour-block sidebar | Runic glyphs |
+| Recruiter-safe? | ✅ Most professional | ⚠️ Bold | ✅ Dark = slick | ✅ Both modes | ✅ Elegant + unique |
+| Fun | ★★★☆☆ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★★ |
+
+---
+
+# PART 1–17 — FULL SITE SPECIFICATION
+
+The remaining 17 parts covered: site map, data architecture (GitHub API, Medium RSS, project overrides, character sheet stats, hobbies data), front page sections (Hero, GitHub Graph, Featured Projects, Character Sheet, Beyond the Code, Medium Articles, Social Links, Footer), project pages, interactive component registry, SEO & metadata, maintainability, three tech paths (Astro / Next.js / Vite SPA), deployment targets (GitHub Pages / Vercel / Azure), shared component library, file structure, CI/CD workflows, and a Lovable prompt sequence.
+
+**Decision:** Start with Path C (Vite + React SPA) for maximum Lovable compatibility and fastest time-to-live. The prompt was ~4,500 words specifying every data structure, component, design token, and deployment path.`,
+    },
   },
   {
     phase: 'Phase 1',
@@ -415,6 +610,11 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                     </span>
                   ))}
                 </div>
+
+                {/* Expandable sub-section (e.g. original prompt) */}
+                {step.expandableSection && (
+                  <ExpandablePrompt title={step.expandableSection.title} content={step.expandableSection.content} color={step.color} />
+                )}
               </div>
             </motion.div>
           )}

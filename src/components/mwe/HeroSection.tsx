@@ -1,10 +1,18 @@
 import { useTheme } from '@/context/ThemeContext';
-import { Github, Linkedin, BookOpen, Instagram, Facebook } from 'lucide-react';
+import { Github, Linkedin, Instagram, Facebook } from 'lucide-react';
+
+function MediumIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+    </svg>
+  );
+}
 
 const socials = [
   { icon: Github, url: 'https://github.com/espenhk', label: 'GitHub' },
   { icon: Linkedin, url: 'https://linkedin.com/in/espen-h-kristensen-4770a525', label: 'LinkedIn' },
-  { icon: BookOpen, url: 'https://medium.com/@espen-haukeland-kristensen', label: 'Medium' },
+  { icon: MediumIcon, url: 'https://medium.com/@espen-haukeland-kristensen', label: 'Medium' },
   { icon: Instagram, url: 'https://instagram.com/bgosl', label: 'Instagram' },
   { icon: Facebook, url: 'https://facebook.com/espenhk', label: 'Facebook' },
 ];

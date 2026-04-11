@@ -181,7 +181,7 @@ export default function ExperienceTimeline() {
         </div>
 
         {/* Education & Certs — side by side */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <GraduationCap size={16} color="#99CCFF" />

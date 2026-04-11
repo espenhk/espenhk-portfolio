@@ -217,8 +217,9 @@ export default function CharacterSheetFull() {
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          gap: 20,
+          gap: 12,
           marginTop: 16,
+          flexWrap: 'wrap',
         }}>
           {offDutyInterests.map(item => (
             <div
@@ -226,15 +227,15 @@ export default function CharacterSheetFull() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: 6,
                 fontFamily: theme.fonts.sans,
-                fontSize: '0.82rem',
+                fontSize: '0.78rem',
                 color: fg2,
               }}
             >
-              <span style={{ fontSize: '1.2rem' }}>{item.emoji}</span>
+              <span style={{ fontSize: '1.1rem' }}>{item.emoji}</span>
               <span style={{ fontWeight: 600, color: fg }}>{item.label}</span>
-              <span style={{ fontSize: '0.72rem', opacity: 0.7 }}>— {item.detail}</span>
+              <span style={{ fontSize: '0.68rem', opacity: 0.7 }}>— {item.detail}</span>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette, PenLine } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /* ── tiny inline previews of site components ────────────── */
@@ -251,6 +251,35 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
   );
 }
 
+/* ── author prompt placeholder ──────────────────────────── */
+
+function AuthorPrompt({ prompt }: { prompt: string }) {
+  const { theme, isDark } = useTheme();
+  return (
+    <div style={{
+      margin: '12px 0',
+      padding: '12px 16px',
+      borderLeft: `3px solid ${isDark ? '#CC99FF60' : '#CC99FF80'}`,
+      background: isDark ? 'rgba(204,153,255,0.04)' : 'rgba(204,153,255,0.06)',
+      borderRadius: '0 8px 8px 0',
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 10,
+    }}>
+      <PenLine size={14} style={{ color: '#CC99FF', marginTop: 3, flexShrink: 0 }} />
+      <span style={{
+        fontFamily: theme.fonts.sans,
+        fontSize: '0.8rem',
+        fontStyle: 'italic',
+        lineHeight: 1.6,
+        color: isDark ? 'rgba(204,153,255,0.7)' : 'rgba(120,80,160,0.7)',
+      }}>
+        {prompt}
+      </span>
+    </div>
+  );
+}
+
 /* ── step data ──────────────────────────────────────────── */
 
 interface Step {
@@ -258,7 +287,7 @@ interface Step {
   icon: React.ReactNode;
   title: string;
   description: string;
-  details: string[];
+  details: (string | { prompt: string })[];
   toolsUsed: string[];
   color: string;
   preview?: React.ReactNode;
@@ -271,15 +300,19 @@ const steps: Step[] = [
     icon: <Brain size={20} />,
     title: 'Prompt Engineering with Claude Opus 4.6',
     description:
-      'Before opening Lovable, I spent time with Claude Opus 4.6 designing the portfolio concept and writing a detailed prompt. Claude proposed five distinct visual themes to choose from.',
+      'It started, as these things do, with a blank chat window. I had a vague idea — "my portfolio should feel like an RPG character sheet" — and a lot of opinions. So I opened Claude and started talking.',
     details: [
-      'Started with a loose brief: "I want a portfolio that feels like an RPG character sheet"',
-      'Claude generated five visual theme directions: Cupertino (Apple-flat minimalism), Arcadia (8-bit retro pixel art), Nightcity (cyberpunk neon terminal), Starfleet (sci-fi command console), and Foxglen (Tunic-inspired mythical manual)',
-      'Each theme came with a full theme.ts config — color palette, font pairing, border radii, shadow style, character sheet variant, and layout philosophy',
-      'We iterated on the Starfleet concept — the LCARS-inspired amber/lavender/blue palette had the right balance of personality and professionalism',
-      'Over ~8 rounds, refined the prompt from a rough brief into a 4,500-word specification covering all 17 parts: data architecture, component library, deployment paths, and more',
-      'The final prompt specified everything: fonts (Antonio/Outfit/JetBrains Mono), color system (#FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue), LCARS capsule radii, animations, and data schema',
-      'No code was written — this phase was entirely about design thinking and prompt craft',
+      'The first draft was loose. Something like: "I want a portfolio that feels like an RPG character sheet, with stat bars and a sci-fi aesthetic." Not exactly a spec.',
+      { prompt: 'What made you reach for Claude here instead of just starting to build? What were you hoping the back-and-forth would surface?' },
+      'Claude came back with five fully distinct visual directions — not just color swaps, but completely different design philosophies: Cupertino (Apple minimalism), Arcadia (8-bit pixel art), Nightcity (cyberpunk neon), Starfleet (LCARS command console), and Foxglen (Tunic-inspired mythical manual)',
+      'Each theme came with a full theme.ts config: palette, fonts, border radii, shadow philosophy, character sheet variant, layout strategy. It was like being handed five mood boards by five different designers.',
+      { prompt: 'How did it feel to see five fully formed directions appear from a rough idea? Was anything surprising about what Claude proposed?' },
+      'Starfleet pulled ahead quickly. The LCARS amber/lavender/blue palette had this quality of being deeply nerdy but somehow still professional. The other four were good, but this one felt like *me*.',
+      { prompt: 'Why Starfleet specifically? Was there a moment where it clicked, or was it more of a gradual "yeah, this is it"?' },
+      'Over ~8 rounds of iteration, the prompt grew from a rough brief into a 4,500-word specification: 17 parts covering data architecture, component library, theming, deployment paths, animations, even the exact LCARS capsule border-radii (24px 8px 8px 24px)',
+      'Fonts were locked: Antonio for display, Outfit for body, JetBrains Mono for code. Colors codified: #FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue.',
+      { prompt: 'At what point did the prompt start feeling "done"? Was there a moment you caught yourself over-engineering, or did it feel like every detail earned its place?' },
+      'No code was written in this phase. Just design thinking, prompt craft, and a slowly crystallizing vision.',
     ],
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
     color: '#CC99FF',
@@ -421,17 +454,19 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
   {
     phase: 'Phase 1',
     icon: <Sparkles size={20} />,
-    title: 'First Generation in Lovable',
+    title: 'First Generation — "Show Me Five Worlds"',
     description:
-      'Pasted the Claude-refined prompt into Lovable. It generated five minimal working examples (MWEs) — one per theme — each with a hero, project card, character sheet bars, dark/light toggle, and footer. After comparing all five, Starfleet was the clear winner.',
+      'The moment of truth. I pasted the 4,500-word spec into Lovable and hit enter. What came back was five self-contained mini-sites — five alternate realities for what this portfolio could be.',
     details: [
-      'Lovable generated all five MWEs sharing the same component structure, differing only in theme.ts',
-      'Cupertino looked too corporate, Arcadia was fun but hard to read, Nightcity felt edgy but not "me"',
-      'Foxglen was beautiful but the runic aesthetic felt forced for a data engineer portfolio',
-      'Starfleet\'s LCARS amber/lavender/blue palette struck the right balance — structured but playful',
-      'Once selected, Lovable generated the full single-page app with all sections from the spec',
-      'The Starfleet theme system (ThemeContext + starfleet.ts) was set up with dark/light mode from the start',
-      'GitHub API integration, data files (experience.ts, characterSheet.ts, siteConfig.tsx), and nav bar were all scaffolded in the first full generation',
+      'Lovable generated all five MWEs sharing the same component structure, differing only in theme.ts. Each had a hero, project card, stat bars, dark/light toggle, and footer. Same skeleton, five different skins.',
+      { prompt: 'What was the first reaction when you saw the five MWEs side by side? Did the one you expected to win actually win?' },
+      'Cupertino was polished but anonymous — it could have been anyone\'s portfolio. Arcadia made me smile, but pixelated headings at 14px aren\'t great for readability.',
+      'Nightcity looked incredible in screenshots but felt exhausting to actually read. The neon glow was a vibe, not an interface.',
+      'Foxglen was the surprise contender — the parchment texture and uncial headings created something genuinely unique. But for a data engineering portfolio, it felt like cosplay.',
+      { prompt: 'Was there any theme you were sad to let go? Or one that you\'d revisit for a different project?' },
+      'Starfleet won. The LCARS amber bars, the structured layout, the "personnel file" framing — it felt like it was designed for someone who thinks in data pipelines and system architecture.',
+      'Once selected, Lovable generated the full single-page app: all sections from the spec, ThemeContext, data files, nav bar, GitHub API integration — the whole scaffold, in one shot.',
+      { prompt: 'How much of that first full generation was usable as-is? What percentage felt "right" vs. "needs work"?' },
     ],
     toolsUsed: ['Lovable AI', 'React 18', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     color: '#FF9F1C',
@@ -440,22 +475,22 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
   {
     phase: 'Phase 2',
     icon: <Code2 size={20} />,
-    title: 'Iterative Refinement — The Long Phase',
+    title: 'The Iteration Grind',
     description:
-      'This was where most of the time went. Dozens of follow-up prompts to fix mobile issues, tune animations, get the profile image right, and polish every section. Some things took many rounds to nail.',
+      'This is where the glamorous "AI built my website" story becomes the real one. Phase 2 was dozens of follow-up prompts, each one fixing something the last one broke, chasing pixel-perfect results across screen sizes.',
     details: [
-      '🔁 Profile image centering in the hero bubble took multiple rounds — face kept getting cut off, needed repeated nudging',
-      '🔁 Mobile responsiveness was a recurring battle — Three.js canvas overflow on iPhone, layout breaks at narrow widths',
-      '🔁 Activity Log (GitHub contribution graph) background color kept not matching the Repositories section — fixed multiple times',
-      '🔁 Flag football content and links needed several corrections across iterations',
-      '🔁 Section background consistency across the whole page required repeated passes',
-      'Added Three.js / React Three Fiber for 3D section avatars with sticky scroll behavior',
-      'Built the GitHub Activity Log with live contribution calendar data',
-      'Added horizontal scroll arrows for the Transmissions (LinkedIn posts) carousel on desktop',
-      'Tuned Character Sheet stat bars: glow effects on high stats, category grouping, color coding by category',
-      'Nav bar scroll-aware behavior: blur background, active section detection, mobile hamburger menu',
-      'Built "Off-Duty Interests" section with clickable link to Tromsø Flaggfotball',
-      'Dark/light theme toggle refinement across all sections — each section needed individual attention',
+      '🔁 The profile image was the first headache. Getting a face centered in a circular hero bubble sounds trivial — it took multiple rounds of nudging crop coordinates before it stopped cutting off my forehead.',
+      { prompt: 'What was the most frustrating part of the image centering saga? Did you consider just picking a different photo?' },
+      '🔁 Mobile responsiveness was a recurring battle. The Three.js canvas (added for 3D section avatars) kept overflowing the viewport on iPhone. Every fix on one device shifted something on another.',
+      { prompt: 'At what point did you consider dropping the 3D elements entirely? Was there a moment where "good enough on mobile" won over "perfect everywhere"?' },
+      '🔁 The GitHub Activity Log background color refused to match the rest of the page. Fixed it, looked great, scrolled down — the Repositories section was now the wrong shade. This happened at least three times.',
+      'Added Three.js / React Three Fiber for 3D section avatars with sticky scroll behavior — the biggest "scope creep" of the project, but worth it for the wow factor',
+      '🔁 Section background consistency across the entire page was a whack-a-mole game. Fix one section, break the gradient transition to the next.',
+      { prompt: 'Was there a turning point where the iteration started feeling productive instead of circular? Or a trick you learned for getting Lovable to make the right fix?' },
+      'Nav bar scroll behavior: blur background, active section highlighting, mobile hamburger — each of these was its own mini-project within the project',
+      'Character Sheet stat bars got glow effects on high stats, category grouping, color coding — this section was pure fun to tune',
+      'Dark/light theme toggle: every single section needed individual attention. What looks great in dark mode at 11pm looks washed out in light mode at noon.',
+      { prompt: 'How many hours of Phase 2 were "fun iteration" vs. "fixing things that shouldn\'t be broken"? What\'s the ratio?' },
     ],
     toolsUsed: ['Lovable AI', 'Three.js', 'React Three Fiber', 'GitHub API'],
     color: '#99CCFF',
@@ -469,17 +504,19 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
   {
     phase: 'Phase 3',
     icon: <Layers size={20} />,
-    title: 'Content & Data Population',
+    title: 'Filling In the Blanks',
     description:
-      'Filled in real data — work experience at PwC Norway, Kantega, Avella, and Kobler. Education from University of Oslo. LinkedIn posts, certifications, and project metadata.',
+      'With the design locked, it was time to make it real. This phase was less about code and more about content — translating a career into structured data, and making sure the story told was accurate.',
     details: [
-      'Wrote detailed experience entries: PwC Norway (Manager), Kantega AS (Data Engineer), Avella AS (Integration Consultant), Kobler AS (News Trend Analyst)',
-      'Configured project overrides for featured repos: MyFootballFlags, Python ODE Solver, War on Zombies',
-      'Added LinkedIn post data with titles, engagement metrics, and URLs for the Transmissions carousel',
-      '🔁 Academy section had a description stuck in Norwegian — translated to English and repositioned degree type into the title line',
-      'Added spoken languages (Norwegian, English, German, Italian), six certifications, and three education entries',
-      'Added Medium publications including the 4-part data anonymisation series and the Responsible AI book recommendations',
-      'Uploaded CV as PDF and linked it to the download button',
+      'Work history went in: PwC Norway (Manager), Kantega AS (Data Engineer), Avella AS (Integration Consultant), Kobler AS (News Trend Analyst). Four roles, four very different chapters.',
+      { prompt: 'How did it feel to reduce each job to a one-line description and a handful of tags? Was anything important lost in compression?' },
+      'Project overrides for featured repos: MyFootballFlags, Python ODE Solver, War on Zombies. Each needed a custom description and hero image because the README alone doesn\'t tell the story.',
+      'LinkedIn post data with engagement metrics went into the Transmissions carousel. This section was about showing a public voice, not just code.',
+      '🔁 The Academy section had descriptions stuck in Norwegian from the CV parse — "Forsterkningslæring" doesn\'t mean much to an international audience. Translated and repositioned.',
+      { prompt: 'Did the CV-to-data pipeline work smoothly, or was there a lot of manual cleanup? How much of the content was auto-parsed vs. hand-written?' },
+      'Six certifications, three education entries, four spoken languages, and a Medium publication list including the 4-part data anonymisation series',
+      'The "Off-Duty Interests" section — flag football, hiking, genre fiction — felt like the hardest content to write. Technical stuff has structure; personality doesn\'t.',
+      { prompt: 'Was there anything you deliberately left out of the portfolio? Anything that felt too personal, too niche, or too "who cares"?' },
     ],
     toolsUsed: ['Manual data entry', 'CV parsing', 'Content writing'],
     color: '#66CC99',
@@ -493,14 +530,15 @@ The remaining 17 parts covered: site map, data architecture (GitHub API, Medium 
   {
     phase: 'Phase 4',
     icon: <Rocket size={20} />,
-    title: 'Polish & Ship',
+    title: 'Ship It (and Then Keep Going)',
     description:
-      'Final QA, comprehensive README, and publishing to espenhk.lovable.app.',
+      'The finishing line is a lie — there\'s always one more thing. But at some point you have to call it, push it live, and let people see it.',
     details: [
-      'Responsive QA across desktop and mobile viewports',
-      'Wrote comprehensive README documenting the architecture, theming system, and data pipeline',
+      'Responsive QA across desktop, tablet, and mobile viewports. Every breakpoint is a chance for something to quietly fall apart.',
+      { prompt: 'What was the last thing you fixed before publishing? Was there a "good enough" moment, or did you keep finding things?' },
       'Published via Lovable\'s one-click deploy to espenhk.lovable.app',
-      'Built this very page you\'re reading right now 🤯',
+      'Built this very page you\'re reading right now 🤯 — a meta-layer that documents how the thing was built, inside the thing itself',
+      { prompt: 'Why build this page? Is it for other developers, for recruiters, for yourself, or just because it\'s fun to be recursive?' },
     ],
     toolsUsed: ['Lovable Publish', 'GitHub', 'Custom domain'],
     color: '#E8655A',
@@ -595,18 +633,22 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                   </div>
                 )}
 
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px' }}>
+                <div style={{ margin: '0 0 16px' }}>
                   {step.details.map((d, i) => (
-                    <li key={i} style={{
-                      fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
-                      color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
-                      padding: '4px 0 4px 16px', position: 'relative',
-                    }}>
-                      <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
-                      {d}
-                    </li>
+                    typeof d === 'object' && 'prompt' in d ? (
+                      <AuthorPrompt key={i} prompt={d.prompt} />
+                    ) : (
+                      <div key={i} style={{
+                        fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
+                        color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                        padding: '4px 0 4px 16px', position: 'relative',
+                      }}>
+                        <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
+                        {d}
+                      </div>
+                    )
                   ))}
-                </ul>
+                </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {step.toolsUsed.map(t => (

@@ -15,7 +15,7 @@ export default function GitHubGraph() {
   };
 
   return (
-    <section
+    <div
       style={{
         padding: '32px 24px 40px',
         backgroundImage: isDark
@@ -69,6 +69,6 @@ export default function GitHubGraph() {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

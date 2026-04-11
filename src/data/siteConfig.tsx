@@ -28,7 +28,7 @@ export const siteConfig = {
   name: 'Espen H. Kristensen',
   tagline: 'Data Engineer · Manager @ PwC Norway',
   bio: 'Passionate about data engineering, LLMs and responsible AI. Mathematical background, sports geek, cocktail nerd.',
-  profileImage: 'https://avatars.githubusercontent.com/u/9327813?v=4',
+  profileImage: 'https://avatars.githubusercontent.com/u/9382831?v=4',
   logo: '/images/logo-placeholder.svg',
   resumeUrl: '/files/cv.pdf',
   githubUsername: 'espenhk',

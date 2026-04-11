@@ -15,7 +15,7 @@ function getPanelBg(themeId: string, isDark: boolean, theme: any): string {
     case 'cupertino':
       return 'linear-gradient(145deg, #0C1222 0%, #111830 50%, #0E1428 100%)';
     case 'arcadia':
-      return 'linear-gradient(180deg, #0F0C20 0%, #1A1438 100%)';
+      return 'linear-gradient(180deg, #120C20 0%, #1A1230 50%, #181008 100%)';
     case 'nightcity':
       return 'linear-gradient(135deg, #0A0818 0%, #140C28 50%, #0D1218 100%)';
     case 'starfleet':

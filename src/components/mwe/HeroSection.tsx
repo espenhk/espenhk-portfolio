@@ -19,7 +19,7 @@ function getHeroBg(themeId: string, isDark: boolean, c: any): string {
     case 'cupertino':
       return `linear-gradient(160deg, #06090F 0%, #0A1628 35%, #0D1F3D 55%, #081428 75%, #050A14 100%)`;
     case 'arcadia':
-      return `linear-gradient(180deg, #0A0818 0%, #1A0C30 25%, #0D1A0D 50%, #0A0818 100%)`;
+      return `linear-gradient(180deg, #0A0818 0%, #1A0C20 25%, #1A1008 50%, #0A0818 100%)`;
     case 'nightcity':
       return `linear-gradient(135deg, #0A0010 0%, #1A0030 20%, #001A1A 45%, #0D0020 70%, #0A0010 100%)`;
     case 'starfleet':

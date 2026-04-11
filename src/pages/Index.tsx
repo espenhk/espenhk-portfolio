@@ -102,11 +102,18 @@ function MWEContent() {
         )}
         {/* Arcadia corner glow */}
         {theme.id === 'arcadia' && isDark && (
-          <div style={{
-            position: 'absolute', top: 0, right: 0, width: 200, height: 200,
-            background: 'radial-gradient(circle at 100% 0%, rgba(146,204,65,0.08) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }} />
+          <>
+            <div style={{
+              position: 'absolute', top: 0, right: 0, width: 200, height: 200,
+              background: 'radial-gradient(circle at 100% 0%, rgba(231,110,85,0.1) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, width: 200, height: 200,
+              background: 'radial-gradient(circle at 0% 100%, rgba(247,213,29,0.06) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+          </>
         )}
         <h2 style={{
           fontFamily: theme.fonts.display,

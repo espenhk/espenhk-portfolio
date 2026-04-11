@@ -19,7 +19,7 @@ export function BlueskyIcon({ size = 18, color = 'currentColor' }: { size?: numb
 }
 
 export interface SocialLink {
-  icon: ComponentType<{ size?: number; color?: string }>;
+  icon: ComponentType<any>;
   url: string;
   label: string;
 }

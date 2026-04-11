@@ -52,8 +52,9 @@ export default function Publications() {
   return (
     <section
       id="publications"
-      ref={ref}
-      style={{
+      ref={ref}>
+      <style>{SCROLL_HIDE_CSS}</style>
+      <div style={{
         padding: '60px 24px',
         backgroundImage: isDark
           ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'

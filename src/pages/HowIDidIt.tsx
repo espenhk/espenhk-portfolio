@@ -140,13 +140,13 @@ function MiniTimeline() {
 }
 
 function MiniThemeSwatches() {
-  const { theme, isDark } = useTheme();
-  const themes = [
-    { name: 'Cupertino', colors: ['#0071E3', '#34C759', '#FF9F0A', '#0A0A0A'] },
-    { name: 'Arcadia', colors: ['#209CEE', '#92CC41', '#F7D51D', '#0F0F1B'] },
-    { name: 'Nightcity', colors: ['#00F0FF', '#FF2A6D', '#FCEE0A', '#0D0E14'] },
-    { name: 'Starfleet', colors: ['#FF9F1C', '#CC99FF', '#99CCFF', '#0A0E1A'], selected: true },
-    { name: 'Foxglen', colors: ['#D4B87B', '#8CAA7E', '#C4907C', '#1E1B17'] },
+  const { theme, isDark, setThemeById } = useTheme();
+  const themeOptions = [
+    { name: 'Cupertino', id: 'cupertino', colors: ['#0071E3', '#34C759', '#FF9F0A', '#0A0A0A'] },
+    { name: 'Arcadia', id: 'arcadia', colors: ['#209CEE', '#92CC41', '#F7D51D', '#0F0F1B'] },
+    { name: 'Nightcity', id: 'nightcity', colors: ['#00F0FF', '#FF2A6D', '#FCEE0A', '#0D0E14'] },
+    { name: 'Starfleet', id: 'starfleet', colors: ['#FF9F1C', '#CC99FF', '#99CCFF', '#0A0E1A'] },
+    { name: 'Foxglen', id: 'foxglen', colors: ['#D4B87B', '#8CAA7E', '#C4907C', '#1E1B17'] },
   ];
   return (
     <div style={{
@@ -154,32 +154,43 @@ function MiniThemeSwatches() {
       border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : 'rgba(0,0,0,0.08)'}`,
       borderRadius: 8, padding: 14, maxWidth: 320,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#CC99FF', marginBottom: 10 }}>
-        ▸ Theme Candidates
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.secondary || '#CC99FF', marginBottom: 10 }}>
+        ▸ Theme Candidates — tap to preview
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {themes.map(t => (
-          <div key={t.name} style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '5px 8px',
-            borderRadius: 6,
-            background: t.selected ? (isDark ? 'rgba(255,159,28,0.08)' : 'rgba(255,159,28,0.06)') : 'transparent',
-            border: t.selected ? '1px solid rgba(255,159,28,0.2)' : '1px solid transparent',
-          }}>
-            <div style={{ display: 'flex', gap: 3 }}>
-              {t.colors.map((c, i) => (
-                <div key={i} style={{ width: 12, height: 12, borderRadius: 3, background: c, border: '1px solid rgba(255,255,255,0.1)' }} />
-              ))}
-            </div>
-            <span style={{
-              fontFamily: theme.fonts.mono, fontSize: '0.6rem',
-              color: t.selected ? '#FF9F1C' : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
-              fontWeight: t.selected ? 700 : 400,
-            }}>
-              {t.name} {t.selected && '✓'}
-            </span>
-          </div>
-        ))}
+        {themeOptions.map(t => {
+          const isActive = theme.id === t.id;
+          return (
+            <button
+              key={t.name}
+              onClick={() => setThemeById(t.id)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '5px 8px',
+                borderRadius: 6,
+                background: isActive ? (isDark ? `${theme.colors.accent}14` : `${theme.colors.accent}0F`) : 'transparent',
+                border: isActive ? `1px solid ${theme.colors.accent}33` : '1px solid transparent',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                width: '100%',
+                textAlign: 'left',
+              }}
+            >
+              <div style={{ display: 'flex', gap: 3 }}>
+                {t.colors.map((c, i) => (
+                  <div key={i} style={{ width: 12, height: 12, borderRadius: 3, background: c, border: '1px solid rgba(255,255,255,0.1)' }} />
+                ))}
+              </div>
+              <span style={{
+                fontFamily: theme.fonts.mono, fontSize: '0.6rem',
+                color: isActive ? theme.colors.accent : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+                fontWeight: isActive ? 700 : 400,
+              }}>
+                {t.name} {isActive && '✓'}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

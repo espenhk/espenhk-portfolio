@@ -330,7 +330,8 @@ export default function Publications() {
             </h3>
           </div>
 
-          <div className="li-scroll" style={{
+          <div style={{ position: 'relative' }}>
+          <div ref={liScrollRef} className="li-scroll" style={{
             display: 'flex',
             gap: 10,
             overflowX: 'auto',
@@ -414,6 +415,41 @@ export default function Publications() {
                 </motion.a>
               );
             })}
+          </div>
+
+          {/* LinkedIn scroll arrows */}
+          <button
+            onClick={() => liScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
+              width: 28, height: 28, borderRadius: '50%',
+              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              border: 'none', cursor: 'pointer', display: 'none',
+              alignItems: 'center', justifyContent: 'center',
+              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            }}
+            className="li-arrow"
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button
+            onClick={() => liScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
+              width: 28, height: 28, borderRadius: '50%',
+              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              border: 'none', cursor: 'pointer', display: 'none',
+              alignItems: 'center', justifyContent: 'center',
+              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            }}
+            className="li-arrow"
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
           </div>
         </div>
       </div>

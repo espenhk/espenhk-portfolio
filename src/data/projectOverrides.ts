@@ -42,6 +42,8 @@ export const projectOverrides: ProjectOverride[] = [
   },
   // === HIDDEN ===
   { repoName: "bicep-training", hidden: true },
+  { repoName: "espenhk", hidden: true },
+  { repoName: "UF1-Viewer-with-F1MV", hidden: true },
   { repoName: "github-actions-training", hidden: true },
   { repoName: "github-actions-tutorial001", hidden: true },
   { repoName: "github-actions-tutorial002", hidden: true },

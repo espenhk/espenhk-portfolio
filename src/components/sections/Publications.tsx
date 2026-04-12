@@ -339,7 +339,7 @@ export default function Publications() {
           >
             If the LinkedIn embed does not load, you can view the latest posts directly on{' '}
             <a
-              href="https://www.linkedin.com/"
+              href="https://www.linkedin.com/in/espenhk"
               target="_blank"
               rel="noopener noreferrer"
               style={{

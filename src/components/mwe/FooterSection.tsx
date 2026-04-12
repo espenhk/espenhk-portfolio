@@ -1,5 +1,6 @@
 import { useTheme } from '@/context/ThemeContext';
 import { siteConfig, socialLinks } from '@/data/siteConfig';
+import { currentStatus } from '@/data/currentStatus';
 
 const brandColors: Record<string, string> = {
   GitHub: '#333333',
@@ -52,6 +53,30 @@ export default function FooterSection() {
             <s.icon size={18} />
           </a>
         ))}
+      </div>
+      {/* Currently vibing to */}
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 12,
+        padding: '6px 14px',
+        borderRadius: theme.radii.full,
+        border: `1px solid ${isDark ? `${c.accent}30` : border}`,
+        background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+        fontSize: '0.75rem',
+        fontFamily: theme.fonts.mono,
+        color: fg2,
+      }}>
+        <span style={{ fontSize: '0.85rem' }}>{currentStatus.emoji}</span>
+        <span style={{ opacity: 0.6 }}>{currentStatus.label}</span>
+        {currentStatus.url ? (
+          <a href={currentStatus.url} target="_blank" rel="noopener noreferrer"
+            style={{ color: c.accent, textDecoration: 'none' }}
+          >{currentStatus.value}</a>
+        ) : (
+          <span>{currentStatus.value}</span>
+        )}
       </div>
       <p style={{ color: fg2, fontSize: '0.8rem', fontFamily: theme.fonts.mono }}>
         © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.

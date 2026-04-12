@@ -1,8 +1,11 @@
+import { useMemo } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { siteConfig, socialLinks } from '@/data/siteConfig';
+import { getRandomTagline } from '@/data/taglines';
 
 export default function HeroSection() {
   const { theme, isDark } = useTheme();
+  const tagline = useMemo(() => getRandomTagline(), []);
   const c = theme.colors;
   const bg = isDark
     ? `linear-gradient(180deg, #060A18 0%, #0C1230 30%, #14102A 55%, #0A0E20 80%, #060A18 100%)`
@@ -87,7 +90,7 @@ export default function HeroSection() {
           {siteConfig.name}
         </h1>
         <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
-          {siteConfig.tagline}
+          {tagline}
         </p>
         <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
           {siteConfig.bio}

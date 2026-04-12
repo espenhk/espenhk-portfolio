@@ -11,64 +11,239 @@ export interface LinkedInPost {
 
 export const linkedInPosts: LinkedInPost[] = [
   {
-    type: 'post',
-    text: 'Excited to join PwC Norway as Manager, leading data engineering and AI initiatives. Looking forward to this new chapter! 🚀',
-    date: '08.2025',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 47,
-    comments: 12,
-  },
-  {
-    type: 'article',
-    text: 'Just published: "Norway published the 10 commandments of AI" — an analysis of the guiding principles by think tank Langsikt. What do they mean for Nordic tech?',
-    date: '11.2025',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 38,
-    comments: 8,
+    type: 'comment',
+    text: `“De har 100% rigget Pro-planen for å være akkurat svak nok til at de fleste vil ha en av Max’ene, ja…”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7449109635204190208/',
+    likes: 1,
+    activityUrn: 'urn:li:activity:7449109635204190208',
   },
   {
     type: 'comment',
-    text: 'Great points on responsible AI governance. In our work at Kantega we found that data anonymisation is the first practical step most orgs overlook. Wrote a series on this — happy to share.',
-    date: '10.2024',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 15,
+    text: `“Sebastian Bech yep, jeg har cirka null praktisk erfaring med frontend - sist jeg skrev noe HTML var på videregående😅 nå er jeg ett mest bekymret for om folk kommer til å tro at jeg er kjempeflink i frontend😂”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7449001996264648704/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7449001996264648704',
+  },
+  {
+    type: 'comment',
+    text: `“Fleksibilitet er bra, og jeg tenker at all den tid du har en noenlunde aktiv deltagende rolle i det agentene dine gjør, for eksempel ved å kikke på litt av koden deres fra mobilen og nudge dem videre mens du går tur, ville jeg ikke hatt særlig dårlig samvittighet for det.
+
+Men hvis vi snakker om at en arbeidsdag skal bli redusert til en 15- minutters sesjon der du prompter litt for å få agentene dine i gang, og så er du ferdig for dagen, så tror jeg vi har bommet. Vi må også spørre oss hvem som ”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448989824562348032/',
+    activityUrn: 'urn:li:activity:7448989824562348032',
   },
   {
     type: 'post',
-    text: 'Just wrapped up a deep-dive into Azure AI Foundry. The managed endpoints for fine-tuned models are a game-changer for enterprise RAG use cases. Here are my key takeaways…',
-    date: '06.2025',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 31,
+    text: `Viking har slått Bodø/Glimt 5-0, men det er ikke det heftigste som skjedde hos meg i går. Jeg har bygget to nettsider med svært profesjonelt utseende, utelukkende med prompting og i hovedsak fra mobil. Det tok meg kanskje 8 timer totalt, hvorav de siste 80% var å iterere og fikse småplukk. Hvor magisk er ikke det? Hvilken erfaring har dere med "helautomatiserte" verktøy som Lovable?
+
+For å ta det siste først, her er de:
+- https://lnkd.in/eTddQpuJ : endelig har jeg en portfolio-side! Her gjenstår`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448988844860858368/',
+    activityUrn: 'urn:li:activity:7448988844860858368',
+  },
+  {
+    type: 'comment',
+    text: `“Jeg er i "teste alt"-modus. Har tidl. testet vanlig chat med ulike modeller, særlig Claude + GPT. I tillegg har testet GH Copilot noe, som er smooth, med orkestrator+spesialist-agenter. Det jeg tester som er nytt for meg å bruke skikkelig nå, er: 1) Claude Code som extension i VS Code: nesten like integrert som GH Copilot, og funker cirka like bra. Bruker litt lengre tid enn jeg skulle ønske på å plukke opp rett kontekst på nytt for hver sesjon, men CLAUDE.md hjelper. 2) Claude Desktop (inkl Cod”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448871361092935680/',
+    activityUrn: 'urn:li:activity:7448871361092935680',
+  },
+  {
+    type: 'comment',
+    text: `“André Lindenberg «Hey Claude, summarize this for me» 😉”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448849918347251712/',
+    comments: 55,
+    activityUrn: 'urn:li:activity:7448849918347251712',
+  },
+  {
+    type: 'comment',
+    text: `“I feel you, definitely agree that writing code is usually the most fun part of my workday. I’m totally fine with using assistants / agents to write a good bit of it. But what I’m realizing through hobby projects, is that when much of the code was already built with AI, the distance between me and my codebase grows to where there is less and less I can do without having to resort to my LLM of choice. It’s building a dependency on a tool and vendors of that tool that I’m not quite comfortable with”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448760512504356864/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7448760512504356864',
+  },
+  {
+    type: 'post',
+    text: `Har vært på farten i hele dag: handling, fysioterapeut, et glass vin og nå på fotballkamp. Skriver dette fra Alfheim på Tromsø-kamp. Samtidig har jeg bygget dette fra null: https://lnkd.in/eTddQpuJ
+
+Kommer mer om stack’en og metoden etter kamp, men foreløpig ville jeg bare poste dette og måpe litt over hvor kraftfulle disse verktøyene har blitt nå…`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448739418850410496/',
+    activityUrn: 'urn:li:activity:7448739418850410496',
+  },
+  {
+    type: 'comment',
+    text: `“Kult at du tar scenen for mer enn bare teknisk/business-rettet nerding!
+
+Jeg har etter hvert blitt ganske lei av hele «AI kommer og tar jobbene våre»-sporet, som dukker opp igjen og igjen. «X kommer og tar jobben din» er ikke en ny påstand for AI, den popper opp med nesten hver eneste nye teknologi- og tar for det meste feil.
+
+Det blir for lettvint å tenke «her kan vi spare noen raske kroner på lønnsbudsjettet». La oss, som gode matematikere, anta at 80% (4 av 5) kan gjøres overflødige i pga AI ”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448532075130998784/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7448532075130998784',
+  },
+  {
+    type: 'comment',
+    text: `“Anders Solstad nei, så langt har jeg testet:
+- Claude som VS Code-extension
+- Claude (Code-fanen) i iOS-appen (veldig hendig for å få gjort litt på farten!)
+- GH Copilot i VS Code
+
+Claude Code desktop-applikasjonen er neste på listen å teste, høres ut som den kan gi meg enda mer agentisk og uavhengig rigg.
+
+Kan du si litt mer om hvordan du har sydd dette sammen? Høres ut som du har noe sånt som:
+- en eller annen lagret oversikt over status og mål for prosjektet
+- en orkestrator-agent som styrer ”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448409770341978112/',
+    comments: 2,
+    activityUrn: 'urn:li:activity:7448409770341978112',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen I’m not a big fan of AI coding tools to be honest. I’ve just recently started using Claude like a month ago, but I don’t use it extensively and it’s always paired with hand written code. So I’d say that 99% of my contributions are human made. Consider that many of such contributions are also PR reviews of automated stuff like dependabot, and part of the commits is small stuff since I like to split work in chunks.”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7448115584329936896/',
+    likes: 1811,
     comments: 6,
+    activityUrn: 'urn:li:activity:7448115584329936896',
   },
   {
     type: 'comment',
-    text: 'Streaming with Kafka + Databricks is underrated for real-time data quality checks. We built a pattern using structured streaming that catches schema drift before it hits the lakehouse.',
-    date: '03.2024',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 22,
+    text: `“Christian Demant andre gang på to dager jeg ser Milla Jovovich sitt GH-prosjekt. Fiffig! Skal testes ut, takk for tips😁”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7447977952564174848/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7447977952564174848',
+  },
+  {
+    type: 'comment',
+    text: `“Torstein Fjelltveit Skagseth absolutt - kan hende jeg tolket deg litt langt. Dette du viste frem er absolutt enkelt og ufarlig nok til at det går helt fint å bare «vibe frem» fritt, men jeg ser en del som er på «alle utviklere blir nå utdatert, hvem som helst kan lage hva som helst»-sporet, og det er jeg ganske skeptisk til.
+
+Takk for tipset om Glasswing! Ikke overrasket over at det kommer sånt, det største motargumentet mot heftig AI-implementasjon om dagen er jo sikkerhet og QA-aspekter. Og he”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7447976144785711105/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7447976144785711105',
   },
   {
     type: 'post',
-    text: 'Presented "Breaking down AlphaGo" at UiO today — reinforcement learning explained through the lens of the greatest board game upset in history. Video coming soon 🎬',
-    date: '06.2022',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 54,
-    comments: 9,
+    text: `Har (endelig) startet med kodeassistenter for alvor: GH Copilot på jobb, Claude Pro hjemme. Men jeg sliter med at distansen mellom meg og kodebasen min nå vokser raskt, slik at det blir vanskeligere for meg å skulle snekre på den for hånd. Derfor vil jeg gjerne ha tilbakemelding på hvordan dere løser dette!
+
+Så langt sitter jeg igjen med:
+- Når man bruker plan mode først og tweaker denne før man ber om implementasjon, så blir implementasjon veldig ofte veldig bra tidlig. Som regel bruker jeg Son`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7447876205720072192/',
+    activityUrn: 'urn:li:activity:7447876205720072192',
+  },
+  {
+    type: 'comment',
+    text: `“Rått! Blir nysgjerrig: har du fått noen til å ettergå hvorvidt den faktisk er ISO 27001-compliant, GDPR osv? Hvor mye jobb var det å få vibe-kodet frem dette, kontra det som går på ren funksjonalitet?”`,
+    date: '04.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7447404799274364928/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7447404799274364928',
   },
   {
     type: 'post',
-    text: 'New certification unlocked: PL-300 Microsoft Certified Power BI Data Analyst 📊 Time to build some dashboards.',
-    date: '01.2024',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 62,
+    text: `Hadde ikke denne på bingokortet mitt for året! Havner nok høyt på listen av positive overraskelser, så ikke denne komme 🤓`,
+    date: '04.2026',
+    url: '/feed/update/urn:li:activity:7447159680403038209/',
+    activityUrn: 'urn:li:activity:7447194060412497920',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen Absolutt! Når utviklinga går så raskt som den gjer er det lett å bli ståande att på perrongen!”`,
+    date: '03.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7439333791946510336/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7439333791946510336',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen Oskar siterer også feil. Microsoft sin AI-sjef (som lever av å pushe AI) da at AI vil erstatte "white collar jobs". Dvs mellomledere og administrasjon. Og det er ikke utenkelig at han har rett.
+
+Det han IKKE sa, var det Oskar skrev: "kontorjobber". En kontorjobb er noe helt annet enn en lederstilling, selv om de stort sett sitter på et kontor.”`,
+    date: '03.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7438127218658148352/',
     comments: 14,
+    activityUrn: 'urn:li:activity:7438127218658148352',
   },
   {
     type: 'comment',
-    text: 'The anonymisation vs pseudonymisation distinction matters more than people think. GDPR treats them very differently. We cover this in depth in part 2 of our series.',
-    date: '11.2024',
-    url: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
-    likes: 18,
+    text: `“For meg er nok «noe de ikke har giddet å skrive selv» er et viktig punkt her, særlig siden KI-generert tekst ofte blir ganske lang. Det snur på forholdet mellom avsender og mottaker: når jeg leser 3 A4-sider skrevet av et menneske, så vet jeg at de har brukt mer tid enn jeg bruker på å lese, på å skrive noe de mener det er verdt at jeg bruker tid på å lese. Når avsender har brukt 2 minutter på et lite prompt, Ctrl+C og Ctrl+V, så er deres investering i «dette var det verdt å bruke tiden min på» ”`,
+    date: '03.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7437119080509272065/',
+    comments: 7,
+    activityUrn: 'urn:li:activity:7437119080509272065',
+  },
+  {
+    type: 'comment',
+    text: `“Cecilia Sbertoli bokstavelig talt absolutt alt er lært fra «oss». Treningsmaterialet er for alle praktiske formål «hele Internett», dvs mer eller mindre all tekst noensinne produsert (siden det meste i dag er digitalisert). 
+
+Meeen «oss» må nyanseres litt: det inkluderer innhold skrevet av en eller annen type bot (enten det er dagens KI-modeller eller andre eldre typer), og nå i senere tid en masse innhold som selv er KI-generert og publisert på nett. Dette har en viss selvforsterkende effekt, d”`,
+    date: '03.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7433859989318017024/',
+    likes: 212,
+    comments: 4,
+    activityUrn: 'urn:li:activity:7433859989318017024',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen kostnadsbildet i dag er rimelig ok, men jeg hadde ikke blitt overrasket om dette endres etterhvert som vi gjør oss avhengige av verktøyene. Dette er vel et argument i seg selv til å ikke gjøre seg altfor avhengig av dem.
+
+"human in the loop" er avgjørende for at dette skal kunne gjøres på en forsvarlig måte, og det er anbefalt i bankens retningslinjer at det etableres SLA for responstid på pull requests. For vårt team betyr dette at vi skal ha respons på PR "senest ila 24 tim”`,
+    date: '03.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7433787333130317824/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7433787333130317824',
+  },
+  {
+    type: 'comment',
+    text: `“Aksel Kvamme Vestfossen i disse dager føler jeg jeg kommer tilbake til en helt annen verden etter langhelg😂”`,
+    date: '02.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7432494013900939265/',
+    comments: 2,
+    activityUrn: 'urn:li:activity:7432494013900939265',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen Selv gode refleksjoner, Espen. Fremtiden får vise!”`,
+    date: '02.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7432360818098221056/',
+    comments: 1,
+    activityUrn: 'urn:li:activity:7432360818098221056',
+  },
+  {
+    type: 'comment',
+    text: `“Espen H. Kristensen this is very interesting thank you for diving into this! I hope I get some time soon to do the same!”`,
+    date: '02.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7432304944185028608/',
+    likes: 727,
+    comments: 1,
+    activityUrn: 'urn:li:activity:7432304944185028608',
+  },
+  {
+    type: 'comment',
+    text: `“I love how «Meeting to discuss AI strategy» quite clearly is a «please can we up the quota»-meeting 😂”`,
+    date: '02.2026',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7431828088314892288/',
+    likes: 930,
+    activityUrn: 'urn:li:activity:7431828088314892288',
+  },
+  {
+    type: 'post',
+    text: `Mange spennende takeaways fra årets CEO Survey! 🤓🤓`,
+    date: '01.2026',
+    url: '/feed/update/urn:li:activity:7422982889673506816/',
+    likes: 1,
+    activityUrn: 'urn:li:activity:7422990752173142019',
   },
 ];

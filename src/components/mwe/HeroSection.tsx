@@ -87,7 +87,7 @@ export default function HeroSection() {
           {siteConfig.name}
         </h1>
         <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
-          {siteConfig.tagline}
+          {tagline}
         </p>
         <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
           {siteConfig.bio}

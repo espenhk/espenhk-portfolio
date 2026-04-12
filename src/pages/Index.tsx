@@ -23,6 +23,7 @@ function PageContent() {
       minHeight: '100vh',
       transition: `background ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
     }}>
+      <KonamiOverlay active={activated} />
       <NavBar />
       <HeroSection />
       <CharacterSheetFull />

@@ -2,13 +2,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
 const messages = [
-  '🍸 You just unlocked the secret cocktail menu. Negroni incoming.',
-  '📊 SELECT * FROM easter_eggs WHERE awesome = true; — 1 row returned.',
-  '⚽ VAR review complete. This easter egg stands. No offside.',
-  '🔥 Your pipeline just ran flawlessly on the first try. Just kidding, that never happens.',
-  '🧊 Achievement unlocked: Colder than my Old Fashioned, smoother than my deploys.',
-  '🤖 GPT wrote this message. Just kidding. Or did it? …It did. But I approved it.',
-  '☕ // TODO: Stop finding easter eggs and go outside.',
+  '🎮 Achievement Unlocked: Found the Secret!',
+  '🚀 +9001 Nerd Cred',
+  '☕ console.log("You found it!")',
+  '🎯 Hidden quest complete. You have good instincts.',
+  '🧪 Easter egg activated. No bugs were harmed.',
 ];
 
 export default function KonamiOverlay({ active }: { active: boolean }) {

@@ -363,6 +363,14 @@ const steps: Step[] = [
 
 ---
 
+
+# Personal Developer Portfolio — Complete Specification v4
+
+**Owner:** Espen H. Kristensen
+**GitHub:** espenhk · **Medium:** espen-haukeland-kristensen · **Instagram/Bluesky:** @bgosl · **Facebook:** espenhk
+
+---
+
 # PART 0 — GRAPHICAL PROFILES & BUILD STRATEGY
 
 ## 0.1 Build Strategy: Minimal Working Example First
@@ -379,7 +387,7 @@ const steps: Step[] = [
 > 4. A **dark/light mode toggle** demonstrating both modes.
 > 5. A **footer** with social icons.
 >
-> Each MWE must be a single-page, self-contained deployment. All five share the same component code — the *only* difference is the \`theme.ts\` file loaded.
+> Each MWE must be a single-page, self-contained deployment. All five share the same component code — the *only* difference is the theme.ts file loaded.
 >
 > **Present all five MWEs for review.** Once a profile is approved, proceed with the full build using that theme. The full spec (Parts 1–17) describes the complete site.
 
@@ -391,17 +399,52 @@ const steps: Step[] = [
 
 | Element | Treatment |
 |---|---|
-| Headings | \`Inter\` — medium weight, generous letter-spacing |
-| Body | \`Inter\` — regular weight, max readability |
-| Mono | \`JetBrains Mono\` |
-| Palette | Near-white \`#FAFAFA\` / void-black \`#0A0A0A\`. Accent: electric blue \`#0071E3\`. |
-| Corners | Rounded: \`8–20px\` |
-| Shadows | Soft: \`0 2px 12px rgba(0,0,0,0.06)\` |
-| Borders | Subtle \`1px\` border in light grey |
-| Motion | Smooth \`ease-out\` fades, scale-ups on hover |
+| Headings | Inter — medium weight, generous letter-spacing |
+| Body | Inter — regular weight, max readability |
+| Mono | JetBrains Mono |
+| Palette | Near-white #FAFAFA / void-black #0A0A0A. Accent: electric blue #0071E3. |
+| Corners | Rounded: 8–20px |
+| Shadows | Soft: 0 2px 12px rgba(0,0,0,0.06) |
+| Borders | Subtle 1px border in light grey |
+| Motion | Smooth ease-out fades, scale-ups on hover |
 | Character sheet | Clean horizontal bars, accent fill, no glow |
 | Light mode | Primary — pure, airy white |
 | Dark mode | Deep black, high contrast text |
+
+ts
+export const theme = {
+  id: 'cupertino',
+  colors: {
+    accent: '#0071E3', accentHover: '#005BB5',
+    background: { light: '#FAFAFA', dark: '#0A0A0A' },
+    surface: { light: '#FFFFFF', dark: '#1C1C1E' },
+    textPrimary: { light: '#1D1D1F', dark: '#F5F5F7' },
+    textSecondary: { light: '#6E6E73', dark: '#A1A1A6' },
+    border: { light: '#E5E5EA', dark: '#2C2C2E' },
+    success: '#34C759', warning: '#FF9F0A', error: '#FF3B30',
+  },
+  fonts: {
+    display: "'Inter', system-ui, sans-serif",
+    sans: "'Inter', system-ui, sans-serif",
+    mono: "'JetBrains Mono', monospace",
+  },
+  radii: { sm: '8px', md: '12px', lg: '20px', full: '9999px' },
+  borders: { width: '1px', style: 'solid' },
+  shadows: {
+    card: '0 2px 12px rgba(0,0,0,0.06)',
+    cardHover: '0 8px 30px rgba(0,0,0,0.10)',
+  },
+  spacing: { section: '120px', sectionMobile: '64px' },
+  motion: { timingFunction: 'ease-out', durationFast: '150ms', durationNormal: '300ms' },
+  characterSheetTheme: {
+    panelBg: '#111114', barGlow: 'none', nameFont: "'Inter', sans-serif",
+  },
+  hobbySection: {
+    background: { light: '#F5F5F5', dark: '#141414' },
+    accentOverride: '#0071E3',
+  },
+  extras: {},
+};
 
 ---
 
@@ -411,30 +454,116 @@ const steps: Step[] = [
 
 | Element | Treatment |
 |---|---|
-| Headings | \`Press Start 2P\` — all-caps, chunky pixel letterforms |
-| Body | \`IBM Plex Mono\` — readable monospace |
-| Palette | NES-inspired: blue \`#209CEE\`, green \`#92CC41\`, gold \`#F7D51D\`, red \`#E76E55\` |
-| Corners | \`0px\` everywhere — hard right angles |
-| Shadows | Chunky: \`4px 4px 0px rgba(0,0,0,0.25)\` |
-| Borders | Thick \`4px\` solid — NES dialog box style |
-| Motion | \`steps(6)\` timing — frame-by-frame feel |
-| Character sheet | RPG stat screen. Labels: STR / DEX / INT / WIS |
+| Headings | Press Start 2P (Google Fonts) — all-caps, chunky pixel letterforms |
+| Body | IBM Plex Mono — readable monospace |
+| Mono | IBM Plex Mono |
+| Palette | NES-inspired: blue #209CEE, green #92CC41, gold #F7D51D, red #E76E55. Background: Game Boy cream #F7F0D0 / NES void #0F0F1B |
+| Corners | 0px everywhere — hard right angles |
+| Shadows | Chunky: 4px 4px 0px rgba(0,0,0,0.25). On hover: 2px 2px (pressed) |
+| Borders | Thick 4px solid — NES dialog box style |
+| Motion | steps(6) timing — frame-by-frame feel. No smooth easing. |
+| Character sheet | RPG stat screen. Labels: STR / DEX / INT / WIS. Bars fill in discrete pixel chunks. |
+| Light mode | Game Boy parchment cream |
+| Dark mode | NES dark-blue void |
+| Extra dep | NES.css (optional supplementary stylesheet)[1] |
+
+ts
+export const theme = {
+  id: 'arcadia',
+  colors: {
+    accent: '#209CEE', accentHover: '#187BBE',
+    background: { light: '#F7F0D0', dark: '#0F0F1B' },
+    surface: { light: '#FFFEF5', dark: '#1A1A2E' },
+    textPrimary: { light: '#1B1B1B', dark: '#F0F0F0' },
+    textSecondary: { light: '#5A5A5A', dark: '#9A9AB0' },
+    border: { light: '#1B1B1B', dark: '#4A4A6A' },
+    success: '#92CC41', warning: '#F7D51D', error: '#E76E55',
+  },
+  fonts: {
+    display: "'Press Start 2P', cursive",
+    sans: "'IBM Plex Mono', monospace",
+    mono: "'IBM Plex Mono', monospace",
+  },
+  radii: { sm: '0px', md: '0px', lg: '0px', full: '0px' },
+  borders: { width: '4px', style: 'solid' },
+  shadows: {
+    card: '4px 4px 0px rgba(0,0,0,0.25)',
+    cardHover: '2px 2px 0px rgba(0,0,0,0.25)',
+  },
+  spacing: { section: '100px', sectionMobile: '56px' },
+  motion: { timingFunction: 'steps(6)', durationFast: '100ms', durationNormal: '200ms' },
+  characterSheetTheme: {
+    panelBg: '#0F0F1B', barStyle: 'segmented', barGlow: 'none',
+    nameFont: "'Press Start 2P', cursive",
+    statLabels: ['STR', 'DEX', 'INT', 'WIS', 'CHA', 'LCK'],
+  },
+  hobbySection: {
+    background: { light: '#E8DFC0', dark: '#14142A' },
+    accentOverride: '#E76E55',
+    frameStyle: 'dialog-box',
+  },
+  extras: { pixelGrid: true, scanlines: false, chiptuneOnLoad: false, nessCssEnabled: true },
+};
 
 ---
 
 ## 0.4 Graphical Profile C — "NIGHTCITY" · Cyberpunk Neon Terminal
 
-**Mood:** Edgy, technical. Blade Runner meets a senior engineer's GitHub.
+**Mood:** Edgy, technical. Blade Runner meets a senior engineer's GitHub. Dark-mode-first.
 
 | Element | Treatment |
 |---|---|
-| Headings | \`Rajdhani\` / \`Orbitron\` — uppercase, tracked wide |
-| Body | \`Exo 2\` / \`Inter\` — clean sans for dark backgrounds |
-| Palette | Cyan \`#00F0FF\`, magenta \`#FF2A6D\`, amber \`#FCEE0A\`. Background: \`#0D0E14\` |
-| Corners | Asymmetric: \`0 12px 0 12px\` — cyberpunk "cut corner" |
-| Shadows | Glow: \`0 0 20px rgba(0,240,255,0.15)\` on hover |
-| Motion | \`cubic-bezier(0.77, 0, 0.175, 1)\`. Optional glitch entrance. |
-| Character sheet | HUD overlay. Neon cyan fill + sweep animation. |
+| Headings | Rajdhani / Orbitron — uppercase, tracked wide |
+| Body | Exo 2 / Inter — clean sans for dark backgrounds |
+| Mono | JetBrains Mono with cyan tint |
+| Palette | Cyan #00F0FF, magenta #FF2A6D, amber #FCEE0A. Background: #0D0E14 / #1A1A2E. |
+| Corners | Asymmetric: 0 12px 0 12px — cyberpunk "cut corner" |
+| Shadows | Glow: 0 0 20px rgba(0,240,255,0.15) on hover |
+| Borders | 1px at rest, accent glow on hover |
+| Motion | cubic-bezier(0.77, 0, 0.175, 1). Optional glitch entrance (2px chromatic offset). |
+| Character sheet | HUD overlay. Bars with neon cyan fill + sweep animation. Terminal format: [██████░░░░] 75% |
+| Light mode | Cool corporate grey, desaturated accents, no glow |
+| Dark mode | Primary — full neon |
+
+ts
+export const theme = {
+  id: 'nightcity',
+  colors: {
+    accent: '#00F0FF', accentHover: '#00C4CC',
+    secondary: '#FF2A6D', tertiary: '#FCEE0A',
+    background: { light: '#E8EAF0', dark: '#0D0E14' },
+    surface: { light: '#F0F1F5', dark: '#1A1A2E' },
+    textPrimary: { light: '#1B1B2F', dark: '#F0F1F5' },
+    textSecondary: { light: '#5C647A', dark: '#939AB0' },
+    border: { light: '#D1D4DE', dark: '#2A2D3A' },
+    success: '#05FFA1', warning: '#FCEE0A', error: '#FF2A6D',
+  },
+  fonts: {
+    display: "'Rajdhani', 'Orbitron', system-ui, sans-serif",
+    sans: "'Exo 2', 'Inter', system-ui, sans-serif",
+    mono: "'JetBrains Mono', monospace",
+  },
+  radii: { sm: '2px', md: '4px', lg: '0 12px 0 12px', full: '9999px' },
+  borders: { width: '1px', style: 'solid' },
+  shadows: {
+    card: '0 0 0 1px rgba(0,240,255,0.05)',
+    cardHover: '0 0 20px rgba(0,240,255,0.15), 0 0 40px rgba(0,240,255,0.05)',
+  },
+  spacing: { section: '120px', sectionMobile: '64px' },
+  motion: {
+    timingFunction: 'cubic-bezier(0.77, 0, 0.175, 1)',
+    durationFast: '150ms', durationNormal: '300ms', glitchEntrance: true,
+  },
+  characterSheetTheme: {
+    panelBg: '#0D0E14', barGlow: '0 0 12px rgba(0,240,255,0.5)',
+    barSweep: true, nameFont: "'Rajdhani', sans-serif", statFormat: 'terminal',
+  },
+  hobbySection: {
+    background: { light: '#E0E4EE', dark: '#12141D' },
+    accentOverride: '#FF2A6D', frameStyle: 'data-feed',
+  },
+  extras: { matrixRain: false, noiseTexture: true, gridLines: true, scanlines: false },
+};
 
 ---
 
@@ -444,29 +573,143 @@ const steps: Step[] = [
 
 | Element | Treatment |
 |---|---|
-| Headings | \`Antonio\` / \`Chakra Petch\` — semi-condensed futuristic sans |
-| Body | \`Outfit\` / \`Inter\` — max readability |
-| Palette | LCARS amber \`#FF9F1C\`, lavender \`#CC99FF\`, sky-blue \`#99CCFF\`, coral \`#E8655A\`, tan \`#FFCC99\` |
-| Corners | LCARS capsule: \`24px 8px 8px 24px\` |
-| Borders | None — colour blocks *are* the borders |
-| Motion | \`ease-out\`, elements slide from left |
-| Character sheet | Crew personnel dossier. "PERSONNEL FILE" header in amber. |
+| Headings | Antonio / Chakra Petch — semi-condensed futuristic sans |
+| Body | Outfit / Inter — max readability |
+| Mono | JetBrains Mono, amber tint |
+| Palette | LCARS amber #FF9F1C, lavender #CC99FF, sky-blue #99CCFF, coral #E8655A, tan #FFCC99. Background: navy #0A0E1A. |
+| Corners | LCARS capsule: 24px 8px 8px 24px (round-left, square-right) |
+| Shadows | Moderate: 0 2px 8px rgba(0,0,0,0.2) |
+| Borders | None — colour blocks *are* the borders. 40px sidebar rail changes hue per section. |
+| Motion | ease-out, elements slide from left. No bounce. |
+| Character sheet | Crew personnel dossier. "PERSONNEL FILE" header in amber. Stats as two-column data table. Easter egg: stardate display. |
+| Light mode | White with pastel colour-block accents — Starfleet dossier feel |
+| Dark mode | Primary — deep navy command bridge |
+
+ts
+export const theme = {
+  id: 'starfleet',
+  colors: {
+    accent: '#FF9F1C', accentHover: '#E08A0C',
+    secondary: '#CC99FF', tertiary: '#99CCFF',
+    highlight: '#E8655A', warm: '#FFCC99',
+    background: { light: '#F4F1EC', dark: '#0A0E1A' },
+    surface: { light: '#FFFFFF', dark: '#131A2E' },
+    textPrimary: { light: '#1A1A2E', dark: '#F0EDDF' },
+    textSecondary: { light: '#5A5A6A', dark: '#9A9AAF' },
+    border: { light: '#E0DDD5', dark: '#1E2640' },
+    success: '#66CC99', warning: '#FF9F1C', error: '#E8655A',
+  },
+  fonts: {
+    display: "'Antonio', 'Chakra Petch', system-ui, sans-serif",
+    sans: "'Outfit', 'Inter', system-ui, sans-serif",
+    mono: "'JetBrains Mono', monospace",
+  },
+  radii: { sm: '4px', md: '8px', lg: '24px 8px 8px 24px', lgReverse: '8px 24px 24px 8px', full: '9999px' },
+  borders: { width: '0px', style: 'none' },
+  shadows: { card: '0 2px 8px rgba(0,0,0,0.2)', cardHover: '0 4px 16px rgba(0,0,0,0.3)' },
+  spacing: { section: '110px', sectionMobile: '60px' },
+  motion: { timingFunction: 'ease-out', durationFast: '150ms', durationNormal: '250ms', entranceDirection: 'left' },
+  layout: {
+    sidebarRail: true, sectionHeaderBars: true,
+    sectionColors: {
+      hero: '#FF9F1C', projects: '#99CCFF', characterSheet: '#CC99FF',
+      hobbies: '#E8655A', articles: '#FFCC99', social: '#66CC99',
+    },
+  },
+  characterSheetTheme: {
+    panelBg: '#131A2E', barGlow: 'none', barColor: '#FF9F1C',
+    nameFont: "'Antonio', sans-serif", statFormat: 'dossier',
+    headerLabel: 'PERSONNEL FILE', classificationLabel: 'CLASSIFICATION', showStardate: true,
+  },
+  hobbySection: {
+    background: { light: '#F0ECE4', dark: '#0E1324' },
+    accentOverride: '#E8655A', frameStyle: 'lcars-panel', headerPrefix: 'OFF-DUTY ACTIVITIES //',
+  },
+  extras: { starField: true, sidebarRailAnimated: false },
+};
 
 ---
 
 ## 0.6 Graphical Profile E — "FOXGLEN" · Tunic-Inspired Mythical Manual
 
-**Mood:** Gentle mystery. The portfolio as a discovered instruction booklet.
+**Mood:** Gentle mystery. The portfolio as a discovered instruction booklet in a runic language you almost understand. Muted watercolour tones, warmth, handcraft.
+
+Inspired by *Tunic* (2022) — **a Zelda-inspired isometric adventure featuring an anthropomorphic fox, a constructed runic writing system, and a beautiful in-game instruction manual the player pieces together.**[2] The game won the **BAFTA for Artistic Achievement** and was praised for its **"simple-but-beautiful" art style described as an "extravagant diorama"**.[2]
 
 | Element | Treatment |
 |---|---|
-| Headings | \`Uncial Antiqua\` or \`MedievalSharp\` — uncial letterforms |
-| Body | \`Nunito\` or \`Karla\` — soft, rounded sans-serif |
-| Decorative | \`Noto Sans Runic\` — aesthetic glyphs, not translatable |
-| Palette | Parchment \`#F2EDE4\`, sage \`#8CAA7E\`, dusty rose \`#C4907C\`, slate blue \`#7B95A5\`, soft gold \`#D4B87B\` |
-| Corners | Rounded \`16px\`. Inner shadow simulating manual-page indentation. |
-| Backgrounds | Subtle parchment texture overlay at ~5% opacity |
-| Character sheet | "The Hero's Page" — styled as a discovered manual page |
+| Headings | Uncial Antiqua or MedievalSharp (Google Fonts) — uncial letterforms evoking illuminated manuscripts |
+| Body | Nunito or Karla — soft, rounded sans-serif matching Tunic's gentle world |
+| Mono | Fira Code with ligatures — connected glyphs echo the runic script |
+| Decorative | Noto Sans Runic (Google Fonts) — used *only* for section markers, pull-quote ornaments, and stat labels. Aesthetic glyphs, not translatable. |
+| Palette | Deeply muted, warm: parchment #F2EDE4, sage #8CAA7E, dusty rose #C4907C, slate blue #7B95A5, soft gold #D4B87B, charcoal #3A3632. Never pure white or pure black. |
+| Corners | Rounded 16px. Inner shadow simulating manual-page indentation. |
+| Shadows | Barely-visible inner shadow + faint gold-edge glow on hover |
+| Borders | Thin 1px in section accent. Section dividers: horizontal rule flanked by a centred runic SVG glyph. |
+| Backgrounds | Subtle parchment texture overlay at ~5% opacity. Watercolour-wash CSS gradients (sage→cream, rose→cream) between sections. Optional faint isometric dot grid. |
+| Buttons | Rounded-rectangle "manual page tab." Filled accent at 15% opacity, accent text. Hover: 30% fill, translateY(-1px). Double-line border (manual ruled edge). |
+| Motion | Gentle, unhurried. Fade-in with slow vertical drift (page being placed on a table). Stat bars fill with smooth sweep + tiny trailing particle dots (golden sparkle of Tunic item pickups). cubic-bezier(0.25, 0.46, 0.45, 0.94). |
+| Character sheet | **"The Hero's Page"** — styled as a discovered manual page. Slightly rotated cream card with ruled margins. Portrait in a rounded frame with colour border. Stats inscribed with runic decorative labels alongside readable English. Category headers in uncial font with runic ornament. |
+| Hobby section | Each hobby framed as a manual page with hand-drawn-style SVG border. Section labelled with a runic glyph + readable title. Social embeds in a "field notes" frame. |
+| Light mode | Primary — warm parchment cream #F2EDE4 |
+| Dark mode | Deep forest brown-black #1E1B17 — warm charcoal, not blue-black. Accents desaturate slightly. |
+
+ts
+export const theme = {
+  id: 'foxglen',
+  colors: {
+    accent: '#D4B87B',           // soft gold
+    accentHover: '#C4A86B',
+    secondary: '#8CAA7E',        // sage green
+    tertiary: '#7B95A5',         // slate blue
+    highlight: '#C4907C',        // dusty rose
+    background: { light: '#F2EDE4', dark: '#1E1B17' },
+    surface: { light: '#FAF7F2', dark: '#2A2520' },
+    textPrimary: { light: '#3A3632', dark: '#E8E2D6' },
+    textSecondary: { light: '#7A756C', dark: '#A09A8E' },
+    border: { light: '#D8D2C6', dark: '#3A3530' },
+    success: '#8CAA7E',
+    warning: '#D4B87B',
+    error: '#C4907C',
+  },
+  fonts: {
+    display: "'Uncial Antiqua', 'MedievalSharp', serif",
+    sans: "'Nunito', 'Karla', system-ui, sans-serif",
+    mono: "'Fira Code', monospace",
+    runic: "'Noto Sans Runic', sans-serif",    // decorative only
+  },
+  radii: { sm: '8px', md: '16px', lg: '20px', full: '9999px' },
+  borders: { width: '1px', style: 'solid' },
+  shadows: {
+    card: 'inset 0 1px 3px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.06)',
+    cardHover: '0 4px 16px rgba(212,184,123,0.15)',
+  },
+  spacing: { section: '110px', sectionMobile: '60px' },
+  motion: {
+    timingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    durationFast: '200ms', durationNormal: '400ms',
+    particleTrail: true,        // golden sparkle on stat bar fill
+  },
+  characterSheetTheme: {
+    panelBg: '#2A2520',
+    barGlow: '0 0 8px rgba(212,184,123,0.3)',
+    nameFont: "'Uncial Antiqua', serif",
+    statFormat: 'manual-page',   // ruled margin, runic labels
+    runicLabels: true,           // decorative runes alongside English
+  },
+  hobbySection: {
+    background: { light: '#EDE6DA', dark: '#241F1A' },
+    accentOverride: '#C4907C',
+    frameStyle: 'manual-page',
+    dividerGlyph: '/images/rune-divider.svg',
+  },
+  extras: {
+    parchmentTexture: true,      // 5% opacity overlay
+    watercolourDividers: true,   // CSS gradient section breaks
+    isometricDotGrid: false,     // optional
+    runicSectionMarkers: true,   // SVG glyphs at section breaks
+  },
+};
 
 ---
 
@@ -476,17 +719,414 @@ const steps: Step[] = [
 |---|---|---|---|---|---|
 | Mood | Clean, corporate | Nostalgic, playful | Edgy, technical | Structured, exploratory | Gentle, mysterious |
 | Dark feel | Void black | NES cartridge | Blade Runner | Starship bridge | Charcoal on vellum |
-| Key gimmick | None — pure clarity | Pixel borders | Neon glow, glitch | Colour-block sidebar | Runic glyphs |
+| Light feel | Airy white | Game Boy parchment | Cool grey | Starfleet dossier | Warm parchment |
+| Heading font | Inter | Press Start 2P | Rajdhani | Antonio | Uncial Antiqua |
+| Corners | Rounded | Hard 0px | Asymmetric cut | LCARS capsule | Soft 16px |
+| Key gimmick | None — pure clarity | Pixel borders, stepped animation | Neon glow, glitch | Colour-block sidebar | Runic glyphs, watercolour dividers |
+| Char. sheet | Clean bars | RPG stat screen | Cyberpunk HUD | Personnel dossier | Discovered manual page |
+| Extra deps | None | NES.css | None | None | None |
 | Recruiter-safe? | ✅ Most professional | ⚠️ Bold | ✅ Dark = slick | ✅ Both modes | ✅ Elegant + unique |
 | Fun | ★★★☆☆ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★★ |
 
+## 0.8 Theme Switching Architecture
+
+src/config/themes/
+  cupertino.ts
+  arcadia.ts
+  nightcity.ts
+  starfleet.ts
+  foxglen.ts
+src/config/activeTheme.ts   ← re-exports the chosen one
+
+ts
+// src/config/activeTheme.ts
+export { theme } from './themes/foxglen'; // change this one line to switch
+
+All components import from activeTheme.ts. Tailwind config reads from it. Switching themes = changing one import.
+
 ---
 
-# PART 1–17 — FULL SITE SPECIFICATION
+# PART 1 — OVERVIEW & PURPOSE
 
-The remaining 17 parts covered: site map, data architecture (GitHub API, Medium RSS, project overrides, character sheet stats, hobbies data), front page sections (Hero, GitHub Graph, Featured Projects, Character Sheet, Beyond the Code, Medium Articles, Social Links, Footer), project pages, interactive component registry, SEO & metadata, maintainability, three tech paths (Astro / Next.js / Vite SPA), deployment targets (GitHub Pages / Vercel / Azure), shared component library, file structure, CI/CD workflows, and a Lovable prompt sequence.
+A professional personal portfolio website for **Espen H. Kristensen** to showcase hobby coding projects and life outside of code. Modular, template-driven, theme-parametrised, defined fully in code. Deployable to **GitHub Pages**, **standalone hosting** (Vercel/Netlify/Cloudflare Pages), or **Azure App Service as a Docker container**.
 
-**Decision:** Start with Path C (Vite + React SPA) for maximum Lovable compatibility and fastest time-to-live. The prompt was ~4,500 words specifying every data structure, component, design token, and deployment path.`,
+---
+
+# PART 2 — DESIGN LANGUAGE
+
+Defined entirely by the active theme (see Part 0). All components read from activeTheme.ts. Tailwind config maps tokens into utilities. Responsive: mobile-first, breakpoints at sm:640 / md:768 / lg:1024 / xl:1280. Dark/light mode toggle with system-preference awareness, persisted to localStorage. Icons: Lucide React.
+
+---
+
+# PART 3 — SITE MAP
+
+/                     → Home (front page — all sections)
+/projects/:slug       → Individual project page
+/blog                 → Medium articles listing (optional)
+
+---
+
+# PART 4 — DATA ARCHITECTURE
+
+## 4.1 Site Configuration
+
+ts
+export const siteConfig = {
+  name: 'Espen H. Kristensen',
+  tagline: 'Data Engineer · Manager @ PwC Norway',
+  bio: 'Passionate about data engineering, LLMs and responsible AI. Mathematical background, sports geek, cocktail nerd.',
+  profileImage: 'https://avatars.githubusercontent.com/u/9327813?v=4',
+  logo: '/images/logo-placeholder.svg',
+  resumeUrl: '/files/cv.pdf',
+  githubUsername: 'espenhk',
+  mediumUsername: 'espen-haukeland-kristensen',
+  socials: {
+    github: 'https://github.com/espenhk',
+    linkedin: 'https://linkedin.com/in/espen-h-kristensen-4770a525',
+    medium: 'https://medium.com/@espen-haukeland-kristensen',
+    instagram: 'https://instagram.com/bgosl',
+    bluesky: 'https://bsky.app/profile/bgosl.bsky.social',
+    facebook: 'https://facebook.com/espenhk',
+    youtube: '',
+    twitter: '',
+  },
+  linkedinPostEmbedUrl: '',
+};
+
+## 4.2 GitHub Fetcher
+
+Fetches public repos from GET /users/espenhk/repos (60 req/hr unauthenticated, 5k/hr with token). Filters out forks and archived repos. Paginates automatically. Runs at build time (SSG) or client-side (SPA) depending on tech path.
+
+## 4.3 Medium RSS Fetcher
+
+Fetches latest 10 posts from https://medium.com/feed/@espen-haukeland-kristensen via rss2json. Returns title, link, pubDate, thumbnail, contentSnippet.
+
+## 4.4 Project Overrides & Resolved Projects
+
+Only espenhk/* repos. Local overrides for editorial control:
+
+ts
+export const projectOverrides: ProjectOverride[] = [
+  // === FEATURED ===
+  {
+    repoName: 'myfootballflags',
+    featured: true, sortOrder: 1,
+    titleOverride: 'MyFootballFlags',
+    subtitleOverride: 'Live NFL play-by-play CLI for fantasy football nerds',
+  },
+  {
+    repoName: 'python-ODESolver',
+    featured: true, sortOrder: 2,
+    titleOverride: 'Python ODE Solver',
+    subtitleOverride: 'Runge-Kutta & Euler methods for ordinary differential equations',
+  },
+  {
+    repoName: 'python-war-on-zombies',
+    featured: true, sortOrder: 3,
+    titleOverride: 'War on Zombies',
+    subtitleOverride: 'Epidemiology simulation: pandemic spread, vaccines, and the undead',
+  },
+  {
+    repoName: 'advent-of-code-2022',
+    featured: false, sortOrder: 4,
+    titleOverride: 'Advent of Code 2022',
+    subtitleOverride: 'Daily coding puzzles solved in Python',
+  },
+  {
+    repoName: 'gameoflife',
+    featured: false, sortOrder: 5,
+    titleOverride: "Conway's Game of Life",
+    subtitleOverride: 'Classic cellular automaton in Java',
+  },
+  // === HIDDEN ===
+  { repoName: 'bicep-training', hidden: true },
+  { repoName: 'github-actions-training', hidden: true },
+  { repoName: 'github-actions-tutorial001', hidden: true },
+  { repoName: 'github-actions-tutorial002', hidden: true },
+  { repoName: 'tomatoes', hidden: true },
+  { repoName: 'ml-society-science', hidden: true },
+];
+
+The resolver merges GitHub API data + overrides → unified Project[] array.
+
+## 4.5 Character Sheet Stats
+
+ts
+export const characterSheet = {
+  name: 'Espen H. Kristensen',
+  title: 'Data Engineer / Manager',
+  portraitImage: 'https://avatars.githubusercontent.com/u/9327813?v=4',
+  tagline: '"Sports geek · Cocktail nerd · Data wrangler"',
+  stats: [
+    { label: 'Python', value: 90, category: 'language' },
+    { label: 'SQL', value: 88, category: 'language' },
+    { label: 'Java', value: 65, category: 'language' },
+    { label: 'Bicep / IaC', value: 60, category: 'language' },
+    { label: 'Azure Data', value: 85, category: 'framework' },
+    { label: 'Power BI', value: 80, category: 'framework' },
+    { label: 'Kafka / Confluent', value: 75, category: 'framework' },
+    { label: 'GitHub Actions', value: 70, category: 'framework' },
+    { label: 'Data Engineering', value: 92, category: 'tool' },
+    { label: 'Machine Learning', value: 78, category: 'tool' },
+    { label: 'NLP', value: 72, category: 'tool' },
+    { label: 'Data Anonymisation', value: 80, category: 'tool' },
+    { label: 'Integration', value: 75, category: 'tool' },
+    { label: 'Responsible AI', value: 77, category: 'tool' },
+    { label: 'Communication', value: 90, category: 'soft-skill' },
+    { label: 'Technical Writing', value: 85, category: 'soft-skill' },
+    { label: 'Cocktail Mixing', value: 88, category: 'soft-skill' },
+  ],
+};
+
+CV pipeline: scripts/cv-to-stats.ts reads JSON Resume → writes characterSheet.ts.
+
+## 4.6 Hobbies Data
+
+ts
+export const hobbies: Hobby[] = [
+  {
+    slug: 'flag-football',
+    name: 'Flag Football',
+    role: 'Wide Receiver / Safety',  // update with real position
+    teamName: 'TBD',                 // fill in
+    teamLogo: '/images/hobbies/team-logo-placeholder.svg',
+    description: 'Competing in Norwegian flag football.',
+    coverImage: '/images/hobbies/flag-football-placeholder.webp',
+    links: [
+      { label: 'Team Website', url: '#', icon: 'globe' },
+      { label: 'Instagram', url: '#', icon: 'instagram' },
+      { label: 'Facebook', url: '#', icon: 'facebook' },
+    ],
+    pinnedEmbeds: [],
+    gallery: [],
+    stats: [],
+    sortOrder: 1,
+  },
+];
+
+## 4.7 Bio Texts
+
+**Professional:**
+> Espen H. Kristensen is a data engineer and manager at PwC Norway in Tromsø, working with data engineering, LLMs, and responsible AI. He holds a degree from the University of Oslo spanning algorithms, machine learning, NLP, reinforcement learning, numerical modelling, and image analysis — giving him a mathematical depth that goes well beyond the average data practitioner. He's certified across Azure Data Fundamentals, Power BI Data Analyst Associate, IBM ACE, webMethods, Confluent (Kafka), and SAFe 5 Agilist. He writes on Medium about topics like data anonymisation in practice — covering k-anonymisation, l-diversity, t-closeness, and differential privacy.
+
+**Off the Clock:**
+> A self-described sports geek and cocktail nerd. Served as a communication specialist in the Norwegian Armed Forces' Signal Battalion (Northern Brigade, Bardufoss). A lifelong American football enthusiast who once built a Java CLI for live NFL play-by-plays. Plays flag football. Has bartended at Fuglen — Oslo's legendary cocktail bar — and debates Negroni ratios with differential-privacy rigour. Originally from western Norway, lived in Oslo most of his adult life, recently moved to Tromsø above the Arctic Circle.
+
+---
+
+# PART 5 — FRONT PAGE SECTIONS
+
+1. **Hero** — full-viewport. Profile image, name, tagline, bio. CTAs: "View Projects", "Download CV".
+2. **GitHub Commit Graph** — react-github-calendar for espenhk, themed to accent.
+3. **Featured Projects Grid** — responsive 1→2→3 col card grid from featured projects.
+4. **Character Sheet** — Tekken-style (or theme-variant) panel with animated stat bars.
+5. **Beyond the Code — Hobbies** — full-width hobby cards with cover image/carousel, links, social embeds (react-social-media-embed), fun stats.
+6. **Latest Medium Articles** — article cards from RSS feed.
+7. **Social Links & LinkedIn Post** — social icon row, LinkedIn embed, CV button.
+8. **Footer** — name, copyright, social icons, credit.
+
+---
+
+# PART 6 — PROJECT PAGE (/projects/:slug)
+
+Hero banner → metadata bar → Markdown body → interactive elements → "Back" link.
+
+Interactive element types: image-carousel, embedded-game, interactive-diagram, power-bi, youtube-embed.
+
+---
+
+# PART 7 — INTERACTIVE COMPONENT REGISTRY
+
+ts
+export const interactiveRegistry: Record<string, () => Promise<{ default: React.FC }>> = {
+  'NetworkDiagram': () => import('./NetworkDiagram'),
+  'DataFlowDiagram': () => import('./DataFlowDiagram'),
+};
+
+---
+
+# PART 8 — PLACEHOLDER IMAGES
+
+| Image | Path | Spec |
+|---|---|---|
+| Profile | GitHub avatar URL (live) | 400×400 |
+| Logo | /images/logo-placeholder.svg | SVG, 40px |
+| Project hero | /images/projects/{slug}-placeholder.webp | 1200×630 |
+| Character portrait | GitHub avatar URL (live) | 600×800 |
+| OG | /images/og-default.webp | 1200×630 |
+| Hobby cover | /images/hobbies/{slug}-placeholder.webp | 1200×630 |
+| Team logo | /images/hobbies/{team}-logo-placeholder.svg | SVG, 60px |
+| Rune divider | /images/rune-divider.svg | SVG (FOXGLEN only) |
+
+---
+
+# PART 9 — SEO & METADATA
+
+Per-page <title>, <meta description>, OG tags. Auto-generated sitemap. robots.txt.
+
+---
+
+# PART 10 — MAINTAINABILITY
+
+| Action | Effort |
+|---|---|
+| Add project | Push new public repo to espenhk. Optionally add override. |
+| Add article | Publish on Medium. Auto-appears. |
+| Add hobby | Add entry to hobbies.ts + images. |
+| Change theme | Change one import in activeTheme.ts. |
+| Update stats | Run scripts/cv-to-stats.ts. |
+| Deploy | npm run build or docker build. |
+
+---
+
+# PART 11 — THREE TECH PATHS
+
+| | Path A: Astro 5 + React | Path B: Next.js 15 | Path C: Vite + React SPA |
+|---|---|---|---|
+| Best for | GitHub Pages, max perf | Azure container, ISR | Lovable, fastest start |
+| Lighthouse | ★★★★★ | ★★★☆☆ | ★★★☆☆ |
+| GitHub Pages | ✅ | ✅ (output: 'export') | ✅ |
+| Azure container | ⚠️ | ✅ Ideal | ✅ (Nginx) |
+| Lovable compat | ❌ | ✅ | ✅ Direct |
+| SEO (no JS) | ✅ | ✅ | ⚠️ |
+| Live data | ❌ Build only | ✅ ISR | ✅ Client fetch |
+
+---
+
+# PART 12 — DEPLOYMENT TARGETS
+
+**GitHub Pages:** Static only. 404.html hack for SPA routing. Base-path for sub-path. Daily cron rebuild.
+
+**Standalone (Vercel/Netlify/CF):** Auto-deploy on push. ISR on Vercel. Free.
+
+**Azure App Service:** Path B: Node.js on 3000. Path C: Nginx on 80. ACR push. ~$13/mo B1.
+
+Dockerfiles for both Path B (Next.js SSR) and Path C (Vite+Nginx) provided in previous spec iterations — unchanged.
+
+---
+
+# PART 13 — SHARED COMPONENT LIBRARY
+
+ProjectCard, CharacterSheet, StatBar, HobbyCard, HobbyGallery, HobbyStats, HobbyLinks, HobbySocialEmbeds, ImageCarousel, PowerBIEmbed, YouTubeEmbed, GameEmbed, GitHubGraph, MediumArticleCard, SocialBar, ThemeToggle, Button, TagPill, Card.
+
+---
+
+# PART 14 — FILE STRUCTURE (Path B — Next.js)
+
+/
+├── public/images/ & files/
+├── src/
+│   ├── config/themes/ (5 theme files) + activeTheme.ts
+│   ├── data/ (siteConfig, projectOverrides, characterSheet, hobbies)
+│   ├── lib/ (github/, medium/, resolveProjects.ts)
+│   ├── app/ (layout, page, projects/[slug], blog)
+│   ├── components/
+│   │   ├── sections/ (Hero, GitHubGraph, FeaturedProjects, CharacterSheet, HobbiesSection, MediumArticles, SocialBar, Footer)
+│   │   ├── hobby/ (HobbyCard, HobbyGallery, HobbyStats, HobbyLinks, HobbySocialEmbeds)
+│   │   ├── interactive/ (registry, ImageCarousel, PowerBIEmbed, YouTubeEmbed, GameEmbed)
+│   │   └── ui/ (Button, Card, TagPill, StatBar)
+│   └── styles/globals.css
+├── scripts/cv-to-stats.ts
+├── Dockerfile
+├── tailwind.config.ts
+├── package.json
+└── .github/workflows/ (deploy-gh-pages.yml, deploy-azure.yml)
+
+---
+
+# PART 15 — CI/CD WORKFLOWS
+
+**GitHub Pages:** Build on push + daily cron. Upload to Pages.
+
+**Azure:** Docker build → push to ACR → restart App Service.
+
+(Full YAML provided in previous iterations — unchanged.)
+
+---
+
+# PART 16 — LOVABLE PROMPT SEQUENCE
+
+1. Scaffold (theme, navbar, footer, dark mode)
+2. Hero (profile, bio, CTAs)
+3. GitHub Graph
+4. Project Cards (fetch from GH API, cache)
+5. Character Sheet (animated bars)
+6. Hobbies ("Beyond the Code", social embeds)
+7. Medium Articles (RSS fetch)
+8. Social & LinkedIn
+9. Project Page (dynamic route, interactive elements)
+
+---
+
+# PART 17 — SUMMARY
+
+This specification is self-contained. Every data structure, component, deployment path, design token, bio text, repo list, and theme configuration is defined here. **Build the five MWEs first (Part 0). Get approval. Then build the full site.** An AI builder, a human developer, or a future Espen can reproduce the site deterministically from this document alone.
+
+Citations:
+[1] https://www.youtube.com/watch?v=pUy9rQdKV44
+[2] https://en.wikipedia.org/w/index.php?title=Tunic_(video_game)&printable=yes
+
+# Arguments about tech:
+
+
+## Tech Stack Showdown: Astro vs Next.js vs Vite SPA
+
+### The Core Tension
+
+This site sits at an awkward sweet spot: it's fundamentally a **content portfolio** (which screams static), but the spec demands **heavy interactivity** (carousels, animated character sheets, live GitHub/Medium fetches, Power BI iframes, social embeds, games). That tension is what makes the choice non-trivial.
+
+---
+
+### Path A — Astro 5 + React Islands
+
+**The argument for:** Astro ships zero JavaScript by default. For a portfolio where 70% of the page is static text, images, and cards, this is a genuine advantage. Lighthouse scores will hit 99–100 out of the box. Build output is plain HTML — perfect for GitHub Pages with zero configuration headaches. It's the leanest possible production bundle.
+
+**The argument against:** Your spec has interactive components in *almost every section*: the GitHub calendar, the character sheet with scroll-triggered Framer Motion animations, the image carousels, the social embeds in the hobbies section, the Power BI iframes, the Medium fetch. Each one becomes a React island with its own hydration boundary. At some point you're managing a dozen client:visible directives and debugging hydration mismatches — you're fighting the framework instead of using it. Worse, **Lovable doesn't output Astro**. Every component Lovable generates needs to be manually rewrapped in .astro files. That kills the "AI-generated, easily maintainable" promise of the spec. And if you ever want the site on Azure App Service with ISR (so new GitHub repos appear without a redeploy), Astro's SSR story via the Node adapter is less mature and less documented than Next.js.
+
+**Verdict:** The right tool if you're a purist who values Lighthouse scores above all else and is comfortable doing manual Astro integration work. The wrong tool if you want Lovable compatibility or Azure SSR.
+
+---
+
+### Path B — Next.js 15 + App Router
+
+**The argument for:** This is the most *capable* option. React components work natively — no island pattern, no hydration wrangling. The App Router gives you React Server Components for the static parts (hero, footer, metadata) and client components for interactive sections, with the framework handling the boundary automatically. ISR means you deploy once and the site re-fetches your GitHub repos and Medium feed on a configurable schedule without a redeploy — critical for the Azure container use case. API routes are available if you later want a /api/refresh webhook or a contact form. The ecosystem is enormous: every tutorial, every Stack Overflow answer, every AI tool understands Next.js. Lovable output maps almost directly to Next.js components.
+
+**The argument against:** You pay for that capability in bundle size. Next.js ships ~150–200KB of JavaScript to the client versus Astro's ~8–30KB. For a personal portfolio that gets a few hundred visits a month, that's over-engineering. The App Router caching model is notoriously confusing — there's revalidate, dynamic, force-static, force-dynamic, unstable_cache, and they interact in non-obvious ways. You will hit caching bugs during development. Self-hosting the Next.js server (on Azure, outside Vercel) requires managing a Node.js process, health checks, memory limits, and cold starts — real operational overhead for what could be a static site. And if you ultimately deploy to GitHub Pages, you must use output: 'export', which disables ISR, API routes, and middleware — stripping away the very features that justify choosing Next.js in the first place.
+
+**Verdict:** The right tool if Azure App Service is a real deployment target and you want always-fresh data without redeploys. Overkill if you're just putting this on GitHub Pages.
+
+---
+
+### Path C — Vite + React SPA
+
+**The argument for:** This is what Lovable actually generates. Zero translation layer — paste the spec prompts into Lovable, get a working codebase, deploy. The mental model is the simplest: it's just React. Every component is a regular React component. There's no framework magic, no server/client boundary to reason about, no island hydration, no caching model. npm run build produces a dist/ folder of static files that works on GitHub Pages, Vercel, Netlify, or an Nginx container on Azure. The Nginx container is ~25MB and starts in under a second — the lightest possible Azure deployment. For a developer maintaining this in spare hours between data engineering work, simplicity has real value.
+
+**The argument against:** No server-side rendering. Google *does* execute JavaScript now, but your initial page load is a white screen until the JS bundle parses and React mounts. That's ~120–180KB of JavaScript before anything renders — a meaningful delay on mobile. The GitHub and Medium data is fetched client-side in every visitor's browser, which means: loading spinners instead of instant content, and each visitor's browser hits the GitHub API (60 req/hr per IP — fine for a portfolio, but inelegant). There's no build-time image optimisation — you're serving whatever you put in /public/. And there's a subtle long-term risk: if you ever want to add anything server-side (auth, a CMS, dynamic OG images), you'll hit a wall and need to migrate to Next.js anyway.
+
+**Verdict:** The right tool if you want the fastest path from spec to deployed site with minimum complexity. The wrong tool if SEO without JavaScript or server-side capabilities matter to you.
+
+---
+
+### The Decision Framework
+
+| If your priority is… | Choose |
+|---|---|
+| **Fastest from Lovable to live site** | **Path C** (Vite SPA) |
+| **GitHub Pages as sole target, maximum performance** | **Path A** (Astro) |
+| **Azure App Service container with live data** | **Path B** (Next.js) |
+| **Minimum maintenance burden** | **Path C** — fewest concepts to understand |
+| **Future-proofing for features you haven't imagined** | **Path B** — most extensible |
+| **Best Lighthouse scores for bragging rights** | **Path A** — nothing beats zero-JS static HTML |
+
+### My Recommendation
+
+**Start with Path C.** Here's why: the spec explicitly prioritises Lovable compatibility, ease of maintenance, and "defined fully in code." Path C delivers all three with the least friction. Build the five MWEs in Lovable, pick a theme, generate the full site. Deploy to GitHub Pages immediately. Total time-to-live: hours, not days.
+
+If you later decide you want ISR or server-side features, migrating from Vite+React to Next.js is a well-trodden path — your components, data files, and Tailwind config transfer unchanged. You're essentially adding a framework shell around existing code. The reverse migration (Next.js → Astro) is much harder.
+
+Path A (Astro) is the theoretically elegant choice, but the mismatch with Lovable and the island-management overhead for this particular spec make it the hardest to maintain in practice. Save it for a future project that's truly content-only.
+
+Let’s start with path C as the stack.`,
     },
   },
   {

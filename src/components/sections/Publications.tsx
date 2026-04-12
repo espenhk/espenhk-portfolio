@@ -66,7 +66,7 @@ export default function Publications() {
     script.src = 'https://widgets.sociablekit.com/linkedin-profile-posts/widget.js';
     script.defer = true;
     document.body.appendChild(script);
-    return () => { document.body.removeChild(script); };
+    return () => { script.remove(); };
   }, []);
 
   useEffect(() => {

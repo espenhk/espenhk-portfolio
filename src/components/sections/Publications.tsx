@@ -328,6 +328,35 @@ export default function Publications() {
           </div>
 
           <div className="sk-ww-linkedin-profile-post" data-embed-id="25671841" />
+
+          <div
+            style={{
+              marginTop: 12,
+              textAlign: 'center',
+              color: isDark ? 'rgba(255,255,255,0.72)' : 'rgba(0,0,0,0.68)',
+              fontSize: '0.95rem',
+            }}
+          >
+            If the LinkedIn embed does not load, you can view the latest posts directly on{' '}
+            <a
+              href="https://www.linkedin.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                color: isDark ? '#5B9BD5' : '#0A66C2',
+                textDecoration: 'none',
+                fontWeight: 600,
+              }}
+              aria-label="Open LinkedIn in a new tab"
+            >
+              LinkedIn
+              <ExternalLink size={14} />
+            </a>
+            .
+          </div>
         </div>
       </div>
     </section>

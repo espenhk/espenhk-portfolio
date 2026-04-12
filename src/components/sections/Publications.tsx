@@ -2,9 +2,8 @@ import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { publications as fallbackPubs, type Publication } from '@/data/experience';
-import { linkedInPosts } from '@/data/linkedInPosts';
 import { fetchMediumArticles, fetchYouTubeVideos } from '@/lib/feeds';
-import { ExternalLink, BookOpen, Layers, ThumbsUp, MessageCircle } from 'lucide-react';
+import { ExternalLink, BookOpen, Layers } from 'lucide-react';
 
 function getYouTubeId(url: string): string | null {
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
@@ -17,12 +16,6 @@ const typeColor: Record<string, string> = {
   series: '#CC99FF',
 };
 
-const liTypeColor: Record<string, string> = {
-  post: '#0A66C2',
-  comment: '#57A773',
-  article: '#E7A33E',
-};
-
 function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
@@ -33,11 +26,9 @@ function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?:
 
 const SCROLL_HIDE_CSS = `
 .transmissions-scroll::-webkit-scrollbar { display: none; }
-.li-scroll::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) {
   .transmissions-scroll > div { min-width: 38vw !important; max-width: 38vw !important; }
   .scroll-arrow { display: flex !important; }
-  .li-arrow { display: flex !important; }
 }
 `;
 
@@ -51,9 +42,7 @@ export default function Publications() {
   const [publications, setPublications] = useState<Publication[]>(fallbackPubs);
   const ref = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const liScrollRef = useRef<HTMLDivElement>(null);
   const [transScrolled, setTransScrolled] = useState(false);
-  const [liScrolled, setLiScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -73,11 +62,11 @@ export default function Publications() {
   }, []);
 
   useEffect(() => {
-    const el = liScrollRef.current;
-    if (!el) return;
-    const onScroll = () => setLiScrolled(el.scrollLeft > 10);
-    el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
+    const script = document.createElement('script');
+    script.src = 'https://widgets.sociablekit.com/linkedin-profile-posts/widget.js';
+    script.defer = true;
+    document.body.appendChild(script);
+    return () => { document.body.removeChild(script); };
   }, []);
 
   useEffect(() => {
@@ -338,129 +327,7 @@ export default function Publications() {
             </h3>
           </div>
 
-          <div style={{ position: 'relative' }}>
-          <div ref={liScrollRef} className="li-scroll" style={{
-            display: 'flex',
-            gap: 10,
-            overflowX: 'auto',
-            scrollSnapType: 'x mandatory',
-            scrollPaddingLeft: 32,
-            scrollPaddingRight: 24,
-            paddingBottom: 6,
-            marginLeft: -24,
-            marginRight: -24,
-            paddingLeft: 32,
-            paddingRight: 24,
-            WebkitOverflowScrolling: 'touch',
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none',
-          }}>
-            {linkedInPosts.map((post, i) => {
-              const typeCol = liTypeColor[post.type];
-              return (
-                <motion.a
-                  key={i}
-                  href={post.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={visible ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.3, delay: 0.3 + i * 0.06 }}
-                  whileHover={{ y: -2 }}
-                  style={{
-                    background: isDark ? undefined : panelBg,
-                    backgroundImage: isDark ? panelBg : undefined,
-                    borderRadius: theme.radii.md,
-                    border: `1px solid ${isDark ? `${typeCol}18` : border}`,
-                    boxShadow: isDark ? theme.shadows.card : '0 1px 3px rgba(0,0,0,0.05)',
-                    padding: '12px 14px',
-                    minWidth: 180,
-                    maxWidth: 180,
-                    scrollSnapAlign: 'start',
-                    flexShrink: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 8,
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{
-                      fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: typeCol,
-                      textTransform: 'uppercase', letterSpacing: '0.06em',
-                      background: `${typeCol}12`, padding: '1px 5px', borderRadius: theme.radii.sm,
-                    }}>
-                      {post.type === 'comment' ? '💬 comment' : post.type === 'article' ? '📝 article' : '📣 post'}
-                    </span>
-                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.52rem', color: fg2 }}>{post.date}</span>
-                  </div>
-
-                  <p style={{
-                    fontFamily: theme.fonts.sans, fontSize: '0.68rem', color: fg,
-                    lineHeight: 1.4, flex: 1, overflow: 'hidden',
-                    display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical',
-                  }}>
-                    {post.text}
-                  </p>
-
-                  <div style={{
-                    display: 'flex', gap: 10, alignItems: 'center',
-                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
-                    paddingTop: 6,
-                  }}>
-                    {post.likes != null && (
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontFamily: theme.fonts.mono, fontSize: '0.58rem', color: fg2 }}>
-                        <ThumbsUp size={10} /> {post.likes}
-                      </span>
-                    )}
-                    {post.comments != null && (
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontFamily: theme.fonts.mono, fontSize: '0.58rem', color: fg2 }}>
-                        <MessageCircle size={10} /> {post.comments}
-                      </span>
-                    )}
-                  </div>
-                </motion.a>
-              );
-            })}
-          </div>
-
-          {/* LinkedIn scroll arrows */}
-          {liScrolled && (
-          <button
-            onClick={() => liScrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
-            style={{
-              position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
-              width: 28, height: 28, borderRadius: '50%',
-              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
-              border: 'none', cursor: 'pointer', display: 'none',
-              alignItems: 'center', justifyContent: 'center',
-              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
-            }}
-            className="li-arrow"
-            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          )}
-          <button
-            onClick={() => liScrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
-            style={{
-              position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
-              width: 28, height: 28, borderRadius: '50%',
-              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
-              border: 'none', cursor: 'pointer', display: 'none',
-              alignItems: 'center', justifyContent: 'center',
-              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
-            }}
-            className="li-arrow"
-            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-          </div>
+          <div className="sk-ww-linkedin-profile-post" data-embed-id="25671841" />
         </div>
       </div>
     </section>

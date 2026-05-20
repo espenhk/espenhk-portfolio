@@ -56,11 +56,3 @@ export default function Index() {
     </ThemeProvider>
   );
 }
-
-export default function Index() {
-  return (
-    <ThemeProvider>
-      <PageContent />
-    </ThemeProvider>
-  );
-}

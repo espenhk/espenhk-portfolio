@@ -30,7 +30,7 @@ export const siteConfig = {
   bio: "Passionate about data engineering, LLMs and responsible AI. Mathematical background, sports geek, cocktail nerd.",
   profileImage: "https://avatars.githubusercontent.com/u/9382831?v=4",
   logo: "/images/logo-placeholder.svg",
-  resumeUrl: "/files/cv.pdf",
+  resumeUrl: "/files/CV_Espen-Haukeland-Kristensen_en.pdf",
   githubUsername: "espenhk",
   mediumUsername: "espenhk",
   youtubeChannelId: "UCS4IaI0EFrvHRk45XVYgzjw",

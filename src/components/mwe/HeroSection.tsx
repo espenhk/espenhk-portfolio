@@ -68,6 +68,10 @@ export default function HeroSection() {
         <img
           src={siteConfig.profileImage}
           alt={siteConfig.name}
+          width={140}
+          height={140}
+          fetchPriority="high"
+          decoding="async"
           style={{
             width: 140, height: 140,
             borderRadius: theme.radii.full,

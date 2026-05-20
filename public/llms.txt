@@ -1,0 +1,8 @@
+# Espen H. Kristensen — Portfolio
+
+> Personal portfolio for Espen H. Kristensen, Data Engineer & Manager at PwC Norway. Showcases data engineering work, LLM/AI projects, writing, and open-source repos.
+
+## Pages
+
+- [Home](/): Portfolio hero, character sheet (skills), publications, projects, and experience timeline.
+- [How I Did It](/how-i-did-it): Behind-the-scenes write-up of how this portfolio was built with Lovable, including theme swapper and dev process.

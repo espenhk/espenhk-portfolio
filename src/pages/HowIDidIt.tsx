@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -1371,7 +1372,24 @@ function PageContent() {
       minHeight: '100vh',
       padding: '60px 20px 80px',
     }}>
-      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+      <Helmet>
+        <title>How I Built This Site — Espen H. Kristensen</title>
+        <meta name="description" content="Behind the scenes: how this portfolio was built with Lovable, from prompt design with Claude to theme system, data integrations, and deploy." />
+        <link rel="canonical" href="https://espenhk.lovable.app/how-i-did-it" />
+        <meta property="og:title" content="How I Built This Site — Espen H. Kristensen" />
+        <meta property="og:description" content="Behind-the-scenes write-up of building a portfolio with Lovable: prompt design, theme system, data integrations, and deploy." />
+        <meta property="og:url" content="https://espenhk.lovable.app/how-i-did-it" />
+        <meta property="og:type" content="article" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "How I Built This Site",
+          "description": "Behind-the-scenes write-up of building a portfolio with Lovable: prompt design, theme system, data integrations, and deploy.",
+          "author": { "@type": "Person", "name": "Espen H. Kristensen" },
+          "url": "https://espenhk.lovable.app/how-i-did-it"
+        })}</script>
+      </Helmet>
+      <main style={{ maxWidth: 720, margin: '0 auto' }}>
         {/* Back link */}
         <motion.button
           initial={{ opacity: 0 }}
@@ -1472,7 +1490,7 @@ function PageContent() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { useKonamiCode } from '@/hooks/useKonamiCode';
 import KonamiOverlay from '@/components/KonamiOverlay';
@@ -25,14 +26,24 @@ function PageContent() {
       minHeight: '100vh',
       transition: `background ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
     }}>
+      <Helmet>
+        <title>Espen H. Kristensen — Data Engineer Portfolio</title>
+        <meta name="description" content="Portfolio of Espen H. Kristensen, Data Engineer & Manager at PwC Norway. Data engineering, LLMs, responsible AI, projects, and writing." />
+        <link rel="canonical" href="https://espenhk.lovable.app/" />
+        <meta property="og:title" content="Espen H. Kristensen — Data Engineer Portfolio" />
+        <meta property="og:description" content="Data engineering, LLMs and responsible AI — projects, writing, and experience from a Manager at PwC Norway." />
+        <meta property="og:url" content="https://espenhk.lovable.app/" />
+      </Helmet>
       <KonamiOverlay active={activated} />
       <NavBar />
-      <HeroSection />
-      <CharacterSheetFull />
-      <Publications />
-      <ContactCTA />
-      <FeaturedProjects />
-      <ExperienceTimeline />
+      <main>
+        <HeroSection />
+        <CharacterSheetFull />
+        <Publications />
+        <ContactCTA />
+        <FeaturedProjects />
+        <ExperienceTimeline />
+      </main>
       <FooterSection />
     </div>
   );

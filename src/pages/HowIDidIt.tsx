@@ -1490,7 +1490,7 @@ function PageContent() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </main>
     </div>
   );
 }

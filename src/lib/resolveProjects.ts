@@ -35,7 +35,7 @@ export function resolveProjects(repos: GitHubRepo[]): Project[] {
     projects.push({
       slug: repo.name,
       title: override?.titleOverride ?? formatRepoName(repo.name),
-      subtitle: override?.subtitleOverride ?? repo.description ?? '',
+      subtitle: repo.description ?? '',
       description: repo.description,
       language: repo.language,
       stars: repo.stargazers_count,

@@ -1,4 +1,7 @@
-import type { Section, SectionDataMap, SiteSettings } from '@/cms/types';
+import type { Section, SectionDataMap, SiteSettings, StatsData } from '@/cms/types';
+import type { Education } from '@/data/experience';
+
+type StatsInterest = StatsData['interests'][number];
 import { clampStat, STAT_MAX, STAT_MIN } from '@/cms/resolve';
 import { AreaField, Field, LinesField, ListEditor, NumberField, TextField, ToggleField } from './fields';
 import { Input } from '@/components/ui/input';
@@ -46,7 +49,7 @@ function StatsEditor({ data, set }: Props<'stats'>) {
       make={() => ({ flag: '🏳️', name: 'Language' })} title={l => `${l.flag} ${l.name}`}
       render={(l, s) => <><TextField label="Flag emoji" value={l.flag} onChange={flag => s({ flag })} /><TextField label="Name" value={l.name} onChange={name => s({ name })} /></>} />
     <ListEditor label="Off-duty interests" items={data.interests} onChange={interests => set({ interests })}
-      make={() => ({ emoji: '⭐', label: 'Interest', detail: '' })} title={i => `${i.emoji} ${i.label}`}
+      make={(): StatsInterest => ({ emoji: '⭐', label: 'Interest', detail: '' })} title={i => `${i.emoji} ${i.label}`}
       render={(i, s) => <>
         <TextField label="Emoji" value={i.emoji} onChange={emoji => s({ emoji })} />
         <TextField label="Label" value={i.label} onChange={label => s({ label })} />
@@ -108,7 +111,7 @@ function ExperienceEditor({ data, set }: Props<'experience'>) {
         <TextField label="Tags (comma separated)" value={(j.tags ?? []).join(', ')} onChange={v => s({ tags: v.split(',').map(t => t.trim()).filter(Boolean) })} />
       </>} />
     <ListEditor label="Education" items={data.education} onChange={education => set({ education })}
-      make={() => ({ institution: 'Institution', degree: '', period: '' })}
+      make={(): Education => ({ institution: 'Institution', degree: '', period: '' })}
       title={e => `${e.institution} · ${e.degree}`}
       render={(e, s) => <>
         <TextField label="Institution" value={e.institution} onChange={institution => s({ institution })} />

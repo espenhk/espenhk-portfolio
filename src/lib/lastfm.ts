@@ -24,18 +24,27 @@ export function parseRecentTracks(json: any): LastTrack | null {
   };
 }
 
-export function useLastTrack(user?: string) {
+const CACHE_KEY = 'lastfm:last:';
+function readCache(u: string): LastTrack | null {
+  try { const v = localStorage.getItem(CACHE_KEY + u); return v ? JSON.parse(v) : null; } catch { return null; }
+}
+
+export function useLastTrack(user?: string, enabled = true) {
   const u = (user || DEFAULT_LASTFM_USER).trim();
   return useQuery({
     queryKey: ['lastfm', u],
-    enabled: !!LASTFM_API_KEY && !!u,
+    enabled: enabled && !!LASTFM_API_KEY && !!u,
     refetchInterval: 60_000,
     retry: 1,
     queryFn: async () => {
       const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(u)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Last.fm ${res.status}`);
-      return parseRecentTracks(await res.json());
+      const t = parseRecentTracks(await res.json());
+      if (t) try { localStorage.setItem(CACHE_KEY + u, JSON.stringify(t)); } catch { /* ignore */ }
+      return t ?? readCache(u);
     },
+    initialData: () => readCache(u) ?? undefined,
+    initialDataUpdatedAt: 0,
   });
 }

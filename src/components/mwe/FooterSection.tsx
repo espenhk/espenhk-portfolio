@@ -14,8 +14,8 @@ const brandColors: Record<string, string> = {
 export default function FooterSection() {
   const { theme, isDark } = useTheme();
   const settings = useSiteSettings();
-  const { data: track } = useLastTrack(settings.lastfmUser);
-  const currentStatus = track
+  const { data: track } = useLastTrack(settings.lastfmUser, !settings.statusOverride);
+  const currentStatus = track && !settings.statusOverride
     ? { emoji: '🎧', label: track.nowPlaying ? 'Listening to' : 'Last played', value: `${track.artist} – ${track.name}`, url: track.url || undefined }
     : settings.status;
   const socialLinks = buildSocialLinks(settings.socials);

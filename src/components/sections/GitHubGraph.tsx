@@ -2,7 +2,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { GitHubCalendar } from 'react-github-calendar';
 import { siteConfig } from '@/data/siteConfig';
 
-export default function GitHubGraph() {
+export default function GitHubGraph({ username = siteConfig.githubUsername }: { username?: string }) {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
@@ -41,7 +41,7 @@ export default function GitHubGraph() {
           paddingBottom: 4,
         }}>
           <GitHubCalendar
-            username={siteConfig.githubUsername}
+            username={username}
             colorScheme={colorScheme}
             theme={explicitTheme}
             fontSize={11}

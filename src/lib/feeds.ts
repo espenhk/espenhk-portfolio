@@ -1,7 +1,8 @@
 import type { Publication } from '@/data/experience';
 
-const MEDIUM_RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@espenhk';
-const YOUTUBE_RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=UCS4IaI0EFrvHRk45XVYgzjw';
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+const mediumRss = (user: string) => `${RSS2JSON}https://medium.com/feed/@${encodeURIComponent(user)}`;
+const youtubeRss = (channel: string) => `${RSS2JSON}https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channel)}`;
 
 function extractFirstImage(html: string): string | undefined {
   const match = html.match(/<img[^>]+src=["']([^"']+)["']/);
@@ -19,9 +20,9 @@ function formatDate(dateStr: string): string {
   return `${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
 }
 
-export async function fetchMediumArticles(): Promise<Publication[]> {
+export async function fetchMediumArticles(user = 'espenhk'): Promise<Publication[]> {
   try {
-    const res = await fetch(MEDIUM_RSS_URL);
+    const res = await fetch(mediumRss(user));
     const data = await res.json();
     if (data.status !== 'ok' || !data.items) return [];
     return data.items.map((item: any) => ({
@@ -51,9 +52,9 @@ function getYtId(url: string): string | null {
   return m ? m[1] : null;
 }
 
-export async function fetchYouTubeVideos(): Promise<Publication[]> {
+export async function fetchYouTubeVideos(channel = 'UCS4IaI0EFrvHRk45XVYgzjw'): Promise<Publication[]> {
   try {
-    const res = await fetch(YOUTUBE_RSS_URL);
+    const res = await fetch(youtubeRss(channel));
     const data = await res.json();
     if (data.status !== 'ok' || !data.items) return [];
     return data.items.map((item: any) => {

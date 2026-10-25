@@ -18,9 +18,29 @@ export interface Project {
   createdAt: string;
 }
 
-export function resolveProjects(repos: GitHubRepo[]): Project[] {
+export interface ProjectsConfig {
+  featured: string[];
+  hidden: string[];
+  titles: Record<string, string>;
+}
+
+/** Converts a CMS projects config into override entries (featured order = list order). */
+export function configToOverrides(cfg: ProjectsConfig): ProjectOverride[] {
+  const map = new Map<string, ProjectOverride>();
+  const get = (n: string) => {
+    const k = n.trim().toLowerCase();
+    if (!map.has(k)) map.set(k, { repoName: n.trim() });
+    return map.get(k)!;
+  };
+  cfg.featured.filter(Boolean).forEach((n, i) => Object.assign(get(n), { featured: true, sortOrder: i + 1 }));
+  cfg.hidden.filter(Boolean).forEach(n => { get(n).hidden = true; });
+  Object.entries(cfg.titles ?? {}).forEach(([n, t]) => { if (t) get(n).titleOverride = t; });
+  return [...map.values()];
+}
+
+export function resolveProjects(repos: GitHubRepo[], overrides: ProjectOverride[] = projectOverrides): Project[] {
   const overrideMap = new Map<string, ProjectOverride>();
-  for (const o of projectOverrides) {
+  for (const o of overrides) {
     overrideMap.set(o.repoName.toLowerCase(), o);
   }
 

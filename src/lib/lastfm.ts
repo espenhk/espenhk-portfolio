@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 /** Public, read-only Last.fm API key (safe in client code). Paste yours here. */
-export const LASTFM_API_KEY = '';
+export const LASTFM_API_KEY = 'a8a2ac2b9d472f2e94cb1f2adb97fdf3';
 export const DEFAULT_LASTFM_USER = 'bgosl';
 
 export interface LastTrack {

@@ -177,5 +177,6 @@ export function SettingsEditor({ settings, onChange }: { settings: SiteSettings;
     </div>
     <TextField label="Status value" value={settings.status.value} onChange={value => onChange({ ...settings, status: { ...settings.status, value } })} />
     <TextField label="Status link" value={settings.status.url ?? ''} onChange={url => onChange({ ...settings, status: { ...settings.status, url: url || undefined } })} />
+    <TextField label="Last.fm username (live status, overrides the above)" value={settings.lastfmUser ?? 'bgosl'} onChange={lastfmUser => onChange({ ...settings, lastfmUser })} />
   </div>;
 }

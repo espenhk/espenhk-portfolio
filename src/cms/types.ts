@@ -77,6 +77,7 @@ export interface SiteSettings {
   /** Storage path of an uploaded CV (overrides resumeUrl when set) */
   resumePath?: string;
   status: { emoji: string; label: string; value: string; url?: string };
+  lastfmUser?: string;
 }
 
 export interface CmsDoc {

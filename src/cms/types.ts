@@ -78,6 +78,8 @@ export interface SiteSettings {
   resumePath?: string;
   status: { emoji: string; label: string; value: string; url?: string };
   lastfmUser?: string;
+  /** When true, show the manual status instead of live Last.fm. */
+  statusOverride?: boolean;
 }
 
 export interface CmsDoc {

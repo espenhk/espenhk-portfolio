@@ -1,6 +1,6 @@
 # Portfolio CMS
 
-A private editor at `/admin` where you sign in with a real account and reorder, show/hide, edit and duplicate every section of the homepage. Content lives in standard Postgres tables, so you can export it and move it anywhere.
+A private editor at `/admin` (hidden: no links, buttons, menu entries, sitemap entries or hints anywhere on the portfolio; marked noindex and disallowed in robots.txt; reachable only by typing the URL) where you sign in with a real account and reorder, show/hide, edit and duplicate every section of the homepage. Content lives in standard Postgres tables, so you can export it and move it anywhere.
 
 ## Why this beats the Tromsø approach
 - Tromsø: one shared password, checked by a server function, with a token in the browser. Hard to revoke, and it depends on custom function code.

@@ -1,11 +1,19 @@
 import { useMemo } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { siteConfig, socialLinks } from '@/data/siteConfig';
-import { getRandomTagline } from '@/data/taglines';
+import { buildSocialLinks } from '@/data/siteConfig';
+import { defaultSectionData } from '@/cms/defaults';
+import { useSiteSettings, useResumeUrl } from '@/cms/api';
+import type { HeroData } from '@/cms/types';
 
-export default function HeroSection() {
+export default function HeroSection({ data = defaultSectionData.hero, anchorId = 'hero' }: { data?: HeroData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
-  const tagline = useMemo(() => getRandomTagline(), []);
+  const settings = useSiteSettings();
+  const resumeUrl = useResumeUrl();
+  const socialLinks = useMemo(() => buildSocialLinks(settings.socials), [settings.socials]);
+  const tagline = useMemo(() => {
+    const t = data.taglines.filter(Boolean);
+    return t.length ? t[Math.floor(Math.random() * t.length)] : '';
+  }, [data.taglines]);
   const c = theme.colors;
   const bg = isDark
     ? `linear-gradient(180deg, #060A18 0%, #0C1230 30%, #14102A 55%, #0A0E20 80%, #060A18 100%)`
@@ -15,6 +23,7 @@ export default function HeroSection() {
 
   return (
     <section
+      id={anchorId}
       style={{
         background: isDark ? undefined : bg,
         backgroundImage: isDark ? bg : undefined,
@@ -66,8 +75,8 @@ export default function HeroSection() {
 
       <div style={{ maxWidth: 720, textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <img
-          src={siteConfig.profileImage}
-          alt={siteConfig.name}
+          src={data.profileImage}
+          alt={settings.name}
           width={140}
           height={140}
           fetchPriority="high"
@@ -91,13 +100,13 @@ export default function HeroSection() {
           textTransform: 'uppercase',
           textShadow: isDark ? '0 0 20px rgba(255,159,28,0.15)' : undefined,
         }}>
-          {siteConfig.name}
+          {settings.name}
         </h1>
         <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
           {tagline}
         </p>
         <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
-          {siteConfig.bio}
+          {data.bio}
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
           <a
@@ -115,10 +124,10 @@ export default function HeroSection() {
               transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
             }}
           >
-            View Projects
+            {data.primaryButtonLabel}
           </a>
           <a
-            href={siteConfig.resumeUrl}
+            href={resumeUrl}
             style={{
               background: 'transparent',
               color: c.accent,
@@ -132,7 +141,7 @@ export default function HeroSection() {
               transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
             }}
           >
-            Download CV
+            {data.cvButtonLabel}
           </a>
         </div>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>

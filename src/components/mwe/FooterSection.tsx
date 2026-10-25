@@ -1,6 +1,6 @@
 import { useTheme } from '@/context/ThemeContext';
-import { siteConfig, socialLinks } from '@/data/siteConfig';
-import { currentStatus } from '@/data/currentStatus';
+import { buildSocialLinks } from '@/data/siteConfig';
+import { useSiteSettings } from '@/cms/api';
 
 const brandColors: Record<string, string> = {
   GitHub: '#333333',
@@ -12,6 +12,9 @@ const brandColors: Record<string, string> = {
 
 export default function FooterSection() {
   const { theme, isDark } = useTheme();
+  const settings = useSiteSettings();
+  const currentStatus = settings.status;
+  const socialLinks = buildSocialLinks(settings.socials);
   const c = theme.colors;
   const footerBg = isDark
     ? 'linear-gradient(180deg, #0A0E20 0%, #060818 100%)'
@@ -79,7 +82,7 @@ export default function FooterSection() {
         )}
       </div>
       <p style={{ color: fg2, fontSize: '0.8rem', fontFamily: theme.fonts.mono }}>
-        © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+        © {new Date().getFullYear()} {settings.name}. All rights reserved.
       </p>
     </footer>
   );

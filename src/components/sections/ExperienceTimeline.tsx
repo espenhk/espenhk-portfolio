@@ -1,11 +1,13 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { jobs, education, certifications } from '@/data/experience';
+import type { Job } from '@/data/experience';
+import { defaultSectionData } from '@/cms/defaults';
+import type { ExperienceData } from '@/cms/types';
 import { Briefcase, GraduationCap, Award, ChevronDown } from 'lucide-react';
 
 function CompactJob({ job, index, visible, theme, isDark }: {
-  job: typeof jobs[0]; index: number; visible: boolean;
+  job: Job; index: number; visible: boolean;
   theme: ReturnType<typeof useTheme>['theme']; isDark: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -106,7 +108,8 @@ function CompactJob({ job, index, visible, theme, isDark }: {
   );
 }
 
-export default function ExperienceTimeline() {
+export default function ExperienceTimeline({ data = defaultSectionData.experience, anchorId = 'experience' }: { data?: ExperienceData; anchorId?: string }) {
+  const { jobs, education, certifications } = data;
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
@@ -130,7 +133,7 @@ export default function ExperienceTimeline() {
 
   return (
     <section
-      id="experience"
+      id={anchorId}
       ref={ref}
       style={{
         padding: '60px 24px',
@@ -159,7 +162,7 @@ export default function ExperienceTimeline() {
           letterSpacing: '0.06em',
           textAlign: 'center',
         }}>
-          Service Record
+          {data.heading}
         </h2>
 
         {/* Postings — compact expandable */}
@@ -175,7 +178,7 @@ export default function ExperienceTimeline() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {jobs.map((job, i) => (
-              <CompactJob key={job.company} job={job} index={i} visible={visible} theme={theme} isDark={isDark} />
+              <CompactJob key={`${job.company}-${i}`} job={job} index={i} visible={visible} theme={theme} isDark={isDark} />
             ))}
           </div>
         </div>
@@ -195,7 +198,7 @@ export default function ExperienceTimeline() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {education.map((edu, i) => (
                 <motion.div
-                  key={edu.degree}
+                  key={`${edu.degree}-${i}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.3, delay: 0.5 + i * 0.08 }}
@@ -241,7 +244,7 @@ export default function ExperienceTimeline() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {certifications.map((cert, i) => (
                 <motion.div
-                  key={cert.name}
+                  key={`${cert.name}-${i}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.3, delay: 0.6 + i * 0.06 }}

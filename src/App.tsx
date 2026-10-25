@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import HowIDidIt from "./pages/HowIDidIt.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { lazy, Suspense } from "react";
+
+const AdminPage = lazy(() => import("./pages/admin/AdminPage.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -18,6 +21,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/how-i-did-it" element={<HowIDidIt />} />
+          <Route path="/admin" element={<Suspense fallback={null}><AdminPage /></Suspense>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

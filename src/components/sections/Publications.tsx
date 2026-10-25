@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { publications as fallbackPubs, type Publication } from '@/data/experience';
 import { linkedInPosts } from '@/data/linkedInPosts';
 import { fetchMediumArticles, fetchYouTubeVideos } from '@/lib/feeds';
+import { defaultSectionData } from '@/cms/defaults';
+import type { PublicationsData } from '@/cms/types';
 import { ExternalLink, BookOpen, Layers, ThumbsUp, MessageCircle } from 'lucide-react';
 
 function getYouTubeId(url: string): string | null {
@@ -41,7 +43,7 @@ const SCROLL_HIDE_CSS = `
 }
 `;
 
-export default function Publications() {
+export default function Publications({ data = defaultSectionData.publications, anchorId = 'publications' }: { data?: PublicationsData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
@@ -83,8 +85,8 @@ export default function Publications() {
   useEffect(() => {
     (async () => {
       const [medium, youtube] = await Promise.all([
-        fetchMediumArticles(),
-        fetchYouTubeVideos(),
+        data.showMedium ? fetchMediumArticles(data.mediumUsername) : Promise.resolve([]),
+        data.showYouTube ? fetchYouTubeVideos(data.youtubeChannelId) : Promise.resolve([]),
       ]);
       const live = [...medium, ...youtube];
       if (live.length > 0) {
@@ -102,7 +104,11 @@ export default function Publications() {
         setPublications(all);
       }
     })();
-  }, []);
+  }, [data.showMedium, data.showYouTube, data.mediumUsername, data.youtubeChannelId]);
+
+  const shownPubs = publications
+    .filter(p => (p.type === 'video' ? data.showYouTube : data.showMedium))
+    .slice(0, Math.max(1, data.maxItems || 20));
 
   const panelBg = isDark
     ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
@@ -112,7 +118,7 @@ export default function Publications() {
     <>
       <style>{SCROLL_HIDE_CSS}</style>
       <section
-        id="publications"
+        id={anchorId}
         ref={ref}
         style={{
           padding: '60px 24px',
@@ -141,7 +147,7 @@ export default function Publications() {
           letterSpacing: '0.06em',
           textAlign: 'center',
         }}>
-          Transmissions
+          {data.heading}
         </h2>
 
         {/* === Medium / YouTube carousel — fixed offset === */}
@@ -162,7 +168,7 @@ export default function Publications() {
           msOverflowStyle: 'none',
           scrollbarWidth: 'none',
         }}>
-          {publications.map((pub, i) => {
+          {shownPubs.map((pub, i) => {
             const color = typeColor[pub.type];
             const ytId = pub.type === 'video' ? getYouTubeId(pub.url) : null;
             const isVideo = !!ytId;
@@ -324,6 +330,7 @@ export default function Publications() {
         </div>
 
         {/* === LinkedIn subsection === */}
+        {data.showLinkedIn && (<>
         <div style={{ marginTop: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, justifyContent: 'center' }}>
             <LinkedInIcon size={18} color={isDark ? '#5B9BD5' : '#0A66C2'} />
@@ -334,7 +341,7 @@ export default function Publications() {
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
             }}>
-              On LinkedIn
+              {data.linkedInHeading}
             </h3>
           </div>
 
@@ -462,6 +469,7 @@ export default function Publications() {
           </button>
           </div>
         </div>
+        </>)}
       </div>
     </section>
     </>

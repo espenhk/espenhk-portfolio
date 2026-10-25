@@ -1,7 +1,10 @@
 import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { characterSheet, categoryLabels, categoryColors, spokenLanguages, offDutyInterests, type Stat } from '@/data/characterSheet';
+import { defaultSectionData } from '@/cms/defaults';
+import type { StatsData } from '@/cms/types';
+
+type Stat = StatsData['stats'][number];
 
 function StatBar({ stat, index, visible, accentColor }: {
   stat: Stat; index: number; visible: boolean; accentColor: string;
@@ -52,7 +55,7 @@ function StatBar({ stat, index, visible, accentColor }: {
   );
 }
 
-export default function CharacterSheetFull() {
+export default function CharacterSheetFull({ data = defaultSectionData.stats, anchorId = 'character-sheet' }: { data?: StatsData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
@@ -70,12 +73,12 @@ export default function CharacterSheetFull() {
     return () => observer.disconnect();
   }, []);
 
-  const categories = ['framework', 'tool', 'soft-skill'] as const;
-  const grouped = categories.map(cat => ({
-    key: cat,
-    label: categoryLabels[cat],
-    color: categoryColors[cat],
-    stats: characterSheet.stats.filter(s => s.category === cat),
+  const { languages: spokenLanguages, interests: offDutyInterests } = data;
+  const grouped = data.categories.map(cat => ({
+    key: cat.key,
+    label: cat.label,
+    color: cat.color,
+    stats: data.stats.filter(s => s.category === cat.key),
   }));
 
   // Use a 3-column layout for 3 categories
@@ -88,7 +91,7 @@ export default function CharacterSheetFull() {
 
   return (
     <section
-      id="character-sheet"
+      id={anchorId}
       style={{
         padding: '60px 24px',
         background: isDark ? undefined : c.background.light,
@@ -114,7 +117,7 @@ export default function CharacterSheetFull() {
           letterSpacing: '0.06em',
           textAlign: 'center',
         }}>
-          Personnel Dossier
+          {data.heading}
         </h2>
 
         <div
@@ -171,7 +174,7 @@ export default function CharacterSheetFull() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 7, paddingLeft: 11 }}>
                   {group.stats.map((stat, si) => (
                     <StatBar
-                      key={stat.label}
+                      key={`${stat.label}-${si}`}
                       stat={stat}
                       index={gi * 5 + si}
                       visible={visible}
@@ -203,7 +206,7 @@ export default function CharacterSheetFull() {
             </span>
             {spokenLanguages.map(lang => (
               <span
-                key={lang.name}
+                key={lang.name + lang.flag}
                 title={lang.name}
                 style={{ fontSize: '1.3rem', cursor: 'default' }}
               >
@@ -223,7 +226,7 @@ export default function CharacterSheetFull() {
         }}>
           {offDutyInterests.map(item => (
             <div
-              key={item.label}
+              key={item.label + item.emoji}
               style={{
                 display: 'flex',
                 alignItems: 'center',

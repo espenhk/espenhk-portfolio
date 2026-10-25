@@ -1,6 +1,8 @@
 import { useTheme } from "@/context/ThemeContext";
 import { motion } from "framer-motion";
-import { siteConfig } from "@/data/siteConfig";
+import { defaultSectionData } from "@/cms/defaults";
+import { useSiteSettings } from "@/cms/api";
+import type { ContactData } from "@/cms/types";
 import { Mail, Linkedin, Github } from "lucide-react";
 
 // Custom Medium "M" icon component
@@ -12,21 +14,21 @@ function MediumIcon({ size = 18, color = "currentColor" }: { size?: number; colo
   );
 }
 
-const links = [
-  { icon: Linkedin, label: "LinkedIn", href: siteConfig.socials.linkedin, color: "#0A66C2" },
-  { icon: Github, label: "GitHub", href: siteConfig.socials.github, color: "#CC99FF" },
-  { icon: MediumIcon, label: "Medium", href: siteConfig.socials.medium, color: "#FF9F1C" },
-];
-
-export default function ContactCTA() {
+export default function ContactCTA({ data = defaultSectionData.contact, anchorId = "contact" }: { data?: ContactData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
+  const { socials } = useSiteSettings();
+  const links = [
+    { icon: Linkedin, label: "LinkedIn", href: socials.linkedin, color: "#0A66C2" },
+    { icon: Github, label: "GitHub", href: socials.github, color: "#CC99FF" },
+    { icon: MediumIcon, label: "Medium", href: socials.medium, color: "#FF9F1C" },
+  ].filter((l) => l.href);
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
   const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
 
   return (
     <section
-      id="contact"
+      id={anchorId}
       style={{
         padding: "80px 24px",
         backgroundImage: isDark ? "linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)" : undefined,
@@ -65,7 +67,7 @@ export default function ContactCTA() {
             marginBottom: 12,
           }}
         >
-          Open Frequencies
+          {data.heading}
         </motion.h2>
 
         <motion.p
@@ -81,11 +83,11 @@ export default function ContactCTA() {
             marginBottom: 32,
           }}
         >
-          Interested in data engineering, AI, or just want to talk cocktails?
+          {data.text}
         </motion.p>
 
         <motion.a
-          href={`mailto:espenhkristensen@gmail.com`}
+          href={`mailto:${data.email}`}
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -109,7 +111,7 @@ export default function ContactCTA() {
           }}
         >
           <Mail size={18} />
-          Send Transmission
+          {data.buttonLabel}
         </motion.a>
 
         <motion.div

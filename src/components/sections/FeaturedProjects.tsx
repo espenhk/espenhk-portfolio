@@ -1,8 +1,9 @@
 import { useTheme } from '@/context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchGitHubRepos } from '@/lib/github';
-import { resolveProjects, type Project } from '@/lib/resolveProjects';
-import { siteConfig } from '@/data/siteConfig';
+import { resolveProjects, configToOverrides, type Project } from '@/lib/resolveProjects';
+import { defaultSectionData } from '@/cms/defaults';
+import type { ProjectsData } from '@/cms/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Github, ExternalLink, Star, GitFork } from 'lucide-react';
@@ -189,7 +190,7 @@ function ProjectSkeleton() {
   );
 }
 
-export default function FeaturedProjects() {
+export default function FeaturedProjects({ data = defaultSectionData.projects, anchorId = 'projects' }: { data?: ProjectsData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
   const c = theme.colors;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
@@ -205,19 +206,20 @@ export default function FeaturedProjects() {
     return () => observer.disconnect();
   }, []);
 
-  const { data: projects, isLoading, error } = useQuery({
-    queryKey: ['github-repos', siteConfig.githubUsername],
-    queryFn: async () => {
-      const repos = await fetchGitHubRepos(siteConfig.githubUsername);
-      return resolveProjects(repos);
-    },
+  const { data: repos, isLoading, error } = useQuery({
+    queryKey: ['github-repos', data.githubUsername],
+    queryFn: () => fetchGitHubRepos(data.githubUsername),
     staleTime: 1000 * 60 * 30,
     retry: 2,
   });
 
+  const projects = repos
+    ? resolveProjects(repos, configToOverrides(data)).slice(0, Math.max(1, data.maxShown || 50))
+    : undefined;
+
   return (
     <section
-      id="projects"
+      id={anchorId}
       ref={ref}
       style={{
         padding: '60px 24px',
@@ -247,7 +249,7 @@ export default function FeaturedProjects() {
           letterSpacing: '0.06em',
           textAlign: 'center',
         }}>
-          Repositories
+          {data.heading}
         </h2>
 
         {isLoading && (
@@ -274,7 +276,7 @@ export default function FeaturedProjects() {
             ))}
           </div>
         )}
-        <GitHubGraph />
+        {data.showGraph && <GitHubGraph username={data.githubUsername} />}
       </div>
     </section>
   );

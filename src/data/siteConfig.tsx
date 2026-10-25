@@ -47,10 +47,14 @@ export const siteConfig = {
 };
 
 /** Ordered list of social links for rendering in hero & footer */
-export const socialLinks: SocialLink[] = [
-  { icon: Github, url: siteConfig.socials.github, label: "GitHub" },
-  { icon: Linkedin, url: siteConfig.socials.linkedin, label: "LinkedIn" },
-  { icon: MediumIcon, url: siteConfig.socials.medium, label: "Medium" },
-  { icon: BlueskyIcon, url: siteConfig.socials.bluesky, label: "Bluesky" },
-  { icon: Instagram, url: siteConfig.socials.instagram, label: "Instagram" },
-].filter((s) => s.url);
+export function buildSocialLinks(socials: Record<string, string | undefined>): SocialLink[] {
+  return [
+    { icon: Github, url: socials.github ?? "", label: "GitHub" },
+    { icon: Linkedin, url: socials.linkedin ?? "", label: "LinkedIn" },
+    { icon: MediumIcon, url: socials.medium ?? "", label: "Medium" },
+    { icon: BlueskyIcon, url: socials.bluesky ?? "", label: "Bluesky" },
+    { icon: Instagram, url: socials.instagram ?? "", label: "Instagram" },
+  ].filter((s) => s.url);
+}
+
+export const socialLinks: SocialLink[] = buildSocialLinks(siteConfig.socials);

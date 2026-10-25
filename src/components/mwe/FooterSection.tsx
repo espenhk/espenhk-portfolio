@@ -1,6 +1,7 @@
 import { useTheme } from '@/context/ThemeContext';
 import { buildSocialLinks } from '@/data/siteConfig';
 import { useSiteSettings } from '@/cms/api';
+import { useLastTrack } from '@/lib/lastfm';
 
 const brandColors: Record<string, string> = {
   GitHub: '#333333',
@@ -13,7 +14,10 @@ const brandColors: Record<string, string> = {
 export default function FooterSection() {
   const { theme, isDark } = useTheme();
   const settings = useSiteSettings();
-  const currentStatus = settings.status;
+  const { data: track } = useLastTrack(settings.lastfmUser);
+  const currentStatus = track
+    ? { emoji: '🎧', label: track.nowPlaying ? 'Listening to' : 'Last played', value: `${track.artist} – ${track.name}`, url: track.url || undefined }
+    : settings.status;
   const socialLinks = buildSocialLinks(settings.socials);
   const c = theme.colors;
   const footerBg = isDark

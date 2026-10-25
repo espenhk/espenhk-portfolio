@@ -469,6 +469,7 @@ export default function Publications({ data = defaultSectionData.publications, a
           </button>
           </div>
         </div>
+        </>)}
       </div>
     </section>
     </>

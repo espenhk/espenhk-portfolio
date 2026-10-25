@@ -171,6 +171,7 @@ export function SettingsEditor({ settings, onChange }: { settings: SiteSettings;
         {settings.resumePath && <Button type="button" size="sm" variant="ghost" onClick={() => onChange({ ...settings, resumePath: undefined })}>Use built-in file</Button>}
       </div>
     </Field>
+    <ToggleField label="Override Last.fm with manual status below" value={!!settings.statusOverride} onChange={statusOverride => onChange({ ...settings, statusOverride })} />
     <div className="grid grid-cols-[5rem_1fr] gap-3">
       <TextField label="Status emoji" value={settings.status.emoji} onChange={emoji => onChange({ ...settings, status: { ...settings.status, emoji } })} />
       <TextField label="Status label" value={settings.status.label} onChange={label => onChange({ ...settings, status: { ...settings.status, label } })} />

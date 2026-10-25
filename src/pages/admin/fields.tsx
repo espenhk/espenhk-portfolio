@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
@@ -25,9 +26,26 @@ export function AreaField({ label, value, onChange, rows = 4, hint }: { label: s
 }
 
 export function NumberField({ label, value, onChange, min, max, hint }: { label: string; value: number; onChange: (v: number) => void; min?: number; max?: number; hint?: string }) {
+  const hasSlider = min !== undefined && max !== undefined;
+  const safe = Number.isFinite(value) ? value : min ?? 0;
+  const sliderValue = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, safe));
   return (
     <Field label={label} hint={hint}>
-      <Input type="number" inputMode="numeric" pattern="[0-9]*" min={min} max={max} value={Number.isFinite(value) ? value : ''} onChange={e => onChange(Number(e.target.value))} />
+      <div className={hasSlider ? 'flex items-center gap-4' : undefined}>
+        <Input
+          type="number" inputMode="numeric" pattern="[0-9]*" min={min} max={max}
+          value={Number.isFinite(value) ? value : ''}
+          onChange={e => onChange(Number(e.target.value))}
+          className={hasSlider ? 'w-20 shrink-0' : undefined}
+        />
+        {hasSlider && (
+          <Slider
+            min={min} max={max} step={1} value={[sliderValue]}
+            onValueChange={([v]) => onChange(v)}
+            className="[&_[role=slider]]:h-6 [&_[role=slider]]:w-6 [&_[role=slider]]:border-4"
+          />
+        )}
+      </div>
     </Field>
   );
 }

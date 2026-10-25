@@ -27,7 +27,7 @@ export function AreaField({ label, value, onChange, rows = 4, hint }: { label: s
 export function NumberField({ label, value, onChange, min, max, hint }: { label: string; value: number; onChange: (v: number) => void; min?: number; max?: number; hint?: string }) {
   return (
     <Field label={label} hint={hint}>
-      <Input type="number" min={min} max={max} value={Number.isFinite(value) ? value : ''} onChange={e => onChange(Number(e.target.value))} />
+      <Input type="number" inputMode="numeric" pattern="[0-9]*" min={min} max={max} value={Number.isFinite(value) ? value : ''} onChange={e => onChange(Number(e.target.value))} />
     </Field>
   );
 }

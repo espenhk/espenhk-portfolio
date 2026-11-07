@@ -3,10 +3,33 @@
 # colour literals, hand-edited design tokens and broken contrast (src/test/design-tokens.test.ts).
 name: CI
 
+# Skip runs when only files that can't affect the build or tests changed (docs, plans, skills,
+# Python helper scripts, DB migrations). An ignore-list rather than an allow-list, so a new kind
+# of source file is checked by default instead of silently skipped.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.claude/**'
+      - '.lovable/**'
+      - 'scripts/*.py'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'supabase/**'
+      - 'drizzle/migrations/**'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.claude/**'
+      - '.lovable/**'
+      - 'scripts/*.py'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'supabase/**'
+      - 'drizzle/migrations/**'
 
 permissions:
   contents: read
@@ -25,6 +48,13 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.4
+
+      - name: Cache bun packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
 
       # bun.lock points at Lovable's private npm cache; the script installs from npmjs instead
       # (integrity-checked) and leaves bun.lock untouched.

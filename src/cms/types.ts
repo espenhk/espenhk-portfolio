@@ -1,6 +1,11 @@
 import type { Job, Education, Certification } from '@/data/experience';
 
+export type HeroPartKey = 'avatar' | 'name' | 'tagline' | 'nowPlaying' | 'bio' | 'buttons' | 'socials';
+export interface HeroPart { key: HeroPartKey; visible: boolean }
+
 export interface HeroData {
+  /** Render order + visibility of the hero's building blocks. */
+  parts: HeroPart[];
   bio: string;
   profileImage: string;
   taglines: string[];

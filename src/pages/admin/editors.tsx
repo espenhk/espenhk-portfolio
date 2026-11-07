@@ -1,4 +1,8 @@
-import type { Section, SectionDataMap, SiteSettings, StatsData } from '@/cms/types';
+import type { HeroPart, Section, SectionDataMap, SiteSettings, StatsData } from '@/cms/types';
+import { heroPartLabels } from '@/cms/defaults';
+import { normalizeHeroParts } from '@/cms/resolve';
+import { Switch } from '@/components/ui/switch';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import type { Education } from '@/data/experience';
 
 type StatsInterest = StatsData['interests'][number];
@@ -13,8 +17,32 @@ import { useState } from 'react';
 
 type Props<K extends keyof SectionDataMap> = { data: SectionDataMap[K]; set: (patch: Partial<SectionDataMap[K]>) => void };
 
+function HeroPartsField({ value, onChange }: { value: HeroPart[]; onChange: (v: HeroPart[]) => void }) {
+  const parts = normalizeHeroParts(value);
+  const move = (i: number, d: number) => {
+    const to = i + d; if (to < 0 || to >= parts.length) return;
+    const c = [...parts]; [c[i], c[to]] = [c[to], c[i]]; onChange(c);
+  };
+  return (
+    <Field label="Layout (order and visibility)" hint="Top to bottom. Toggle off to hide a part.">
+      <div className="space-y-1.5">
+        {parts.map((p, i) => (
+          <div key={p.key} className="flex items-center gap-2 rounded-md border border-border px-3 py-1.5">
+            <Switch checked={p.visible} aria-label={`Show ${heroPartLabels[p.key]}`}
+              onCheckedChange={visible => onChange(parts.map((q, j) => (j === i ? { ...q, visible } : q)))} />
+            <span className={`flex-1 text-sm ${p.visible ? '' : 'text-muted-foreground line-through'}`}>{heroPartLabels[p.key]}</span>
+            <Button type="button" size="icon" variant="ghost" className="h-7 w-7" aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}><ArrowUp className="h-4 w-4" /></Button>
+            <Button type="button" size="icon" variant="ghost" className="h-7 w-7" aria-label="Move down" disabled={i === parts.length - 1} onClick={() => move(i, 1)}><ArrowDown className="h-4 w-4" /></Button>
+          </div>
+        ))}
+      </div>
+    </Field>
+  );
+}
+
 function HeroEditor({ data, set }: Props<'hero'>) {
   return <>
+    <HeroPartsField value={data.parts} onChange={parts => set({ parts })} />
     <AreaField label="Intro text" value={data.bio} onChange={bio => set({ bio })} />
     <TextField label="Avatar image URL" value={data.profileImage} onChange={profileImage => set({ profileImage })} />
     <LinesField label="Taglines (one is picked at random on each visit)" value={data.taglines} onChange={taglines => set({ taglines })} />

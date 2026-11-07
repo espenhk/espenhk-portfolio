@@ -1,0 +1,47 @@
+# Build + tests on every PR and on every push to main.
+# Lovable commits straight to main without running tests, so this is the guard that catches
+# colour literals, hand-edited design tokens and broken contrast (src/test/design-tokens.test.ts).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+
+      # bun.lock points at Lovable's private npm cache; the script installs from npmjs instead
+      # (integrity-checked) and leaves bun.lock untouched.
+      - name: Install dependencies
+        run: ./scripts/install-deps.sh
+
+      - name: Design tokens are generated from tokens.json
+        run: |
+          bun run tokens
+          git diff --exit-code -- src/design-system/starfleet \
+            || { echo "::error::tokens.css / tokens.generated.ts are out of date or hand-edited. Run 'bun run tokens' (and never edit them by hand)."; exit 1; }
+
+      - name: Contrast
+        run: bun run tokens:contrast
+
+      - name: Build
+        run: bun run build
+
+      - name: Tests
+        run: bunx vitest run

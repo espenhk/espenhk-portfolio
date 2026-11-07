@@ -2,7 +2,7 @@
 
 Personal portfolio & CV site for **Espen H. Kristensen** — Data Engineer & Manager at PwC Norway.
 
-🔗 **Live:** [espenhk.lovable.app](https://espenhk.lovable.app)
+🔗 **Live:** [espen.hk](https://espen.hk)
 
 ---
 

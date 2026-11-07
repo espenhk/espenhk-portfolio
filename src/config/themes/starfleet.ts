@@ -1,39 +1,59 @@
 import type { Theme } from './types';
 
+/**
+ * Starfleet is driven entirely by the Claude Design system «Starfleet»:
+ * every value is a CSS variable from src/design-system/starfleet/tokens.css
+ * (generated from tokens.json – run `bun run tokens`). Light/dark switch via
+ * `data-theme` on <html>, so the {light, dark} pairs point at the same variable.
+ */
+const v = (name: string) => `var(--${name})`;
+const both = (name: string) => ({ light: v(name), dark: v(name) });
+
 export const theme: Theme = {
   id: 'starfleet',
   label: 'STARFLEET',
   colors: {
-    accent: '#FF9F1C',
-    accentHover: '#E08A0C',
-    secondary: '#CC99FF',
-    tertiary: '#99CCFF',
-    highlight: '#E8655A',
-    warm: '#FFCC99',
-    background: { light: '#F4F1EC', dark: '#0A0E1A' },
-    surface: { light: '#FFFFFF', dark: '#131A2E' },
-    textPrimary: { light: '#1A1A2E', dark: '#F0EDDF' },
-    textSecondary: { light: '#5A5A6A', dark: '#9A9AAF' },
-    border: { light: '#E0DDD5', dark: '#1E2640' },
-    success: '#66CC99',
-    warning: '#FF9F1C',
-    error: '#E8655A',
+    accent: v('accent'),
+    accentHover: v('accent-hover'),
+    secondary: v('secondary'),
+    tertiary: v('tertiary'),
+    highlight: v('highlight'),
+    warm: v('warm'),
+    accentInk: v('accent-ink'),
+    secondaryInk: v('secondary-ink'),
+    tertiaryInk: v('tertiary-ink'),
+    highlightInk: v('highlight-ink'),
+    onAccent: both('on-accent'),
+    background: both('background'),
+    surface: both('surface'),
+    textPrimary: both('text-primary'),
+    textSecondary: both('text-secondary'),
+    border: both('border'),
+    success: v('success'),
+    warning: v('warning'),
+    error: v('error'),
   },
   fonts: {
-    display: "'VT323', 'Antonio', system-ui, sans-serif",
-    sans: "'Outfit', 'Inter', system-ui, sans-serif",
-    mono: "'JetBrains Mono', monospace",
+    display: v('font-display'),
+    sans: v('font-sans'),
+    mono: v('font-mono'),
   },
-  radii: { sm: '4px', md: '8px', lg: '24px 8px 8px 24px', full: '9999px' },
+  radii: {
+    sm: v('radius-sm'),
+    md: v('radius-md'),
+    lg: `${v('radius-lead')} ${v('radius-md')} ${v('radius-md')} ${v('radius-lead')}`,
+    full: v('radius-full'),
+  },
   borders: { width: '0px', style: 'none' },
   shadows: {
-    card: '0 2px 8px rgba(0,0,0,0.2)',
-    cardHover: '0 4px 16px rgba(0,0,0,0.3)',
+    card: v('shadow-card'),
+    cardHover: v('shadow-card-hover'),
   },
+  // Motion is not part of the design system tokens yet.
   motion: { timingFunction: 'ease-out', durationFast: '150ms', durationNormal: '250ms' },
   characterSheetTheme: {
-    panelBg: '#131A2E',
+    panelBg: v('stat-panel'),
     barGlow: 'none',
-    nameFont: "'VT323', sans-serif",
+    nameFont: v('font-display'),
   },
 };

@@ -1,10 +1,21 @@
 export interface ThemeColors {
+  /** Flat accent colour (buttons, rails, bars, tints). Text/icons should use `accentInk`. */
   accent: string;
   accentHover: string;
   secondary?: string;
   tertiary?: string;
   highlight?: string;
   warm?: string;
+  /**
+   * "Ink" variants: the colour used for text, icons and control borders. Optional —
+   * themes without them fall back to the flat colour (unchanged look).
+   */
+  accentInk?: string;
+  secondaryInk?: string;
+  tertiaryInk?: string;
+  highlightInk?: string;
+  /** Text on an accent-filled surface. */
+  onAccent?: { light: string; dark: string };
   background: { light: string; dark: string };
   surface: { light: string; dark: string };
   textPrimary: { light: string; dark: string };

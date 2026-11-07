@@ -1,6 +1,6 @@
 # espenhk.lovable.app
 
-Personal portfolio & CV site for **Espen H. Kristensen** — Data Engineer & Manager at PwC Norway.
+Personal portfolio & CV site for **Espen H. Kristensen** — Data Engineer at TRY.
 
 🔗 **Live:** [espen.hk](https://espen.hk)
 

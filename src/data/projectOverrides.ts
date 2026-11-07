@@ -3,13 +3,12 @@ export interface ProjectOverride {
   featured?: boolean;
   hidden?: boolean;
   sortOrder?: number;
-  titleOverride?: string;
 }
 
-// Descriptions always come live from GitHub — no subtitle overrides.
+// Names and descriptions always come live from GitHub — no title/description overrides.
 export const projectOverrides: ProjectOverride[] = [
   // === FEATURED ===
-  { repoName: "espenhk-portfolio", featured: true, sortOrder: 1, titleOverride: "My Portfolio: espenhk" },
+  { repoName: "espenhk-portfolio", featured: true, sortOrder: 1 },
   { repoName: "gamer-ai", featured: true, sortOrder: 2 },
   { repoName: "tromsoflaggfotball", featured: true, sortOrder: 3 },
   { repoName: "espenhk-hobby-projects", featured: true, sortOrder: 4 },

@@ -4,7 +4,6 @@ import { projectOverrides, type ProjectOverride } from '@/data/projectOverrides'
 export interface Project {
   slug: string;
   title: string;
-  subtitle: string;
   description: string | null;
   language: string | null;
   stars: number;
@@ -21,7 +20,6 @@ export interface Project {
 export interface ProjectsConfig {
   featured: string[];
   hidden: string[];
-  titles: Record<string, string>;
 }
 
 /** Converts a CMS projects config into override entries (featured order = list order). */
@@ -34,7 +32,6 @@ export function configToOverrides(cfg: ProjectsConfig): ProjectOverride[] {
   };
   cfg.featured.filter(Boolean).forEach((n, i) => Object.assign(get(n), { featured: true, sortOrder: i + 1 }));
   cfg.hidden.filter(Boolean).forEach(n => { get(n).hidden = true; });
-  Object.entries(cfg.titles ?? {}).forEach(([n, t]) => { if (t) get(n).titleOverride = t; });
   return [...map.values()];
 }
 
@@ -54,8 +51,7 @@ export function resolveProjects(repos: GitHubRepo[], overrides: ProjectOverride[
 
     projects.push({
       slug: repo.name,
-      title: override?.titleOverride ?? formatRepoName(repo.name),
-      subtitle: repo.description ?? '',
+      title: repo.name,
       description: repo.description,
       language: repo.language,
       stars: repo.stargazers_count,
@@ -79,8 +75,3 @@ export function resolveProjects(repos: GitHubRepo[], overrides: ProjectOverride[
   });
 }
 
-function formatRepoName(name: string): string {
-  return name
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
-}

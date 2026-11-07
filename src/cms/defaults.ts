@@ -10,8 +10,6 @@ const featured = projectOverrides
   .filter(o => o.featured)
   .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999))
   .map(o => o.repoName);
-const titles: Record<string, string> = {};
-projectOverrides.forEach(o => { if (o.titleOverride) titles[o.repoName] = o.titleOverride; });
 
 export const defaultSectionData: SectionDataMap = {
   hero: {
@@ -49,7 +47,6 @@ export const defaultSectionData: SectionDataMap = {
     githubUsername: siteConfig.githubUsername,
     featured,
     hidden: projectOverrides.filter(o => o.hidden).map(o => o.repoName),
-    titles,
     maxShown: 50,
     showGraph: true,
   },

@@ -86,8 +86,6 @@ export default function ProjectCard({ project }: { project: Project }) {
           fontWeight: 400,
           color: fg,
           marginBottom: 6,
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
           paddingRight: project.featured ? 80 : 0,
         }}>
           {project.title}
@@ -98,7 +96,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           lineHeight: 1.5,
           marginBottom: 12,
         }}>
-          {project.subtitle}
+          {project.description}
         </p>
 
         {tags.length > 0 && (

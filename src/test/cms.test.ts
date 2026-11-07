@@ -33,8 +33,9 @@ describe("cms", () => {
 
   it("orders featured repos as listed and hides hidden ones", () => {
     const repo = (name: string) => ({ name, description: `d-${name}`, stargazers_count: 0, forks_count: 0 } as any);
-    const out = resolveProjects([repo("a"), repo("b"), repo("c")], configToOverrides({ featured: ["c", "a"], hidden: ["b"], titles: {} }));
+    const out = resolveProjects([repo("a"), repo("b"), repo("c")], configToOverrides({ featured: ["c", "a"], hidden: ["b"] }));
     expect(out.map(p => p.slug)).toEqual(["c", "a"]);
-    expect(out[0].subtitle).toBe("d-c");
+    expect(out[0].title).toBe("c");
+    expect(out[0].description).toBe("d-c");
   });
 });

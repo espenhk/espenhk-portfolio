@@ -17,7 +17,7 @@ export default function GitHubGraph({ username = siteConfig.githubUsername }: { 
   return (
     <div
       style={{
-        padding: '32px 0 40px',
+        padding: '0 0 32px',
         textAlign: 'center',
       }}
     >

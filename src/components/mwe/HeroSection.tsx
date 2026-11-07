@@ -4,6 +4,7 @@ import { buildSocialLinks } from '@/data/siteConfig';
 import { defaultSectionData } from '@/cms/defaults';
 import { useSiteSettings, useResumeUrl } from '@/cms/api';
 import type { HeroData } from '@/cms/types';
+import NowPlaying from './NowPlaying';
 
 export default function HeroSection({ data = defaultSectionData.hero, anchorId = 'hero' }: { data?: HeroData; anchorId?: string }) {
   const { theme, isDark } = useTheme();
@@ -105,6 +106,9 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
         <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
           {tagline}
         </p>
+        <div style={{ margin: '12px 0 20px' }}>
+          <NowPlaying />
+        </div>
         <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
           {data.bio}
         </p>

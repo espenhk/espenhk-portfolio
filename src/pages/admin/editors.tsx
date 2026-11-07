@@ -82,16 +82,11 @@ function ContactEditor({ data, set }: Props<'contact'>) {
 }
 
 function ProjectsEditor({ data, set }: Props<'projects'>) {
-  const titles = Object.entries(data.titles).map(([repo, title]) => ({ repo, title }));
   return <>
     <TextField label="Heading" value={data.heading} onChange={heading => set({ heading })} />
     <TextField label="GitHub username" value={data.githubUsername} onChange={githubUsername => set({ githubUsername })} />
-    <LinesField label="Featured repos (in order)" hint="Repo names, one per line. Descriptions always come from GitHub." value={data.featured} onChange={featured => set({ featured })} />
+    <LinesField label="Featured repos (in order)" hint="Repo names, one per line. Names and descriptions always come from GitHub." value={data.featured} onChange={featured => set({ featured })} />
     <LinesField label="Hidden repos" value={data.hidden} onChange={hidden => set({ hidden })} />
-    <ListEditor label="Custom titles" items={titles}
-      onChange={list => set({ titles: Object.fromEntries(list.map(t => [t.repo, t.title])) })}
-      make={() => ({ repo: '', title: '' })} title={t => t.repo || 'New title'}
-      render={(t, s) => <><TextField label="Repo name" value={t.repo} onChange={repo => s({ repo })} /><TextField label="Title" value={t.title} onChange={title => s({ title })} /></>} />
     <NumberField label="Max repos shown" min={1} value={data.maxShown} onChange={maxShown => set({ maxShown })} />
     <ToggleField label="Show contribution graph" value={data.showGraph} onChange={showGraph => set({ showGraph })} />
   </>;

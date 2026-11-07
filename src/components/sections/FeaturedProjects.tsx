@@ -81,12 +81,6 @@ function CompactProject({ project, index, visible, theme, isDark }: {
               </span>
             )}
           </div>
-          <span style={{
-            fontFamily: theme.fonts.sans, fontSize: '0.78rem',
-            color: fg2, lineHeight: 1.4,
-          }}>
-            {project.subtitle}
-          </span>
         </div>
 
         <motion.div
@@ -108,6 +102,14 @@ function CompactProject({ project, index, visible, theme, isDark }: {
             style={{ overflow: 'hidden' }}
           >
             <div style={{ marginTop: 12, paddingLeft: 22 }}>
+              {project.description && (
+                <p style={{
+                  fontFamily: theme.fonts.sans, fontSize: '0.82rem',
+                  color: fg2, lineHeight: 1.5, marginBottom: 10,
+                }}>
+                  {project.description}
+                </p>
+              )}
               {project.topics.length > 0 && (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
                   {project.topics.slice(0, 5).map(t => (
@@ -252,6 +254,8 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
           {data.heading}
         </h2>
 
+        {data.showGraph && <GitHubGraph username={data.githubUsername} />}
+
         {isLoading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[1, 2, 3].map(i => <ProjectSkeleton key={i} />)}
@@ -276,7 +280,6 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
             ))}
           </div>
         )}
-        {data.showGraph && <GitHubGraph username={data.githubUsername} />}
       </div>
     </section>
   );

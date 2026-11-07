@@ -40,7 +40,6 @@ export interface ProjectsData {
   githubUsername: string;
   featured: string[];
   hidden: string[];
-  titles: Record<string, string>;
   maxShown: number;
   showGraph: boolean;
 }

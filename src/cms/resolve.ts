@@ -20,6 +20,7 @@ export function normalizeDoc(raw: unknown): CmsDoc {
     ? r.sections.filter(s => s && KNOWN.has((s as Section).type)).map(s => {
         const type = s.type as SectionType;
         const data = { ...(defaultSectionData[type] as object), ...((s.data as object) ?? {}) } as any;
+        if (type === 'projects') delete data.titles; // legacy: repo names always come from GitHub
         if (type === 'stats') data.stats = (data.stats ?? []).map((st: any) => ({ ...st, value: clampStat(Number(st.value)) }));
         return { id: String(s.id || crypto.randomUUID()), type, visible: s.visible !== false, data } as Section;
       })

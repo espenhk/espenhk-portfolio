@@ -2,12 +2,14 @@ import { useTheme } from '@/context/ThemeContext';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { Globe, Trophy, Wine, ExternalLink } from 'lucide-react';
+import { tint, type Palette } from '@/design-system/palette';
 
 interface Interest {
   icon: typeof Trophy;
   title: string;
   description: string;
-  color: string;
+  /** category colour slot in the palette */
+  tone: 'accent' | 'highlight';
   link?: string;
 }
 
@@ -23,23 +25,25 @@ const interests: Interest[] = [
     icon: Trophy,
     title: 'Flag Football',
     description: 'Tromsø Flaggfotball player. Sports geek through and through.',
-    color: '#FF9F1C',
+    tone: 'accent',
     link: 'https://tromsoflaggfotball.lovable.app',
   },
   {
     icon: Wine,
     title: 'Cocktail Craft',
     description: 'Home bartender. Negroni enthusiast. Always experimenting.',
-    color: '#E8655A',
+    tone: 'highlight',
   },
 ];
 
+const toneColors = (p: Palette, tone: Interest['tone']) =>
+  tone === 'highlight' ? { flat: p.highlight, ink: p.highlightInk } : { flat: p.accent, ink: p.accentInk };
+
 export default function BeyondTheCode() {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
+  const border = p.border;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -52,9 +56,7 @@ export default function BeyondTheCode() {
     return () => observer.disconnect();
   }, []);
 
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : '#FFFFFF';
+  const panelBg = p.panelBg;
 
   return (
     <section
@@ -62,20 +64,13 @@ export default function BeyondTheCode() {
       ref={ref}
       style={{
         padding: '60px 24px',
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-          : undefined,
-        background: isDark ? undefined : c.background.light,
+        backgroundImage: p.flourish ? p.sectionBg : undefined,
+        background: p.flourish ? undefined : p.sectionBg,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: 'linear-gradient(180deg, #FF9F1C, #E8655A)', opacity: 0.6,
-        }} />
-      )}
+      {p.flourish && <div style={p.rail(`linear-gradient(180deg, ${p.accent}, ${p.highlight})`)} />}
 
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{
@@ -101,20 +96,20 @@ export default function BeyondTheCode() {
             animate={visible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
             style={{
-              background: isDark ? undefined : panelBg,
-              backgroundImage: isDark ? panelBg : undefined,
+              background: p.flourish ? undefined : panelBg,
+              backgroundImage: p.flourish ? panelBg : undefined,
               borderRadius: theme.radii.md,
               padding: '18px 20px',
-              border: `1px solid ${isDark ? 'rgba(153,204,255,0.1)' : border}`,
-              boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
+              border: `1px solid ${p.flourish ? tint(p.tertiary, 10) : border}`,
+              boxShadow: p.shadowJob,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-              <Globe size={16} color="#99CCFF" />
+              <Globe size={16} color={p.tertiaryInk} />
               <span style={{
                 fontFamily: theme.fonts.display,
                 fontSize: '0.9rem',
-                color: '#99CCFF',
+                color: p.tertiaryInk,
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
               }}>
@@ -128,7 +123,7 @@ export default function BeyondTheCode() {
                   <div style={{
                     display: 'flex', justifyContent: 'space-between', marginBottom: 3,
                   }}>
-                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.72rem', color: '#D0D0D0' }}>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.72rem', color: fg }}>
                       {lang.name}
                     </span>
                     <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.68rem', color: fg2 }}>
@@ -136,7 +131,7 @@ export default function BeyondTheCode() {
                     </span>
                   </div>
                   <div style={{
-                    height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden',
+                    height: 4, background: p.hairline, borderRadius: 2, overflow: 'hidden',
                   }}>
                     <motion.div
                       initial={{ width: 0 }}
@@ -144,7 +139,7 @@ export default function BeyondTheCode() {
                       transition={{ duration: 0.7, delay: 0.2 + i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                       style={{
                         height: '100%',
-                        background: 'linear-gradient(90deg, #99CCFF, #99CCFF88)',
+                        background: `linear-gradient(90deg, ${p.tertiary}, ${tint(p.tertiary, 53)})`,
                         borderRadius: 2,
                       }}
                     />
@@ -158,6 +153,7 @@ export default function BeyondTheCode() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {interests.map((item, i) => {
               const Icon = item.icon;
+              const { flat: color, ink: colorInk } = toneColors(p, item.tone);
               return (
                 <motion.div
                   key={item.title}
@@ -165,12 +161,12 @@ export default function BeyondTheCode() {
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.12 }}
                   style={{
-                    background: isDark ? undefined : panelBg,
-                    backgroundImage: isDark ? panelBg : undefined,
+                    background: p.flourish ? undefined : panelBg,
+                    backgroundImage: p.flourish ? panelBg : undefined,
                     borderRadius: theme.radii.md,
                     padding: '16px 18px',
-                    border: `1px solid ${isDark ? `${item.color}15` : border}`,
-                    boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
+                    border: `1px solid ${p.flourish ? tint(color, 8) : border}`,
+                    boxShadow: p.shadowJob,
                     flex: 1,
                     display: 'flex',
                     gap: 12,
@@ -179,12 +175,12 @@ export default function BeyondTheCode() {
                 >
                   <div style={{
                     width: 32, height: 32, borderRadius: theme.radii.sm,
-                    background: `${item.color}10`,
-                    border: `1px solid ${item.color}20`,
+                    background: tint(color, 6),
+                    border: `1px solid ${tint(color, 12.5)}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
                   }}>
-                    <Icon size={15} color={item.color} />
+                    <Icon size={15} color={colorInk} />
                   </div>
                   <div style={{ flex: 1 }}>
                     <h4 style={{
@@ -203,7 +199,7 @@ export default function BeyondTheCode() {
                           href={item.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ marginLeft: 4, color: item.color, opacity: 0.8 }}
+                          style={{ marginLeft: 4, color: colorInk, opacity: 0.8 }}
                           onClick={e => e.stopPropagation()}
                         >
                           <ExternalLink size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />

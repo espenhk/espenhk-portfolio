@@ -2,20 +2,18 @@ import { useTheme } from '@/context/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
 
 export default function ThemeToggle() {
-  const { theme, isDark, toggleDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
+  const { theme, isDark, toggleDark, palette: p } = useTheme();
 
   return (
     <button
       onClick={toggleDark}
       style={{
         background: 'transparent',
-        border: `${theme.borders.width} ${theme.borders.style} ${isDark ? c.border.dark : c.border.light}`,
+        border: `${theme.borders.width} ${theme.borders.style} ${p.border}`,
         borderRadius: theme.radii.sm,
         padding: '8px 12px',
         cursor: 'pointer',
-        color: fg,
+        color: p.isStarfleet ? p.navInk : p.fg,
         display: 'flex',
         alignItems: 'center',
         gap: 6,

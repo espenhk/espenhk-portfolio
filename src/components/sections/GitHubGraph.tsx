@@ -3,16 +3,13 @@ import { GitHubCalendar } from 'react-github-calendar';
 import { siteConfig } from '@/data/siteConfig';
 
 export default function GitHubGraph({ username = siteConfig.githubUsername }: { username?: string }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
+  const { theme, isDark, palette: p } = useTheme();
+  const fg2 = p.fg2;
 
   const colorScheme = isDark ? 'dark' : 'light';
 
-  const explicitTheme = {
-    dark: ['#161B22', '#4A2E00', '#7A4D00', '#CC8400', '#FF9F1C'],
-    light: ['#EBEDF0', '#FFE4B5', '#FFCC80', '#FFB347', '#FF9F1C'],
-  };
+  // The calendar interpolates the levels between these two concrete colours.
+  const explicitTheme = { dark: p.calendarScale, light: p.calendarScale };
 
   return (
     <div
@@ -26,7 +23,7 @@ export default function GitHubGraph({ username = siteConfig.githubUsername }: { 
         <h2 style={{
           fontFamily: theme.fonts.display,
           fontSize: '1.4rem',
-          color: isDark ? c.textPrimary.dark : c.textPrimary.light,
+          color: p.fg,
           textTransform: 'uppercase',
           letterSpacing: '0.06em',
           marginBottom: 16,

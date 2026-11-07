@@ -23,6 +23,10 @@ export function hexAlpha(hex: string, alpha: number): string {
 
 const v = (name: string) => `var(--${name})`;
 
+/** Text/icon colour for a flat category token: var(--accent) → var(--accent-ink). Other colours pass through. */
+export const inkFor = (color: string) =>
+  color.replace(/^var\(--(accent|secondary|tertiary|highlight)\)$/, 'var(--$1-ink)');
+
 export function resolvePalette(theme: Theme, isDark: boolean) {
   const c = theme.colors;
   const m = isDark ? 'dark' : 'light';
@@ -78,6 +82,8 @@ export function resolvePalette(theme: Theme, isDark: boolean) {
     footerBg: flourish ? `linear-gradient(180deg, ${v('background')} 0%, ${v('ground-deep')} 100%)` : surface,
     cardBg: flourish ? `linear-gradient(145deg, ${v('card-bg-start')} 0%, ${v('card-bg-end')} 100%)` : sf ? v('card-bg-start') : surface,
     panelBg: flourish ? panelGradient : sf ? v('panel-start') : surface,
+    /** solid panel colour (fades over images) */
+    panelSolid: sf ? v('panel-start') : surface,
     statPanelBg: flourish ? panelGradient : theme.characterSheetTheme.panelBg,
     statLabel: sf ? v('stat-label') : N.statLabel,
     statTrack: sf ? v('stat-track') : N.statTrack,
@@ -90,6 +96,13 @@ export function resolvePalette(theme: Theme, isDark: boolean) {
     jobEdgeHover: sf
       ? (isDark ? hexAlpha(t.accent, 0.2) : t['control-edge'])
       : (isDark && accent.startsWith('#') ? hexAlpha(accent, 0.2) : N.hoverEdgeLight),
+
+    tertiaryEdgeHover: sf
+      ? (isDark ? hexAlpha(t.tertiary, 0.2) : t['control-edge'])
+      : (isDark && tertiary.startsWith('#') ? hexAlpha(tertiary, 0.2) : N.hoverEdgeLight),
+
+    /** GitHub contribution calendar [empty, full]: SVG fill attributes need concrete colours. */
+    calendarScale: (sf ? [t.surface, t.accent] : [border, accent]) as [string, string],
 
     // tints
     accentTint: sf ? v('accent-tint') : tint(accent, 9.4),

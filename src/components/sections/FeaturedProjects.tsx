@@ -8,32 +8,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Github, ExternalLink, Star, GitFork } from 'lucide-react';
 import GitHubGraph from './GitHubGraph';
+import { languageColors } from '@/data/languageColors';
+import { tint } from '@/design-system/palette';
 
-const langColors: Record<string, string> = {
-  Python: '#3572A5',
-  Java: '#B07219',
-  JavaScript: '#F1E05A',
-  TypeScript: '#3178C6',
-  HTML: '#E34C26',
-  CSS: '#563D7C',
-  Shell: '#89E051',
-  'Jupyter Notebook': '#DA5B0B',
-  HCL: '#844FBA',
-};
 
 function CompactProject({ project, index, visible, theme, isDark }: {
   project: Project; index: number; visible: boolean;
   theme: ReturnType<typeof useTheme>['theme']; isDark: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : '#FFFFFF';
-  const langColor = project.language ? (langColors[project.language] ?? '#888') : '#888';
+  const { palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
+  const panelBg = p.panelBg;
+  const langColor = (project.language && languageColors[project.language]) || fg2;
 
   return (
     <motion.div
@@ -42,17 +30,17 @@ function CompactProject({ project, index, visible, theme, isDark }: {
       transition={{ duration: 0.4, delay: index * 0.06 }}
       onClick={() => setExpanded(!expanded)}
       style={{
-        background: isDark ? undefined : panelBg,
-        backgroundImage: isDark ? panelBg : undefined,
+        background: p.flourish ? undefined : panelBg,
+        backgroundImage: p.flourish ? panelBg : undefined,
         borderRadius: theme.radii.md,
         padding: '14px 18px',
-        border: `1px solid ${isDark ? 'rgba(153,204,255,0.08)' : border}`,
-        boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
+        border: `1px solid ${p.flourish ? tint(p.tertiary, 8) : p.jobEdge}`,
+        boxShadow: p.shadowJob,
         cursor: 'pointer',
         transition: 'border-color 0.2s ease',
       }}
       whileHover={{
-        borderColor: isDark ? 'rgba(153,204,255,0.2)' : 'rgba(0,0,0,0.15)',
+        borderColor: p.tertiaryEdgeHover,
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -60,7 +48,7 @@ function CompactProject({ project, index, visible, theme, isDark }: {
         <div style={{
           width: 10, height: 10, borderRadius: '50%',
           background: langColor,
-          boxShadow: isDark ? `0 0 6px ${langColor}60` : undefined,
+          boxShadow: p.flourish ? `0 0 6px ${tint(langColor, 38)}` : undefined,
           flexShrink: 0,
         }} />
 
@@ -75,7 +63,7 @@ function CompactProject({ project, index, visible, theme, isDark }: {
             {project.featured && (
               <span style={{
                 fontFamily: theme.fonts.mono, fontSize: '0.6rem',
-                color: c.accent, textTransform: 'uppercase', letterSpacing: '0.08em',
+                color: p.accentInk, textTransform: 'uppercase', letterSpacing: '0.08em',
               }}>
                 ★ Featured
               </span>
@@ -115,10 +103,10 @@ function CompactProject({ project, index, visible, theme, isDark }: {
                   {project.topics.slice(0, 5).map(t => (
                     <span key={t} style={{
                       fontFamily: theme.fonts.mono, fontSize: '0.65rem',
-                      color: isDark ? '#CC99FF' : c.accent,
-                      background: isDark ? 'rgba(204,153,255,0.08)' : 'rgba(255,159,28,0.08)',
+                      color: p.jobTagInk,
+                      background: p.jobTagBg,
                       padding: '2px 8px', borderRadius: theme.radii.sm,
-                      border: `1px solid ${isDark ? 'rgba(204,153,255,0.15)' : 'rgba(255,159,28,0.15)'}`,
+                      border: `1px solid ${p.jobTagEdge}`,
                     }}>
                       {t}
                     </span>
@@ -179,23 +167,23 @@ function CompactProject({ project, index, visible, theme, isDark }: {
 }
 
 function ProjectSkeleton() {
+  const { theme, palette: p } = useTheme();
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.03)',
-      borderRadius: 8,
+      background: tint(p.fg, 3),
+      borderRadius: theme.radii.md,
       padding: '14px 18px',
       height: 56,
       animation: 'pulse 1.5s ease-in-out infinite',
     }}>
-      <div style={{ background: 'rgba(255,255,255,0.06)', height: 16, width: '50%', borderRadius: 4 }} />
+      <div style={{ background: p.hairline, height: 16, width: '50%', borderRadius: theme.radii.sm }} />
     </div>
   );
 }
 
 export default function FeaturedProjects({ data = defaultSectionData.projects, anchorId = 'projects' }: { data?: ProjectsData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
+  const { theme, isDark, palette: p } = useTheme();
+  const fg = p.fg;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -225,21 +213,14 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
       ref={ref}
       style={{
         padding: '60px 24px',
-        background: isDark ? undefined : c.surface.light,
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #0E1428 0%, #121A38 50%, #0E1428 100%)'
-          : undefined,
+        background: p.flourish ? undefined : p.altSectionBg,
+        backgroundImage: p.flourish ? p.altSectionBg : undefined,
         position: 'relative',
         overflow: 'hidden',
         transition: `all ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
       }}
     >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: '#99CCFF', opacity: 0.6,
-        }} />
-      )}
+      {p.flourish && <div style={p.rail(p.tertiary)} />}
 
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{
@@ -265,7 +246,7 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
         {error && (
           <p style={{
             textAlign: 'center',
-            color: c.error,
+            color: p.error,
             fontFamily: theme.fonts.mono,
             fontSize: '0.85rem',
           }}>
@@ -275,8 +256,8 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
 
         {projects && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {projects.map((p, i) => (
-              <CompactProject key={p.slug} project={p} index={i} visible={visible} theme={theme} isDark={isDark} />
+            {projects.map((proj, i) => (
+              <CompactProject key={proj.slug} project={proj} index={i} visible={visible} theme={theme} isDark={isDark} />
             ))}
           </div>
         )}

@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export default function NavBar() {
-  const { theme, isDark, toggleDark } = useTheme();
+  const { theme, isDark, toggleDark, palette: p } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState('');
 
@@ -39,11 +39,9 @@ export default function NavBar() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bg = isDark
-    ? scrolled ? 'rgba(6,10,24,0.85)' : 'transparent'
-    : scrolled ? 'rgba(255,255,255,0.9)' : 'transparent';
-  const fg2 = isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)';
-  const fgActive = isDark ? '#FF9F1C' : '#1A1A2E';
+  const bg = scrolled ? p.navScrolled : 'transparent';
+  const fg2 = p.navInk;
+  const fgActive = p.navActive;
 
   return (
     <motion.nav
@@ -57,7 +55,7 @@ export default function NavBar() {
         right: 0,
         zIndex: 900,
         padding: '0 24px',
-        height: 48,
+        height: p.isStarfleet ? 'var(--nav-height)' : 48,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -66,7 +64,7 @@ export default function NavBar() {
         backdropFilter: scrolled ? 'blur(12px)' : undefined,
         WebkitBackdropFilter: scrolled ? 'blur(12px)' : undefined,
         borderBottom: scrolled
-          ? `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`
+          ? `1px solid ${p.hairline}`
           : '1px solid transparent',
         transition: 'background 0.3s, border-color 0.3s',
       }}
@@ -105,11 +103,11 @@ export default function NavBar() {
           onClick={toggleDark}
           style={{
             background: 'none',
-            border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'}`,
+            border: `1px solid ${p.controlEdge}`,
             borderRadius: theme.radii.sm,
             padding: '4px 6px',
             cursor: 'pointer',
-            color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.5)',
+            color: p.navInk,
             display: 'flex',
             alignItems: 'center',
           }}

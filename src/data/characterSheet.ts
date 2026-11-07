@@ -1,3 +1,4 @@
+import { tokens } from '@/design-system/starfleet/tokens.generated';
 export interface Stat {
   label: string;
   value: number;
@@ -39,10 +40,11 @@ export const categoryLabels: Record<string, string> = {
   'soft-skill': 'TECH & CODE',
 };
 
+// Default category colours (stored as CMS data, so concrete values) from the Starfleet tokens.
 export const categoryColors: Record<string, string> = {
-  'framework': '#99CCFF',
-  'tool': '#CC99FF',
-  'soft-skill': '#FF9F1C',
+  'framework': tokens.color.dark.tertiary,
+  'tool': tokens.color.dark.secondary,
+  'soft-skill': tokens.color.dark.accent,
 };
 
 // Languages spoken — shown as flag icons

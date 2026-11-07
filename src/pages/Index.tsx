@@ -11,18 +11,15 @@ import { makeDefaultDoc } from '@/cms/defaults';
 import type { CmsDoc } from '@/cms/types';
 
 function PageContent({ doc, loading }: { doc: CmsDoc; loading?: boolean }) {
-  const { theme, isDark } = useTheme();
+  const { theme, palette: p } = useTheme();
   const { activated } = useKonamiCode();
-  const c = theme.colors;
-  const mainBg = isDark
-    ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-    : c.background.light;
+  const mainBg = p.pageBg;
 
   return (
     <SettingsContext.Provider value={doc.settings}>
       <div style={{
-        background: isDark ? undefined : mainBg,
-        backgroundImage: isDark ? mainBg : undefined,
+        background: p.flourish ? undefined : mainBg,
+        backgroundImage: p.flourish ? mainBg : undefined,
         minHeight: '100vh',
         transition: `background ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
       }}>

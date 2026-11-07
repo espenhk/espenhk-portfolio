@@ -19,10 +19,9 @@ function inline(text: string, color: string): ReactNode[] {
 }
 
 export default function TextSection({ data, anchorId = 'text' }: { data: TextData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
+  const { theme, palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
   const blocks = data.body.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
 
   return (
@@ -30,13 +29,13 @@ export default function TextSection({ data, anchorId = 'text' }: { data: TextDat
       id={anchorId}
       style={{
         padding: '60px 24px',
-        backgroundImage: isDark ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)' : undefined,
-        background: isDark ? undefined : c.background.light,
+        backgroundImage: p.flourish ? p.sectionBg : undefined,
+        background: p.flourish ? undefined : p.sectionBg,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {isDark && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 6, background: '#99CCFF', opacity: 0.6 }} />}
+      {p.flourish && <div style={p.rail(p.tertiary)} />}
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {data.heading && (
           <h2 style={{
@@ -49,11 +48,11 @@ export default function TextSection({ data, anchorId = 'text' }: { data: TextDat
             const lines = b.split('\n');
             if (lines.every(l => /^\s*[-*] /.test(l))) {
               return <ul key={i} style={{ paddingLeft: 20, marginBottom: 14, listStyle: 'disc' }}>
-                {lines.map((l, j) => <li key={j}>{inline(l.replace(/^\s*[-*] /, ''), c.accent)}</li>)}
+                {lines.map((l, j) => <li key={j}>{inline(l.replace(/^\s*[-*] /, ''), p.accentInk)}</li>)}
               </ul>;
             }
             return <p key={i} style={{ marginBottom: 14 }}>
-              {lines.map((l, j) => <Fragment key={j}>{j > 0 && <br />}{inline(l, c.accent)}</Fragment>)}
+              {lines.map((l, j) => <Fragment key={j}>{j > 0 && <br />}{inline(l, p.accentInk)}</Fragment>)}
             </p>;
           })}
         </div>

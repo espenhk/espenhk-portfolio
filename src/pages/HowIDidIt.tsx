@@ -4,24 +4,28 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Sparkles, MessageSquare, Code2, Layers, Rocket, Brain, Palette, PenLine, Quote } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { themes } from '@/config/themes';
+import { tint, inkFor } from '@/design-system/palette';
+import { languageColors } from '@/data/languageColors';
+import { tokens } from '@/design-system/starfleet/tokens.generated';
 
 /* ── tiny inline previews of site components ────────────── */
 
 function MiniStatBar({ label, value, color }: { label: string; value: number; color: string }) {
-  const { theme } = useTheme();
+  const { theme, palette: p } = useTheme();
   return (
     <div style={{ marginBottom: 6 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <span style={{ color: '#D0D0D0', fontSize: '0.6rem', fontFamily: theme.fonts.mono }}>{label}</span>
+        <span style={{ color: p.statLabel, fontSize: '0.6rem', fontFamily: theme.fonts.mono }}>{label}</span>
         <span style={{ color, fontSize: '0.6rem', fontFamily: theme.fonts.mono, fontWeight: 700 }}>{value}</span>
       </div>
-      <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+      <div style={{ height: 4, background: p.statTrack, borderRadius: 2, overflow: 'hidden' }}>
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${value}%` }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          style={{ height: '100%', background: `linear-gradient(90deg, ${color}, ${color}99)`, borderRadius: 2 }}
+          style={{ height: '100%', background: `linear-gradient(90deg, ${color}, ${tint(color, 60.0)})`, borderRadius: 2 }}
         />
       </div>
     </div>
@@ -29,64 +33,64 @@ function MiniStatBar({ label, value, color }: { label: string; value: number; co
 }
 
 function MiniCharacterSheet() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   return (
     <div style={{
-      background: isDark ? `${theme.colors.surface.dark}CC` : 'rgba(0,0,0,0.03)',
-      border: `1px solid ${isDark ? `${theme.colors.accent}1A` : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? tint(p.surface, 80) : tint(p.fg, 3),
+      border: `1px solid ${isDark ? tint(p.accent, 10.2) : tint(p.fg, 8)}`,
       borderRadius: 8, padding: 14, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: p.accentInk, marginBottom: 8 }}>
         ▸ Character Sheet Preview
       </div>
-      <MiniStatBar label="Data Engineering" value={85} color={theme.colors.secondary || '#CC99FF'} />
+      <MiniStatBar label="Data Engineering" value={85} color={p.secondary} />
       <MiniStatBar label="Python" value={75} color={theme.colors.accent} />
       <MiniStatBar label="SQL" value={80} color={theme.colors.accent} />
-      <MiniStatBar label="Azure Databricks" value={80} color={theme.colors.tertiary || '#99CCFF'} />
+      <MiniStatBar label="Azure Databricks" value={80} color={p.tertiary} />
     </div>
   );
 }
 
 function MiniRepoCard() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   return (
     <div style={{
-      background: isDark ? `linear-gradient(145deg, ${theme.colors.surface.dark} 0%, ${theme.colors.surface.dark}EE 50%, ${theme.colors.surface.dark} 100%)` : theme.colors.surface.light,
-      border: `1px solid ${isDark ? `${theme.colors.accent}14` : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? `linear-gradient(145deg, ${theme.colors.surface.dark} 0%, ${tint(theme.colors.surface.dark, 93.3)} 50%, ${theme.colors.surface.dark} 100%)` : theme.colors.surface.light,
+      border: `1px solid ${isDark ? tint(p.accent, 7.8) : tint(p.fg, 8)}`,
       borderRadius: 8, padding: 12, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: p.accentInk, marginBottom: 8 }}>
         ▸ Repository Card Preview
       </div>
-      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.78rem', fontWeight: 600, color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light, marginBottom: 4 }}>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.78rem', fontWeight: 600, color: p.fg, marginBottom: 4 }}>
         espenhk/portfolio
       </div>
-      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.65rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light, marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.65rem', color: p.fg2, marginBottom: 8 }}>
         Personal portfolio site built with Lovable
       </div>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#3178C6', display: 'inline-block' }} />
-          <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>TypeScript</span>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: languageColors.TypeScript, display: 'inline-block' }} />
+          <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: p.fg2 }}>TypeScript</span>
         </span>
-        <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>⭐ 2</span>
+        <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: p.fg2 }}>⭐ 2</span>
       </div>
     </div>
   );
 }
 
 function MiniNavBar() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   const items = ['Stats', 'Posts', 'Contact', 'Repos', 'Work'];
   return (
     <div style={{
-      background: isDark ? `${theme.colors.background.dark}D9` : `${theme.colors.background.light}E6`,
+      background: isDark ? tint(theme.colors.background.dark, 85.1) : tint(theme.colors.background.light, 90.2),
       backdropFilter: 'blur(12px)',
       borderRadius: 8, padding: '8px 14px',
-      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+      border: `1px solid ${tint(p.fg, isDark ? 6 : 6)}`,
       maxWidth: 320,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 6 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: p.accentInk, marginBottom: 6 }}>
         ▸ Nav Bar Preview
       </div>
       <div style={{ display: 'flex', gap: 4 }}>
@@ -96,7 +100,7 @@ function MiniNavBar() {
             fontSize: '0.55rem',
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
-            color: i === 0 ? theme.colors.accent : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+            color: i === 0 ? p.accentInk : tint(p.fg, isDark ? 50 : 40),
             padding: '3px 6px',
             fontWeight: i === 0 ? 700 : 400,
           }}>
@@ -109,29 +113,29 @@ function MiniNavBar() {
 }
 
 function MiniTimeline() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   const jobs = [
     { role: 'Manager', company: 'PwC Norway', period: '2025–Present' },
     { role: 'Data Engineer', company: 'Kantega AS', period: '2022–2025' },
   ];
   return (
     <div style={{
-      background: isDark ? `${theme.colors.surface.dark}CC` : 'rgba(0,0,0,0.03)',
-      border: `1px solid ${isDark ? `${theme.colors.accent}14` : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? tint(p.surface, 80) : tint(p.fg, 3),
+      border: `1px solid ${isDark ? tint(p.accent, 7.8) : tint(p.fg, 8)}`,
       borderRadius: 8, padding: 14, maxWidth: 260,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.accent, marginBottom: 8 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: p.accentInk, marginBottom: 8 }}>
         ▸ Experience Preview
       </div>
       {jobs.map((j, i) => (
         <div key={i} style={{
           padding: '6px 0',
-          borderTop: i > 0 ? `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}` : undefined,
+          borderTop: i > 0 ? `1px solid ${tint(p.fg, isDark ? 4 : 6)}` : undefined,
         }}>
-          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', fontWeight: 600, color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light }}>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.72rem', fontWeight: 600, color: p.fg }}>
             {j.role}
           </div>
-          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.6rem', color: isDark ? theme.colors.textSecondary.dark : theme.colors.textSecondary.light }}>
+          <div style={{ fontFamily: theme.fonts.sans, fontSize: '0.6rem', color: p.fg2 }}>
             {j.company} · {j.period}
           </div>
         </div>
@@ -141,21 +145,24 @@ function MiniTimeline() {
 }
 
 function MiniThemeSwatches() {
-  const { theme, isDark, setThemeById } = useTheme();
-  const themeOptions = [
-    { name: 'Cupertino', id: 'cupertino', colors: ['#0071E3', '#34C759', '#FF9F0A', '#0A0A0A'] },
-    { name: 'Arcadia', id: 'arcadia', colors: ['#209CEE', '#92CC41', '#F7D51D', '#0F0F1B'] },
-    { name: 'Nightcity', id: 'nightcity', colors: ['#00F0FF', '#FF2A6D', '#FCEE0A', '#0D0E14'] },
-    { name: 'Starfleet', id: 'starfleet', colors: ['#FF9F1C', '#CC99FF', '#99CCFF', '#0A0E1A'] },
-    { name: 'Foxglen', id: 'foxglen', colors: ['#D4B87B', '#8CAA7E', '#C4907C', '#1E1B17'] },
-  ];
+  const { theme, isDark, setThemeById, palette: p } = useTheme();
+  // Swatches come from each theme object; Starfleet's from the design-system tokens (dark mode).
+  const order = ['cupertino', 'arcadia', 'nightcity', 'starfleet', 'foxglen'];
+  const sfDark = tokens.color.dark;
+  const themeOptions = order.map(id => themes.find(t => t.id === id)!).map(t => ({
+    name: t.label.charAt(0) + t.label.slice(1).toLowerCase(),
+    id: t.id,
+    colors: t.id === 'starfleet'
+      ? [sfDark.accent, sfDark.secondary, sfDark.tertiary, sfDark.background]
+      : [t.colors.accent, t.colors.secondary ?? t.colors.accent, t.colors.tertiary ?? t.colors.accent, t.colors.background.dark],
+  }));
   return (
     <div style={{
-      background: isDark ? 'rgba(12,18,40,0.8)' : 'rgba(0,0,0,0.03)',
-      border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : 'rgba(0,0,0,0.08)'}`,
+      background: isDark ? tint(p.isStarfleet ? 'var(--panel-start)' : p.surface, 80) : tint(p.fg, 3),
+      border: `1px solid ${isDark ? tint(p.accent, 10) : tint(p.fg, 8)}`,
       borderRadius: 8, padding: 14, maxWidth: 320,
     }}>
-      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: theme.colors.secondary || '#CC99FF', marginBottom: 10 }}>
+      <div style={{ fontFamily: theme.fonts.mono, fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: p.secondaryInk, marginBottom: 10 }}>
         ▸ Theme Candidates — tap to preview
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -169,8 +176,8 @@ function MiniThemeSwatches() {
                 display: 'flex', alignItems: 'center', gap: 8,
                 padding: '5px 8px',
                 borderRadius: 6,
-                background: isActive ? (isDark ? `${theme.colors.accent}14` : `${theme.colors.accent}0F`) : 'transparent',
-                border: isActive ? `1px solid ${theme.colors.accent}33` : '1px solid transparent',
+                background: isActive ? (isDark ? tint(theme.colors.accent, 7.8) : tint(theme.colors.accent, 5.9)) : 'transparent',
+                border: isActive ? `1px solid ${tint(theme.colors.accent, 20.0)}` : '1px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 width: '100%',
@@ -179,12 +186,12 @@ function MiniThemeSwatches() {
             >
               <div style={{ display: 'flex', gap: 3 }}>
                 {t.colors.map((c, i) => (
-                  <div key={i} style={{ width: 12, height: 12, borderRadius: 3, background: c, border: '1px solid rgba(255,255,255,0.1)' }} />
+                  <div key={i} style={{ width: 12, height: 12, borderRadius: 3, background: c, border: `1px solid ${p.controlEdge}` }} />
                 ))}
               </div>
               <span style={{
                 fontFamily: theme.fonts.mono, fontSize: '0.6rem',
-                color: isActive ? theme.colors.accent : (isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)'),
+                color: isActive ? p.accentInk : tint(p.fg, isDark ? 50 : 40),
                 fontWeight: isActive ? 700 : 400,
               }}>
                 {t.name} {isActive && '✓'}
@@ -201,7 +208,7 @@ function MiniThemeSwatches() {
 
 function ExpandablePrompt({ title, content, color }: { title: string; content: string; color: string }) {
   const [open, setOpen] = useState(false);
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
 
   return (
     <div style={{ marginTop: 16 }}>
@@ -209,27 +216,27 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
         style={{
           background: isDark
-            ? `linear-gradient(135deg, ${color}12, ${color}06)`
-            : `linear-gradient(135deg, ${color}10, ${color}05)`,
-          border: `1px solid ${isDark ? `${color}35` : `${color}25`}`,
+            ? `linear-gradient(135deg, ${tint(color, 7.1)}, ${tint(color, 2.4)})`
+            : `linear-gradient(135deg, ${tint(color, 6.3)}, ${tint(color, 2.0)})`,
+          border: `1px solid ${isDark ? tint(color, 20.8) : tint(color, 14.5)}`,
           borderRadius: 10, padding: '14px 18px', cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: 10, width: '100%',
           textAlign: 'left',
           transition: 'all 0.2s ease',
         }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = `${color}60`; }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? `${color}35` : `${color}25`; }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = tint(color, 37.6); }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? tint(color, 20.8) : tint(color, 14.5); }}
       >
-        <Code2 size={16} style={{ color, flexShrink: 0 }} />
+        <Code2 size={16} style={{ color: inkFor(color), flexShrink: 0 }} />
         <span style={{
           fontFamily: theme.fonts.mono, fontSize: '0.75rem',
-          color: isDark ? color : 'rgba(0,0,0,0.6)',
+          color: isDark ? color : tint(p.fg, 60),
           fontWeight: 600, letterSpacing: '0.02em',
           flex: 1,
         }}>
           {title}
         </span>
-        <span style={{ color: isDark ? 'rgba(208,208,208,0.4)' : 'rgba(0,0,0,0.25)' }}>
+        <span style={{ color: tint(p.fg, isDark ? 40 : 25) }}>
           {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </span>
       </button>
@@ -244,13 +251,13 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
           >
             <div style={{
               marginTop: 8, padding: 16, borderRadius: 8,
-              background: isDark ? 'rgba(6,10,24,0.9)' : 'rgba(0,0,0,0.02)',
-              border: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'}`,
+              background: isDark ? tint(p.isStarfleet ? 'var(--ground-deep)' : p.bg, 90) : tint(p.fg, 2),
+              border: `1px solid ${tint(p.fg, isDark ? 4 : 6)}`,
               maxHeight: 500, overflowY: 'auto',
             }}>
               <pre style={{
                 fontFamily: theme.fonts.mono, fontSize: '0.62rem', lineHeight: 1.65,
-                color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                color: tint(p.fg, isDark ? 65 : 50),
                 whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0,
               }}>
                 {content}
@@ -265,26 +272,26 @@ function ExpandablePrompt({ title, content, color }: { title: string; content: s
 
 /* ── author prompt / reflection ─────────────────────────── */
 
-function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: string }) {
-  const { theme, isDark } = useTheme();
+function AuthorPrompt({ prompt, color = 'var(--secondary)' }: { prompt: string; color?: string }) {
+  const { theme, isDark, palette: p } = useTheme();
   return (
     <div style={{
       margin: '12px 0',
       padding: '12px 16px',
-      borderLeft: `3px solid ${isDark ? `${color}90` : `${color}90`}`,
-      background: isDark ? `${color}18` : `${color}1A`,
+      borderLeft: `3px solid ${isDark ? tint(color, 56.5) : tint(color, 56.5)}`,
+      background: isDark ? tint(color, 9.4) : tint(color, 10.2),
       borderRadius: '0 8px 8px 0',
       display: 'flex',
       alignItems: 'flex-start',
       gap: 10,
     }}>
-      <PenLine size={14} style={{ color, marginTop: 3, flexShrink: 0 }} />
+      <PenLine size={14} style={{ color: inkFor(color), marginTop: 3, flexShrink: 0 }} />
       <span style={{
         fontFamily: theme.fonts.sans,
         fontSize: '0.8rem',
         fontStyle: 'italic',
         lineHeight: 1.6,
-        color: isDark ? `${color}E6` : `${color}`,
+        color: isDark ? tint(color, 90.2) : inkFor(color),
       }}>
         {prompt}
       </span>
@@ -292,26 +299,26 @@ function AuthorPrompt({ prompt, color = '#CC99FF' }: { prompt: string; color?: s
   );
 }
 
-function AuthorReflection({ text, color = '#CC99FF' }: { text: string; color?: string }) {
-  const { theme, isDark } = useTheme();
+function AuthorReflection({ text, color = 'var(--secondary)' }: { text: string; color?: string }) {
+  const { theme, isDark, palette: p } = useTheme();
   return (
     <div style={{
       margin: '12px 0',
       padding: '14px 18px',
-      borderLeft: `3px solid ${isDark ? `${color}CC` : `${color}CC`}`,
-      background: isDark ? `${color}22` : `${color}20`,
+      borderLeft: `3px solid ${isDark ? tint(color, 80.0) : tint(color, 80.0)}`,
+      background: isDark ? tint(color, 13.3) : tint(color, 12.5),
       borderRadius: '0 8px 8px 0',
       display: 'flex',
       alignItems: 'flex-start',
       gap: 10,
     }}>
-      <Quote size={14} style={{ color, marginTop: 3, flexShrink: 0, opacity: 0.8 }} />
+      <Quote size={14} style={{ color: inkFor(color), marginTop: 3, flexShrink: 0, opacity: 0.8 }} />
       <span style={{
         fontFamily: theme.fonts.sans,
         fontSize: '0.82rem',
         fontStyle: 'normal',
         lineHeight: 1.7,
-        color: isDark ? 'rgba(230,230,230,0.9)' : 'rgba(30,30,30,0.85)',
+        color: tint(p.fg, isDark ? 90 : 85),
       }}>
         {text}
       </span>
@@ -349,14 +356,15 @@ const steps: Step[] = [
       'Starfleet pulled ahead quickly. The LCARS amber/lavender/blue palette had this quality of being deeply nerdy but somehow still professional. The other four were good, but this one felt like *me*.',
       { reflection: 'I picked Starfleet because it retained a feeling of playfulness, while staying safely planted in the nerd/computer geek space, resonating with gamer identity.' },
       'Over ~8 rounds of iteration, the prompt grew from a rough brief into a 4,500-word specification: 17 parts covering data architecture, component library, theming, deployment paths, animations, even the exact LCARS capsule border-radii (24px 8px 8px 24px)',
-      'Fonts were locked: Antonio for display, Outfit for body, JetBrains Mono for code. Colors codified: #FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue.',
+      'Fonts were locked: Antonio for display, Outfit for body, JetBrains Mono for code. Colors codified: #FF9F1C amber, #CC99FF lavender, #99CCFF sky-blue.', // design-tokens:allow (quoted history)
       { reflection: 'The prompt felt more done when I had finished iterating on all of it, and could generate the initial "make MWE sections" in the end. Knowing I had specified intent, desired output, core values behind choices and several technologies considered, was good.' },
       'No code was written in this phase. Just design thinking, prompt craft, and a slowly crystallizing vision.',
     ],
     toolsUsed: ['Claude Opus 4.6', 'Prompt engineering', 'Design thinking'],
-    color: '#CC99FF',
+    color: 'var(--secondary)',
     expandableSection: {
       title: '📋 View the Original Prompt — All 4,500 Words',
+      /* design-tokens:allow-start — verbatim historical prompt text, not styling */
       content: `# Personal Developer Portfolio — Complete Specification v4
 
 **Owner:** Espen H. Kristensen
@@ -1128,6 +1136,7 @@ If you later decide you want ISR or server-side features, migrating from Vite+Re
 Path A (Astro) is the theoretically elegant choice, but the mismatch with Lovable and the island-management overhead for this particular spec make it the hardest to maintain in practice. Save it for a future project that's truly content-only.
 
 Let’s start with path C as the stack.`,
+      /* design-tokens:allow-end */
     },
   },
   {
@@ -1148,7 +1157,7 @@ Let’s start with path C as the stack.`,
       { reflection: 'The first full generation of each theme was quite unfinished, in general not being playful enough with colors and looking in large part like the same theme with different font choices. Each needed nurturing to get it good, and Starfleet was still the clear favorite despite iterating on each a lot.' },
     ],
     toolsUsed: ['Lovable AI', 'React 18', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    color: '#FF9F1C',
+    color: 'var(--accent)',
     preview: <MiniThemeSwatches />,
   },
   {
@@ -1169,7 +1178,7 @@ Let’s start with path C as the stack.`,
       { reflection: 'Most of the hours of Phase 2 were fun iteration. It never really got properly frustrating, but I think that was because I started by staying far outside the implementation, nailing a relatively good prompt first.' },
     ],
     toolsUsed: ['Lovable AI', 'Three.js', 'React Three Fiber', 'GitHub API'],
-    color: '#99CCFF',
+    color: 'var(--tertiary)',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <MiniCharacterSheet />
@@ -1195,7 +1204,7 @@ Let’s start with path C as the stack.`,
       { reflection: 'I didn\'t deliberately leave anything out yet, except the repo sections covering forked repos I never worked much on. That felt a bit dishonest to have as featured.' },
     ],
     toolsUsed: ['Manual data entry', 'CV parsing', 'Content writing'],
-    color: '#66CC99',
+    color: 'var(--success)',
     preview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <MiniTimeline />
@@ -1217,7 +1226,7 @@ Let’s start with path C as the stack.`,
       { reflection: 'I built this page much for myself, to test tools like Lovable that touch upon a way of coding that is new for me. It\'s also potentially useful for recruiters, colleagues, new clients etc. to showcase what I know.' },
     ],
     toolsUsed: ['Lovable Publish', 'GitHub', 'Custom domain'],
-    color: '#E8655A',
+    color: 'var(--highlight)',
   },
 ];
 
@@ -1225,7 +1234,7 @@ Let’s start with path C as the stack.`,
 
 function StepCard({ step, index }: { step: Step; index: number }) {
   const [open, setOpen] = useState(false);
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
 
   return (
     <motion.div
@@ -1235,8 +1244,8 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <div style={{
-        background: isDark ? `${theme.colors.surface.dark}B3` : `${theme.colors.surface.light}CC`,
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
+        background: isDark ? tint(theme.colors.surface.dark, 70.2) : tint(theme.colors.surface.light, 80.0),
+        border: `1px solid ${tint(p.fg, isDark ? 6 : 8)}`,
         borderRadius: 12,
         overflow: 'hidden',
         backdropFilter: 'blur(8px)',
@@ -1257,10 +1266,10 @@ function StepCard({ step, index }: { step: Step; index: number }) {
         >
           <div style={{
             width: 40, height: 40, borderRadius: 10,
-            background: `${step.color}20`,
-            border: `1px solid ${step.color}40`,
+            background: tint(step.color, 12.5),
+            border: `1px solid ${tint(step.color, 25.1)}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: step.color, flexShrink: 0,
+            color: inkFor(step.color), flexShrink: 0,
           }}>
             {step.icon}
           </div>
@@ -1268,18 +1277,18 @@ function StepCard({ step, index }: { step: Step; index: number }) {
             <div style={{
               fontFamily: theme.fonts.mono, fontSize: '0.65rem',
               textTransform: 'uppercase', letterSpacing: '0.1em',
-              color: step.color, marginBottom: 2,
+              color: inkFor(step.color), marginBottom: 2,
             }}>
               {step.phase}
             </div>
             <div style={{
               fontFamily: theme.fonts.sans, fontWeight: 600, fontSize: '1.05rem',
-              color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light,
+              color: p.fg,
             }}>
               {step.title}
             </div>
           </div>
-          <div style={{ color: isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.3)' }}>
+          <div style={{ color: tint(p.fg, isDark ? 50 : 30) }}>
             {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </div>
         </button>
@@ -1296,7 +1305,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
               <div style={{ padding: '0 24px 24px' }}>
                 <p style={{
                   fontFamily: theme.fonts.sans, fontSize: '0.88rem', lineHeight: 1.7,
-                  color: isDark ? 'rgba(208,208,208,0.8)' : 'rgba(0,0,0,0.6)',
+                  color: tint(p.fg, isDark ? 80 : 60),
                   marginBottom: 16,
                 }}>
                   {step.description}
@@ -1318,10 +1327,10 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                     ) : (
                       <div key={i} style={{
                         fontFamily: theme.fonts.sans, fontSize: '0.82rem', lineHeight: 1.6,
-                        color: isDark ? 'rgba(208,208,208,0.65)' : 'rgba(0,0,0,0.5)',
+                        color: tint(p.fg, isDark ? 65 : 50),
                         padding: '4px 0 4px 16px', position: 'relative',
                       }}>
-                        <span style={{ position: 'absolute', left: 0, color: step.color, fontWeight: 700 }}>›</span>
+                        <span style={{ position: 'absolute', left: 0, color: inkFor(step.color), fontWeight: 700 }}>›</span>
                         {d}
                       </div>
                     )
@@ -1334,8 +1343,8 @@ function StepCard({ step, index }: { step: Step; index: number }) {
                       fontFamily: theme.fonts.mono, fontSize: '0.6rem',
                       textTransform: 'uppercase', letterSpacing: '0.05em',
                       padding: '3px 8px', borderRadius: 4,
-                      background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-                      color: isDark ? 'rgba(208,208,208,0.6)' : 'rgba(0,0,0,0.45)',
+                      background: tint(p.fg, isDark ? 5 : 4),
+                      color: tint(p.fg, isDark ? 60 : 45),
                     }}>
                       {t}
                     </span>
@@ -1358,7 +1367,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
 /* ── page ────────────────────────────────────────────────── */
 
 function PageContent() {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   const navigate = useNavigate();
 
   const mainBg = isDark
@@ -1401,7 +1410,7 @@ function PageContent() {
             display: 'flex', alignItems: 'center', gap: 6,
             fontFamily: theme.fonts.mono, fontSize: '0.72rem',
             textTransform: 'uppercase', letterSpacing: '0.08em',
-            color: isDark ? 'rgba(208,208,208,0.5)' : 'rgba(0,0,0,0.4)',
+            color: tint(p.fg, isDark ? 50 : 40),
             marginBottom: 48, padding: '6px 0',
           }}
         >
@@ -1418,7 +1427,7 @@ function PageContent() {
           <div style={{
             fontFamily: theme.fonts.mono, fontSize: '0.65rem',
             textTransform: 'uppercase', letterSpacing: '0.15em',
-            color: theme.colors.accent, marginBottom: 12,
+            color: p.accentInk, marginBottom: 12,
           }}>
             Behind the scenes
           </div>
@@ -1426,7 +1435,7 @@ function PageContent() {
             fontFamily: theme.fonts.display,
             fontSize: 'clamp(2rem, 5vw, 3rem)',
             fontWeight: 400,
-            color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light,
+            color: p.fg,
             lineHeight: 1.1, margin: 0,
           }}>
             How I Built This Site
@@ -1439,12 +1448,12 @@ function PageContent() {
           transition={{ duration: 0.5, delay: 0.2 }}
           style={{
             fontFamily: theme.fonts.sans, fontSize: '0.95rem', lineHeight: 1.7,
-            color: isDark ? 'rgba(208,208,208,0.7)' : 'rgba(0,0,0,0.55)',
+            color: tint(p.fg, isDark ? 70 : 55),
             marginBottom: 48, maxWidth: 580,
           }}
         >
           This portfolio was built entirely with{' '}
-          <a href="https://lovable.dev" target="_blank" rel="noopener" style={{ color: theme.colors.accent, textDecoration: 'none' }}>
+          <a href="https://lovable.dev" target="_blank" rel="noopener" style={{ color: p.accentInk, textDecoration: 'none' }}>
             Lovable <ExternalLink size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />
           </a>
           , with the initial prompt carefully crafted through multiple rounds of iteration with Claude Opus 4.6. Five visual themes were proposed, one was selected, and the rest was iterative refinement. Here's the full breakdown.
@@ -1455,8 +1464,8 @@ function PageContent() {
           <div style={{
             position: 'absolute', left: 43, top: 56, bottom: 56, width: 1,
             background: isDark
-              ? `linear-gradient(180deg, transparent, ${theme.colors.accent}33, transparent)`
-              : 'linear-gradient(180deg, transparent, rgba(0,0,0,0.08), transparent)',
+              ? `linear-gradient(180deg, transparent, ${tint(theme.colors.accent, 20.0)}, transparent)`
+              : `linear-gradient(180deg, transparent, ${tint(p.fg, 8)}, transparent)`,
           }} />
           {steps.map((step, i) => (
             <StepCard key={i} step={step} index={i} />
@@ -1471,19 +1480,19 @@ function PageContent() {
           transition={{ delay: 0.3 }}
           style={{
             marginTop: 56, padding: '20px 24px', borderRadius: 12,
-            background: isDark ? `${theme.colors.accent}0F` : `${theme.colors.accent}14`,
-            border: `1px solid ${isDark ? `${theme.colors.accent}1F` : `${theme.colors.accent}26`}`,
+            background: isDark ? tint(theme.colors.accent, 5.9) : tint(theme.colors.accent, 7.8),
+            border: `1px solid ${isDark ? tint(theme.colors.accent, 12.2) : tint(theme.colors.accent, 14.9)}`,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <MessageSquare size={18} style={{ color: theme.colors.accent, marginTop: 2, flexShrink: 0 }} />
+            <MessageSquare size={18} style={{ color: p.accentInk, marginTop: 2, flexShrink: 0 }} />
             <div>
               <p style={{
                 fontFamily: theme.fonts.sans, fontSize: '0.85rem', lineHeight: 1.7,
-                color: isDark ? 'rgba(208,208,208,0.75)' : 'rgba(0,0,0,0.6)',
+                color: tint(p.fg, isDark ? 75 : 60),
                 margin: 0,
               }}>
-                <strong style={{ color: isDark ? theme.colors.textPrimary.dark : theme.colors.textPrimary.light }}>Total time:</strong> ~8–10 hours from blank canvas to published site.
+                <strong style={{ color: p.fg }}>Total time:</strong> ~8–10 hours from blank canvas to published site.
                 The key insight was front-loading effort into prompt design with Claude — a detailed, well-structured brief
                 let Lovable generate ~80% of the site in one shot, then iterative refinement handled the remaining 20%.
               </p>

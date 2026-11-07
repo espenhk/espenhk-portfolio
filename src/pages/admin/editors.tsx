@@ -10,6 +10,7 @@ import { clampStat, STAT_MAX, STAT_MIN } from '@/cms/resolve';
 import { AreaField, Field, LinesField, ListEditor, NumberField, TextField, ToggleField } from './fields';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { tokens } from '@/design-system/starfleet/tokens.generated';
 import { supabase } from '@/integrations/supabase/client';
 import { CMS_BUCKET, useFileUrl } from '@/cms/api';
 import { toast } from 'sonner';
@@ -55,7 +56,7 @@ function StatsEditor({ data, set }: Props<'stats'>) {
   return <>
     <TextField label="Heading" value={data.heading} onChange={heading => set({ heading })} />
     <ListEditor label="Categories" items={data.categories} onChange={categories => set({ categories })}
-      make={() => ({ key: crypto.randomUUID().slice(0, 8), label: 'NEW CATEGORY', color: '#99CCFF' })}
+      make={() => ({ key: crypto.randomUUID().slice(0, 8), label: 'NEW CATEGORY', color: tokens.color.dark.tertiary })}
       title={c => c.label}
       render={(c, s) => <>
         <TextField label="Name" value={c.label} onChange={label => s({ label })} />

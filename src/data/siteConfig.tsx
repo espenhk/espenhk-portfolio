@@ -26,7 +26,7 @@ export interface SocialLink {
 
 export const siteConfig = {
   name: "Espen H. Kristensen",
-  tagline: "Data Engineer · Manager @ PwC Norway",
+  tagline: "Data Engineer @ TRY",
   bio: "Passionate about data engineering, LLMs and responsible AI. Mathematical background, sports geek, cocktail nerd.",
   profileImage: "https://avatars.githubusercontent.com/u/9382831?v=4",
   logo: "/images/logo-placeholder.svg",

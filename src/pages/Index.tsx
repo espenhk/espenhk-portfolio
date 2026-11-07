@@ -28,10 +28,10 @@ function PageContent({ doc, loading }: { doc: CmsDoc; loading?: boolean }) {
       }}>
         <Helmet>
           <title>Espen H. Kristensen — Data Engineer Portfolio</title>
-          <meta name="description" content="Portfolio of Espen H. Kristensen, Data Engineer & Manager at PwC Norway. Data engineering, LLMs, responsible AI, projects, and writing." />
+          <meta name="description" content="Portfolio of Espen H. Kristensen, Data Engineer at TRY. Data engineering, LLMs, responsible AI, projects, and writing." />
           <link rel="canonical" href="https://espenhk.lovable.app/" />
           <meta property="og:title" content="Espen H. Kristensen — Data Engineer Portfolio" />
-          <meta property="og:description" content="Data engineering, LLMs and responsible AI — projects, writing, and experience from a Manager at PwC Norway." />
+          <meta property="og:description" content="Data engineering, LLMs and responsible AI — projects, writing, and experience from a Data Engineer at TRY." />
           <meta property="og:url" content="https://espenhk.lovable.app/" />
         </Helmet>
         <KonamiOverlay active={activated} />

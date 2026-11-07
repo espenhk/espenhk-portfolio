@@ -1,7 +1,7 @@
 /** Rotating taglines – one is picked at random on each page load */
 export const taglines: string[] = [
   "Turning caffeine into pipelines since 2015.",
-  "Data Engineer · Manager @ PwC Norway",
+  "Data Engineer @ TRY",
   "Making data behave, one DAG at a time.",
   "Pipelines by day, cocktails by night.",
   "Ctrl+S-ing the world, one dataset at a time.",

@@ -45,7 +45,7 @@ const NUMBER = /^\d*\.?\d+$/;
 // a box-shadow list: lengths and colors, comma separated; no aliases, no `{`
 const SHADOW = /^(inset\s+)?(-?\d*\.?\d+(px)?\s+){2,3}(-?\d*\.?\d+px\s+)?(#[0-9a-f]{3,8}|rgba?\([^()]*\))(\s*,\s*(inset\s+)?(-?\d*\.?\d+(px)?\s+){2,3}(-?\d*\.?\d+px\s+)?(#[0-9a-f]{3,8}|rgba?\([^()]*\)))*$|^none$/i;
 
-type Kind = 'color' | 'shadow' | 'length' | 'number';
+export type Kind = 'color' | 'shadow' | 'length' | 'number';
 
 interface Resolved {
   /** css custom-property value per theme (aliases become var(--x)) */
@@ -78,7 +78,16 @@ function validate(kind: Kind, name: string, v: string) {
   if (!ok) throw new TokenError(`token "${name}" has invalid ${kind} value "${v}"`);
 }
 
-export function generate(json: TokensJson): { css: string; ts: string } {
+export interface ResolvedTokens {
+  themes: string[];
+  /** every colour/shadow/length/number token, in file order */
+  entries: { name: string; kind: Kind; css: Record<string, string>; raw: Record<string, string> }[];
+  fontVars: [string, string][];
+  typeVars: [string, string][];
+}
+
+/** Validate tokens.json and resolve aliases. Throws TokenError on bad input. */
+export function resolveTokens(json: TokensJson): ResolvedTokens {
   const themes = json?.color?.themes?.map(t => t.id) ?? [];
   if (themes.length === 0) throw new TokenError('color.themes is empty');
 
@@ -150,6 +159,18 @@ export function generate(json: TokensJson): { css: string; ts: string } {
     resolved.set(name, { css, raw });
   }
 
+  return {
+    themes,
+    entries: [...all].map(([name, e]) => ({ name, kind: e.kind, ...resolved.get(name)! })),
+    fontVars,
+    typeVars,
+  };
+}
+
+export function generate(json: TokensJson): { css: string; ts: string } {
+  const { themes, entries, fontVars, typeVars } = resolveTokens(json);
+  const all = new Map(entries.map(e => [e.name, e]));
+  const resolved = all;
   const themed = [...all].filter(([, e]) => e.kind === 'color' || e.kind === 'shadow').map(([n]) => n);
   const rootOnly = [...all].filter(([, e]) => e.kind === 'length' || e.kind === 'number').map(([n]) => n);
 

@@ -1,12 +1,12 @@
 /**
  * Guards that keep the Claude Design system «Starfleet» the single source of truth.
- * See AGENTS.md → "Design system".
+ * See AGENTS.md → "Design system". CI runs this on every push (.github/workflows/ci.yml).
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { generate, PATHS, type TokensJson } from '../../scripts/build-design-tokens';
-import { tokens } from '@/design-system/starfleet/tokens.generated';
+import { checkContrast } from '../../scripts/check-contrast';
 
 const ROOT = resolve(__dirname, '../..');
 const tokensJson = JSON.parse(readFileSync(PATHS.json, 'utf8')) as TokensJson;
@@ -104,60 +104,27 @@ describe('design tokens: generated files are in sync', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 3. Contrast of -ink tokens in light mode (WCAG 2.x)
+// 3. Contrast (WCAG 2.x) – rules live in scripts/check-contrast.ts, shared with the sync skill
 // ---------------------------------------------------------------------------
 
-type RGBA = [number, number, number, number];
+describe('design tokens: contrast', () => {
+  const results = checkContrast(tokensJson);
 
-function parseColor(value: string): RGBA {
-  const hex = /^#([0-9a-f]{3,8})$/i.exec(value);
-  if (hex) {
-    let h = hex[1];
-    if (h.length <= 4) h = h.split('').map(c => c + c).join('');
-    const n = [0, 2, 4, 6].map(i => (h.length > i ? parseInt(h.slice(i, i + 2), 16) : 255));
-    return [n[0], n[1], n[2], n[3] / 255];
-  }
-  const rgb = /^rgba?\(([^)]+)\)$/i.exec(value);
-  if (rgb) {
-    const [r, g, b, a = '1'] = rgb[1].split(',').map(s => s.trim());
-    return [Number(r), Number(g), Number(b), Number(a)];
-  }
-  throw new Error(`cannot parse colour ${value}`);
-}
-
-const over = (fg: RGBA, bg: RGBA): RGBA => {
-  const a = fg[3];
-  return [0, 1, 2].map(i => fg[i] * a + bg[i] * (1 - a)).concat(1) as RGBA;
-};
-
-const luminance = ([r, g, b]: RGBA) => {
-  const ch = (c: number) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
-  return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b);
-};
-
-const contrast = (a: RGBA, b: RGBA) => {
-  const [l1, l2] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (l1 + 0.05) / (l2 + 0.05);
-};
-
-describe('design tokens: -ink contrast in light mode', () => {
-  const light = tokens.color.light as Record<string, string>;
-  const background = parseColor(light.background);
-  const surface = parseColor(light.surface);
-  const inks = Object.keys(light).filter(n => n.endsWith('-ink'));
-
-  it('has -ink tokens to check', () => {
-    expect(inks).toEqual(expect.arrayContaining(['accent-ink', 'secondary-ink', 'tertiary-ink', 'highlight-ink']));
+  it('checks the -ink tokens in both themes', () => {
+    for (const theme of ['light', 'dark']) {
+      const inks = results.filter(r => r.theme === theme).map(r => r.token);
+      expect(inks).toEqual(expect.arrayContaining(['accent-ink', 'secondary-ink', 'tertiary-ink', 'highlight-ink', 'on-accent']));
+    }
   });
 
-  it.each(inks)('%s ≥ 4.5:1 against background and surface (or its own -bg)', name => {
-    // An ink with a dedicated `<prefix>-bg` token (cta-ink → cta-bg, job-tag-ink → job-tag-bg)
-    // sits on that surface, which itself sits on background/surface.
-    const ownBg = light[name.replace(/-ink$/, '-bg')];
-    const grounds = [background, surface].map(g => (ownBg ? over(parseColor(ownBg), g) : g));
-    for (const g of grounds) {
-      const ratio = contrast(over(parseColor(light[name]), g), g);
-      expect(ratio, `${name} ${light[name]} is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
-    }
+  it.each(results.map(r => [`${r.theme} ${r.token} on ${r.on}`, r] as const))('%s ≥ 4.5:1', (_label, r) => {
+    expect(r.ratio, `${r.token} ${r.fg} is ${r.ratio.toFixed(2)}:1 on ${r.on} (${r.theme})`).toBeGreaterThanOrEqual(r.min);
+  });
+
+  it('flags a token that breaks contrast', () => {
+    const j = structuredClone(tokensJson);
+    const ink = j.color.tokens.find(t => t.name === 'accent-ink')!;
+    ink.value = { light: '#ff9f1c', dark: '{accent}' };
+    expect(checkContrast(j).some(r => r.token === 'accent-ink' && !r.ok)).toBe(true);
   });
 });

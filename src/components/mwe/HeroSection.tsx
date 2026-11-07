@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { Fragment, useMemo, type ReactNode } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { buildSocialLinks } from '@/data/siteConfig';
 import { defaultSectionData } from '@/cms/defaults';
 import { useSiteSettings, useResumeUrl } from '@/cms/api';
-import type { HeroData } from '@/cms/types';
+import type { HeroData, HeroPartKey } from '@/cms/types';
+import { normalizeHeroParts } from '@/cms/resolve';
 import NowPlaying from './NowPlaying';
 
 export default function HeroSection({ data = defaultSectionData.hero, anchorId = 'hero' }: { data?: HeroData; anchorId?: string }) {
@@ -21,6 +22,114 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
     : c.background.light;
   const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
   const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
+
+  const visibleParts = normalizeHeroParts(data.parts).filter(p => p.visible).map(p => p.key);
+  const renderPart = (key: HeroPartKey, isLast: boolean): ReactNode => {
+    switch (key) {
+      case 'avatar': return (
+        <img
+          src={data.profileImage}
+          alt={settings.name}
+          width={140}
+          height={140}
+          fetchPriority="high"
+          decoding="async"
+          style={{
+            width: 140, height: 140,
+            borderRadius: theme.radii.full,
+            objectFit: 'cover',
+            objectPosition: 'center 25%',
+            margin: '0 auto 24px',
+            border: `2px solid ${c.accent}`,
+            boxShadow: isDark ? `0 0 20px rgba(255,159,28,0.2)` : theme.shadows.card,
+          }}
+        />
+      );
+      case 'name': return (
+        <h1 style={{
+          fontFamily: theme.fonts.display,
+          fontSize: '2.8rem',
+          fontWeight: 400,
+          marginBottom: 12,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+          textShadow: isDark ? '0 0 20px rgba(255,159,28,0.15)' : undefined,
+        }}>
+          {settings.name}
+        </h1>
+      );
+      case 'tagline': return tagline ? (
+        <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
+          {tagline}
+        </p>
+      ) : null;
+      case 'nowPlaying': return (
+        <div style={{ margin: '12px 0 20px' }}>
+          <NowPlaying />
+        </div>
+      );
+      case 'bio': return (
+        <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
+          {data.bio}
+        </p>
+      );
+      case 'buttons': return (
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+          <a
+            href="#projects"
+            style={{
+              background: isDark ? `linear-gradient(135deg, ${c.accent}, #E08A0C)` : c.accent,
+              color: isDark ? '#000' : '#fff',
+              padding: '12px 28px',
+              borderRadius: theme.radii.sm,
+              fontFamily: theme.fonts.sans,
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textDecoration: 'none',
+              boxShadow: isDark ? `0 0 15px rgba(255,159,28,0.3)` : theme.shadows.card,
+              transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
+            }}
+          >
+            {data.primaryButtonLabel}
+          </a>
+          <a
+            href={resumeUrl}
+            style={{
+              background: 'transparent',
+              color: c.accent,
+              padding: '12px 28px',
+              borderRadius: theme.radii.sm,
+              fontFamily: theme.fonts.sans,
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textDecoration: 'none',
+              border: `1px solid ${c.accent}`,
+              transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
+            }}
+          >
+            {data.cvButtonLabel}
+          </a>
+        </div>
+      );
+      case 'socials': return (
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: isLast ? 0 : 24 }}>
+          {socialLinks.map(s => (
+            <a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: fg2, transition: `color ${theme.motion.durationFast}` }}
+              onMouseEnter={e => (e.currentTarget.style.color = c.accent)}
+              onMouseLeave={e => (e.currentTarget.style.color = fg2)}
+            >
+              <s.icon size={20} />
+            </a>
+          ))}
+        </div>
+      );
+    }
+  };
 
   return (
     <section
@@ -75,94 +184,7 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
       )}
 
       <div style={{ maxWidth: 720, textAlign: 'center', position: 'relative', zIndex: 10 }}>
-        <img
-          src={data.profileImage}
-          alt={settings.name}
-          width={140}
-          height={140}
-          fetchPriority="high"
-          decoding="async"
-          style={{
-            width: 140, height: 140,
-            borderRadius: theme.radii.full,
-            objectFit: 'cover',
-            objectPosition: 'center 25%',
-            margin: '0 auto 24px',
-            border: `2px solid ${c.accent}`,
-            boxShadow: isDark ? `0 0 20px rgba(255,159,28,0.2)` : theme.shadows.card,
-          }}
-        />
-        <h1 style={{
-          fontFamily: theme.fonts.display,
-          fontSize: '2.8rem',
-          fontWeight: 400,
-          marginBottom: 12,
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-          textShadow: isDark ? '0 0 20px rgba(255,159,28,0.15)' : undefined,
-        }}>
-          {settings.name}
-        </h1>
-        <p style={{ color: fg2, fontSize: '1.1rem', marginBottom: 8, fontFamily: theme.fonts.sans }}>
-          {tagline}
-        </p>
-        <div style={{ margin: '12px 0 20px' }}>
-          <NowPlaying />
-        </div>
-        <p style={{ color: fg2, fontSize: '0.95rem', marginBottom: 32, maxWidth: 520, margin: '0 auto 32px', lineHeight: 1.6 }}>
-          {data.bio}
-        </p>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
-          <a
-            href="#projects"
-            style={{
-              background: isDark ? `linear-gradient(135deg, ${c.accent}, #E08A0C)` : c.accent,
-              color: isDark ? '#000' : '#fff',
-              padding: '12px 28px',
-              borderRadius: theme.radii.sm,
-              fontFamily: theme.fonts.sans,
-              fontWeight: 600,
-              fontSize: '0.95rem',
-              textDecoration: 'none',
-              boxShadow: isDark ? `0 0 15px rgba(255,159,28,0.3)` : theme.shadows.card,
-              transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
-            }}
-          >
-            {data.primaryButtonLabel}
-          </a>
-          <a
-            href={resumeUrl}
-            style={{
-              background: 'transparent',
-              color: c.accent,
-              padding: '12px 28px',
-              borderRadius: theme.radii.sm,
-              fontFamily: theme.fonts.sans,
-              fontWeight: 600,
-              fontSize: '0.95rem',
-              textDecoration: 'none',
-              border: `1px solid ${c.accent}`,
-              transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
-            }}
-          >
-            {data.cvButtonLabel}
-          </a>
-        </div>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          {socialLinks.map(s => (
-            <a
-              key={s.label}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: fg2, transition: `color ${theme.motion.durationFast}` }}
-              onMouseEnter={e => (e.currentTarget.style.color = c.accent)}
-              onMouseLeave={e => (e.currentTarget.style.color = fg2)}
-            >
-              <s.icon size={20} />
-            </a>
-          ))}
-        </div>
+        {visibleParts.map((key, i) => <Fragment key={key}>{renderPart(key, i === visibleParts.length - 1)}</Fragment>)}
       </div>
     </section>
   );

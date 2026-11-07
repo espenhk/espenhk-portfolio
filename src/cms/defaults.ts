@@ -4,7 +4,19 @@ import { characterSheet, categoryLabels, categoryColors, spokenLanguages, offDut
 import { jobs, education, certifications } from '@/data/experience';
 import { currentStatus } from '@/data/currentStatus';
 import { projectOverrides } from '@/data/projectOverrides';
-import type { CmsDoc, SectionDataMap, SectionType } from './types';
+import type { CmsDoc, HeroPart, HeroPartKey, SectionDataMap, SectionType } from './types';
+
+/** Hero building blocks in their default (current) order. */
+export const heroPartLabels: Record<HeroPartKey, string> = {
+  avatar: 'Avatar image',
+  name: 'Name',
+  tagline: 'Tagline',
+  nowPlaying: 'Now playing / status',
+  bio: 'Intro text',
+  buttons: 'Buttons (projects + CV)',
+  socials: 'Social links',
+};
+export const defaultHeroParts: HeroPart[] = (Object.keys(heroPartLabels) as HeroPartKey[]).map(key => ({ key, visible: true }));
 
 const featured = projectOverrides
   .filter(o => o.featured)
@@ -13,6 +25,7 @@ const featured = projectOverrides
 
 export const defaultSectionData: SectionDataMap = {
   hero: {
+    parts: defaultHeroParts.map(p => ({ ...p })),
     bio: siteConfig.bio,
     profileImage: siteConfig.profileImage,
     taglines: [...taglines],

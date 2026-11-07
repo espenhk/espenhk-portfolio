@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { clampStat, normalizeDoc, visibleSections, moveSection } from "@/cms/resolve";
+import { clampStat, normalizeDoc, normalizeHeroParts, visibleSections, moveSection } from "@/cms/resolve";
 import { makeDefaultDoc } from "@/cms/defaults";
 import { configToOverrides, resolveProjects } from "@/lib/resolveProjects";
 
@@ -37,5 +37,12 @@ describe("cms", () => {
     expect(out.map(p => p.slug)).toEqual(["c", "a"]);
     expect(out[0].title).toBe("c");
     expect(out[0].description).toBe("d-c");
+  });
+
+  it("keeps stored hero part order/visibility and fills in missing parts", () => {
+    const out = normalizeHeroParts([{ key: "buttons", visible: true }, { key: "nowPlaying", visible: false }, { key: "bogus", visible: true }, { key: "buttons", visible: false }]);
+    expect(out.slice(0, 2)).toEqual([{ key: "buttons", visible: true }, { key: "nowPlaying", visible: false }]);
+    expect(out.map(p => p.key).sort()).toEqual(["avatar", "bio", "buttons", "name", "nowPlaying", "socials", "tagline"]);
+    expect(normalizeHeroParts(undefined).map(p => p.key)).toEqual(["avatar", "name", "tagline", "nowPlaying", "bio", "buttons", "socials"]);
   });
 });

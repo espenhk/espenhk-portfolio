@@ -1,5 +1,17 @@
-import { defaultSectionData, makeDefaultDoc, sectionAnchors } from './defaults';
-import type { CmsDoc, Section, SectionType } from './types';
+import { defaultHeroParts, defaultSectionData, makeDefaultDoc, sectionAnchors } from './defaults';
+import type { CmsDoc, HeroPart, Section, SectionType } from './types';
+
+/** Keeps stored order/visibility, drops unknown or duplicate keys, appends parts added since (visible). */
+export function normalizeHeroParts(raw: unknown): HeroPart[] {
+  const known = new Set(defaultHeroParts.map(p => p.key));
+  const seen = new Set<string>();
+  const out: HeroPart[] = [];
+  for (const p of Array.isArray(raw) ? raw : []) {
+    if (p && known.has(p.key) && !seen.has(p.key)) { seen.add(p.key); out.push({ key: p.key, visible: p.visible !== false }); }
+  }
+  for (const p of defaultHeroParts) if (!seen.has(p.key)) out.push({ ...p });
+  return out;
+}
 
 export const STAT_MIN = 0;
 export const STAT_MAX = 100;
@@ -20,6 +32,7 @@ export function normalizeDoc(raw: unknown): CmsDoc {
     ? r.sections.filter(s => s && KNOWN.has((s as Section).type)).map(s => {
         const type = s.type as SectionType;
         const data = { ...(defaultSectionData[type] as object), ...((s.data as object) ?? {}) } as any;
+        if (type === 'hero') data.parts = normalizeHeroParts(data.parts);
         if (type === 'projects') delete data.titles; // legacy: repo names always come from GitHub
         if (type === 'stats') data.stats = (data.stats ?? []).map((st: any) => ({ ...st, value: clampStat(Number(st.value)) }));
         return { id: String(s.id || crypto.randomUUID()), type, visible: s.visible !== false, data } as Section;

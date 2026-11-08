@@ -12,20 +12,44 @@ const ROOT = resolve(__dirname, '../..');
 const tokensJson = JSON.parse(readFileSync(PATHS.json, 'utf8')) as TokensJson;
 
 // ---------------------------------------------------------------------------
-// 1. No colour literals in components/pages
+// 1. No colour literals anywhere in src/
 // ---------------------------------------------------------------------------
 
 /**
- * Files allowed to contain colour literals, with the reason. Prefer an inline
- * `design-tokens:allow` comment (one line) or a
- * `design-tokens:allow-start` … `design-tokens:allow-end` block over adding a file here.
+ * Paths (file, or folder ending in `/`) allowed to contain colour literals, with the reason.
+ * `kinds: 'tailwind'` allows only Tailwind palette classes there; hex etc. are still flagged.
+ * Prefer an inline `design-tokens:allow` comment (one line) or a
+ * `design-tokens:allow-start` … `design-tokens:allow-end` block over adding a path here.
  */
-const ALLOWED_FILES: Record<string, string> = {
-  'src/components/3d/SectionAvatar.tsx': 'three.js material colours of the 3D animal models (artwork, not UI)',
-  'src/components/ui/chart.tsx': "shadcn selectors that match recharts' default stroke attributes ([stroke='#ccc'])",
-};
+const ALLOWED: { path: string; reason: string; kinds?: 'tailwind' }[] = [
+  { path: 'src/design-system/starfleet/', reason: 'generated from tokens.json (bun run tokens)' },
+  { path: 'src/config/themes/', reason: "the other site themes' own palettes and their neutral fallbacks" },
+  { path: 'src/data/languageColors.ts', reason: "GitHub's language colours (data, not design)" },
+  { path: 'src/data/brandColors.ts', reason: 'third-party brand colours (data, not design)' },
+  { path: 'src/test/', reason: 'tests use literals as fixtures' },
+  { path: 'src/components/3d/SectionAvatar.tsx', reason: 'three.js material colours of the 3D animal models (artwork, not UI)' },
+  { path: 'src/components/ui/chart.tsx', reason: "shadcn selectors that match recharts' default stroke attributes ([stroke='#ccc'])" },
+  { path: 'src/components/ui/', reason: 'vendored shadcn primitives: modal scrim bg-black/80, destructive toast text-red-*', kinds: 'tailwind' },
+];
 
-const COLOR_LITERAL = /(?<![\w&])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b|\b(?:rgba?|hsla?)\(/;
+const NAMED = 'white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|silver|navy|teal|maroon|olive|lime|aqua|cyan|magenta|fuchsia|gold|crimson|coral|salmon|tomato|indigo|violet|brown|beige|ivory|khaki';
+const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+
+const DETECTORS: { kind: 'literal' | 'tailwind'; label: string; re: RegExp }[] = [
+  { kind: 'literal', label: 'hex colour', re: /(?<![\w&])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b/ },
+  { kind: 'literal', label: 'colour function', re: /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(/ },
+  {
+    kind: 'literal',
+    label: 'named colour',
+    // only where a colour is expected: style/CSS properties and JSX colour props
+    re: new RegExp(String.raw`\b(?:color|background|fill|stroke|border|outline|caret|accent)[\w-]*\s*[:=]\s*\{?\s*['"\x60]?[^'"\x60;]*?\b(?:${NAMED})\b`, 'i'),
+  },
+  {
+    kind: 'tailwind',
+    label: 'Tailwind palette class',
+    re: new RegExp(String.raw`(?<![\w-])(?:[\w-]+:)*(?:text|bg|border|ring|fill|stroke|from|via|to|outline|divide|placeholder|caret|accent|decoration|shadow)-(?:white|black|(?:${PALETTE})-\d{2,3})\b`),
+  },
+];
 
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap(name => {
@@ -34,43 +58,69 @@ function walk(dir: string): string[] {
   });
 }
 
-function findColorLiterals(source: string): { line: number; text: string }[] {
-  const hits: { line: number; text: string }[] = [];
+function findColorLiterals(source: string, skip: 'tailwind' | undefined = undefined): { line: number; text: string; label: string }[] {
+  const hits: { line: number; text: string; label: string }[] = [];
   let inBlock = false;
   source.split('\n').forEach((text, i) => {
     if (text.includes('design-tokens:allow-start')) inBlock = true;
     if (text.includes('design-tokens:allow-end')) { inBlock = false; return; }
     if (inBlock || /design-tokens:allow(?!-)/.test(text)) return;
-    if (COLOR_LITERAL.test(text)) hits.push({ line: i + 1, text: text.trim() });
+    const d = DETECTORS.find(det => det.kind !== skip && det.re.test(text));
+    if (d) hits.push({ line: i + 1, text: text.trim(), label: d.label });
   });
   return hits;
 }
 
-describe('design tokens: no colour literals', () => {
-  const files = ['src/components', 'src/pages'].flatMap(d => walk(join(ROOT, d)));
+const allowFor = (rel: string) => ALLOWED.filter(a => (a.path.endsWith('/') ? rel.startsWith(a.path) : rel === a.path));
 
-  it('scans the component and page trees', () => {
-    expect(files.length).toBeGreaterThan(20);
+describe('design tokens: no colour literals', () => {
+  const files = walk(join(ROOT, 'src')).map(f => relative(ROOT, f).split('\\').join('/'));
+
+  it('scans all of src/', () => {
+    expect(files.length).toBeGreaterThan(50);
+    expect(files).toContain('src/index.css');
   });
 
-  it('components and pages use var(--token), not hex/rgb/hsl', () => {
-    const offenders = files
-      .map(f => relative(ROOT, f).split('\\').join('/'))
-      .filter(rel => !(rel in ALLOWED_FILES))
-      .flatMap(rel => findColorLiterals(readFileSync(join(ROOT, rel), 'utf8')).map(h => `${rel}:${h.line}  ${h.text}`));
+  it('src/ uses var(--token), not hex/rgb/hsl/named colours or Tailwind palette classes', () => {
+    const offenders = files.flatMap(rel => {
+      const allow = allowFor(rel);
+      if (allow.some(a => !a.kinds)) return [];
+      const skip = allow.some(a => a.kinds === 'tailwind') ? 'tailwind' : undefined;
+      return findColorLiterals(readFileSync(join(ROOT, rel), 'utf8'), skip).map(h => `${rel}:${h.line}  [${h.label}]  ${h.text}`);
+    });
     expect(offenders, `Colour literals found – use a design token (see AGENTS.md):\n${offenders.join('\n')}`).toEqual([]);
   });
 
-  it('allowlisted files still exist (keep the list honest)', () => {
-    for (const f of Object.keys(ALLOWED_FILES)) expect(statSync(join(ROOT, f)).isFile()).toBe(true);
+  it('allowlisted paths still exist (keep the list honest)', () => {
+    for (const a of ALLOWED) expect(statSync(join(ROOT, a.path)).isFile() || statSync(join(ROOT, a.path)).isDirectory()).toBe(true);
   });
 
-  it('detector catches the usual forms', () => {
-    expect(findColorLiterals("color: '#FF9F1C'")).toHaveLength(1);
-    expect(findColorLiterals("background: 'rgba(255,159,28,0.1)'")).toHaveLength(1);
-    expect(findColorLiterals('`${c.accent}25` hsl(20 10% 5%)')).toHaveLength(1);
-    expect(findColorLiterals("href='#projects' &#123;")).toHaveLength(0);
-    expect(findColorLiterals("x: '#fff', // design-tokens:allow data")).toHaveLength(0);
+  it.each([
+    ["color: '#FF9F1C'", 'hex colour'],
+    ["background: 'rgba(255,159,28,0.1)'", 'colour function'],
+    ['`${c.accent}25` hsl(20 10% 5%)', 'colour function'],
+    ["color: 'oklch(70% 0.1 50)'", 'colour function'],
+    ["color: 'white'", 'named colour'],
+    ["border: '1px solid red'", 'named colour'],
+    ['<Icon color="white" />', 'named colour'],
+    ['  color: black;', 'named colour'],
+    ['className="text-white p-2"', 'Tailwind palette class'],
+    ['className="hover:bg-red-500/50"', 'Tailwind palette class'],
+    ["cn('border-slate-200')", 'Tailwind palette class'],
+  ])('detects %s', (line, label) => {
+    expect(findColorLiterals(line).map(h => h.label)).toEqual([label]);
+  });
+
+  it.each([
+    "href='#projects' &#123;",
+    "x: '#fff', // design-tokens:allow data",
+    "label: 'Black Friday white paper'",
+    "title: 'Bluesky'",
+    'className="text-foreground bg-primary/10 border-border"',
+    "color: p.accentInk, background: 'transparent'",
+    "fill: 'currentColor'",
+  ])('ignores %s', line => {
+    expect(findColorLiterals(line)).toEqual([]);
   });
 });
 

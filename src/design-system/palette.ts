@@ -13,12 +13,12 @@ import { tokens } from './starfleet/tokens.generated';
 export const tint = (color: string, percent: number) =>
   `color-mix(in srgb, ${color} ${percent}%, transparent)`;
 
-/** Concrete rgba() from a hex colour – for framer-motion targets, which cannot interpolate var(). */
+/** Concrete rgba() from a hex colour – for framer-motion targets, which cannot interpolate var(). */ // design-tokens:allow (builds rgba from a token value)
 export function hexAlpha(hex: string, alpha: number): string {
   const h = hex.replace('#', '');
   const full = h.length <= 4 ? h.split('').map(ch => ch + ch).join('') : h;
   const [r, g, b] = [0, 2, 4].map(i => parseInt(full.slice(i, i + 2), 16));
-  return `rgba(${r},${g},${b},${alpha})`;
+  return `rgba(${r},${g},${b},${alpha})`; // design-tokens:allow (builds rgba from a token value)
 }
 
 const v = (name: string) => `var(--${name})`;

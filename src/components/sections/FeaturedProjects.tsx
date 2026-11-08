@@ -1,12 +1,12 @@
 import { useTheme } from '@/context/ThemeContext';
 import { useQuery } from '@tanstack/react-query';
-import { fetchGitHubRepos } from '@/lib/github';
+import { fetchGitHubRepos, PAGES_INDEX_URL } from '@/lib/github';
 import { resolveProjects, configToOverrides, type Project } from '@/lib/resolveProjects';
 import { defaultSectionData } from '@/cms/defaults';
 import type { ProjectsData } from '@/cms/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Github, ExternalLink, Star, GitFork } from 'lucide-react';
+import { ChevronDown, Github, ExternalLink, Star, GitFork, Radio } from 'lucide-react';
 import GitHubGraph from './GitHubGraph';
 import { languageColors } from '@/data/languageColors';
 import { tint } from '@/design-system/palette';
@@ -67,6 +67,25 @@ function CompactProject({ project, index, visible, theme, isDark }: {
               }}>
                 ★ Featured
               </span>
+            )}
+            {project.hasPages && project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                title="Open the live page"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  fontFamily: theme.fonts.mono, fontSize: '0.6rem',
+                  textTransform: 'uppercase', letterSpacing: '0.08em', textDecoration: 'none',
+                  color: p.tertiaryInk, background: tint(p.tertiary, 12),
+                  border: `1px solid ${tint(p.tertiary, 35)}`,
+                  padding: '1px 7px', borderRadius: theme.radii.sm,
+                }}
+              >
+                <Radio size={10} /> Live
+              </a>
             )}
           </div>
         </div>
@@ -146,9 +165,9 @@ function CompactProject({ project, index, visible, theme, isDark }: {
                 >
                   <Github size={14} />
                 </a>
-                {project.homepage && (
+                {project.liveUrl && (
                   <a
-                    href={project.homepage}
+                    href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: fg2, display: 'flex', alignItems: 'center', gap: 3 }}
@@ -185,6 +204,7 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
   const { theme, isDark, palette: p } = useTheme();
   const fg = p.fg;
   const [visible, setVisible] = useState(false);
+  const [liveOnly, setLiveOnly] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -203,9 +223,11 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
     retry: 2,
   });
 
-  const projects = repos
-    ? resolveProjects(repos, configToOverrides(data)).slice(0, Math.max(1, data.maxShown || 50))
-    : undefined;
+  const resolved = repos ? resolveProjects(repos, configToOverrides(data)) : undefined;
+  const liveCount = resolved?.filter(pr => pr.hasPages).length ?? 0;
+  const projects = resolved
+    ?.filter(pr => !liveOnly || pr.hasPages)
+    .slice(0, Math.max(1, data.maxShown || 50));
 
   return (
     <section
@@ -236,6 +258,39 @@ export default function FeaturedProjects({ data = defaultSectionData.projects, a
         </h2>
 
         {data.showGraph && <GitHubGraph username={data.githubUsername} />}
+
+        {liveCount > 0 && (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: 12, flexWrap: 'wrap', marginBottom: 12,
+            fontFamily: theme.fonts.mono, fontSize: '0.72rem',
+          }}>
+            <button
+              type="button"
+              aria-pressed={liveOnly}
+              onClick={() => setLiveOnly(v => !v)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer',
+                fontFamily: 'inherit', fontSize: 'inherit',
+                textTransform: 'uppercase', letterSpacing: '0.06em',
+                padding: '4px 12px', borderRadius: theme.radii.sm,
+                color: liveOnly ? p.tertiaryInk : p.fg2,
+                background: liveOnly ? tint(p.tertiary, 14) : 'transparent',
+                border: `1px solid ${liveOnly ? tint(p.tertiary, 45) : p.controlEdge}`,
+              }}
+            >
+              <Radio size={12} /> Live demos ({liveCount})
+            </button>
+            <a
+              href={PAGES_INDEX_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: p.tertiaryInk, textDecoration: 'none' }}
+            >
+              All live project pages →
+            </a>
+          </div>
+        )}
 
         {isLoading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -1,4 +1,4 @@
-import type { GitHubRepo } from './github';
+import { liveUrl, type GitHubRepo } from './github';
 import { projectOverrides, type ProjectOverride } from '@/data/projectOverrides';
 
 export interface Project {
@@ -11,6 +11,10 @@ export interface Project {
   topics: string[];
   url: string;
   homepage: string | null;
+  /** Has a GitHub Pages site (a live demo under espenhk.github.io). */
+  hasPages: boolean;
+  /** Website field, else the Pages URL; null when neither exists. */
+  liveUrl: string | null;
   featured: boolean;
   sortOrder: number;
   pushedAt: string;
@@ -46,8 +50,8 @@ export function resolveProjects(repos: GitHubRepo[], overrides: ProjectOverride[
   for (const repo of repos) {
     const override = overrideMap.get(repo.name.toLowerCase());
 
-    // Skip hidden repos
-    if (override?.hidden) continue;
+    // Hidden in the CMS, or tagged `unlisted` like the espenhk.github.io index
+    if (override?.hidden || repo.topics?.includes('unlisted')) continue;
 
     projects.push({
       slug: repo.name,
@@ -59,6 +63,8 @@ export function resolveProjects(repos: GitHubRepo[], overrides: ProjectOverride[
       topics: repo.topics ?? [],
       url: repo.html_url,
       homepage: repo.homepage,
+      hasPages: !!repo.has_pages,
+      liveUrl: liveUrl(repo),
       featured: override?.featured ?? false,
       sortOrder: override?.sortOrder ?? 999,
       pushedAt: repo.pushed_at,

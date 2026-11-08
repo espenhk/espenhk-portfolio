@@ -13,18 +13,31 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/** localStorage key for the light/dark choice – also read by the inline script in index.html. */
+const DARK_KEY = 'portfolio-dark';
+
+/**
+ * Initial mode, decided before React renders: the inline script in index.html has already
+ * set data-theme on <html> (stored choice, else prefers-color-scheme), so start from that and
+ * the first render matches the first paint. Falls back to the same logic if the script didn't run.
+ */
+function initialIsDark(): boolean {
+  if (typeof document === 'undefined') return false;
+  const attr = document.documentElement.getAttribute('data-theme');
+  if (attr === 'dark' || attr === 'light') return attr === 'dark';
+  try {
+    const saved = localStorage.getItem(DARK_KEY);
+    if (saved !== null) return saved === 'true';
+  } catch { /* storage blocked */ }
+  return typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeId, setThemeId] = useState('starfleet');
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(initialIsDark);
 
   useEffect(() => {
-    const saved = localStorage.getItem('portfolio-dark');
-    if (saved !== null) setIsDark(saved === 'true');
-    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) setIsDark(true);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('portfolio-dark', String(isDark));
+    try { localStorage.setItem(DARK_KEY, String(isDark)); } catch { /* storage blocked */ }
   }, [isDark]);
 
   const theme = themes.find(t => t.id === themeId) ?? themes[0];

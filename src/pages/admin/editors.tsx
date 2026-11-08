@@ -10,6 +10,8 @@ import { clampStat, STAT_MAX, STAT_MIN } from '@/cms/resolve';
 import { AreaField, Field, LinesField, ListEditor, NumberField, TextField, ToggleField } from './fields';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { tokens } from '@/design-system/starfleet/tokens.generated';
+import { CATEGORY_TOKENS, isCategoryToken } from '@/design-system/categoryColors';
 import { supabase } from '@/integrations/supabase/client';
 import { CMS_BUCKET, useFileUrl } from '@/cms/api';
 import { toast } from 'sonner';
@@ -51,15 +53,41 @@ function HeroEditor({ data, set }: Props<'hero'>) {
   </>;
 }
 
+/** Category colour: a design-system token (follows «Starfleet» changes) or a fixed custom colour. */
+function CategoryColorField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const isToken = isCategoryToken(value);
+  return (
+    <Field label="Color" hint={isToken ? 'Design-system colour: follows changes to «Starfleet».' : 'Custom colour: fixed, does not follow the design system.'}>
+      <div className="flex gap-2">
+        <span className="h-10 w-10 shrink-0 rounded border border-border" style={{ background: isToken ? `var(--${value})` : value }} />
+        <select
+          className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm"
+          value={isToken ? value : 'custom'}
+          onChange={e => onChange(e.target.value === 'custom' ? (isToken ? tokens.color.dark[value] : value) : e.target.value)}
+        >
+          {CATEGORY_TOKENS.map(t => <option key={t} value={t}>{t}</option>)}
+          <option value="custom">Custom colour…</option>
+        </select>
+      </div>
+      {!isToken && (
+        <div className="flex gap-2">
+          <input type="color" value={value} onChange={e => onChange(e.target.value)} className="h-10 w-12 rounded border border-border bg-transparent" />
+          <Input value={value} onChange={e => onChange(e.target.value)} />
+        </div>
+      )}
+    </Field>
+  );
+}
+
 function StatsEditor({ data, set }: Props<'stats'>) {
   return <>
     <TextField label="Heading" value={data.heading} onChange={heading => set({ heading })} />
     <ListEditor label="Categories" items={data.categories} onChange={categories => set({ categories })}
-      make={() => ({ key: crypto.randomUUID().slice(0, 8), label: 'NEW CATEGORY', color: '#99CCFF' })}
+      make={() => ({ key: crypto.randomUUID().slice(0, 8), label: 'NEW CATEGORY', color: 'tertiary' })}
       title={c => c.label}
       render={(c, s) => <>
         <TextField label="Name" value={c.label} onChange={label => s({ label })} />
-        <Field label="Color"><div className="flex gap-2"><input type="color" value={c.color} onChange={e => s({ color: e.target.value })} className="h-10 w-12 rounded border border-border bg-transparent" /><Input value={c.color} onChange={e => s({ color: e.target.value })} /></div></Field>
+        <CategoryColorField value={c.color} onChange={color => s({ color })} />
       </>} />
     <ListEditor label="Stats" items={data.stats} onChange={stats => set({ stats })}
       make={() => ({ label: 'New skill', value: 50, category: data.categories[0]?.key ?? '' })}

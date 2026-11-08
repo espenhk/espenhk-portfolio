@@ -5,19 +5,17 @@ import type { Job } from '@/data/experience';
 import { defaultSectionData } from '@/cms/defaults';
 import type { ExperienceData } from '@/cms/types';
 import { Briefcase, GraduationCap, Award, ChevronDown } from 'lucide-react';
+import { tint } from '@/design-system/palette';
 
 function CompactJob({ job, index, visible, theme, isDark }: {
   job: Job; index: number; visible: boolean;
   theme: ReturnType<typeof useTheme>['theme']; isDark: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : '#FFFFFF';
+  const { palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
+  const panelBg = p.panelBg;
 
   return (
     <motion.div
@@ -26,17 +24,17 @@ function CompactJob({ job, index, visible, theme, isDark }: {
       transition={{ duration: 0.4, delay: index * 0.1 }}
       onClick={() => setExpanded(!expanded)}
       style={{
-        background: isDark ? undefined : panelBg,
-        backgroundImage: isDark ? panelBg : undefined,
+        background: p.flourish ? undefined : panelBg,
+        backgroundImage: p.flourish ? panelBg : undefined,
         borderRadius: theme.radii.md,
         padding: '14px 18px',
-        border: `1px solid ${isDark ? 'rgba(255,159,28,0.08)' : border}`,
-        boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
+        border: `1px solid ${p.jobEdge}`,
+        boxShadow: p.shadowJob,
         cursor: 'pointer',
         transition: 'border-color 0.2s ease',
       }}
       whileHover={{
-        borderColor: isDark ? 'rgba(255,159,28,0.2)' : 'rgba(0,0,0,0.15)',
+        borderColor: p.jobEdgeHover,
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -50,14 +48,14 @@ function CompactJob({ job, index, visible, theme, isDark }: {
             </h3>
             <span style={{
               fontFamily: theme.fonts.mono, fontSize: '0.72rem',
-              color: c.accent, textTransform: 'uppercase',
+              color: p.accentInk, textTransform: 'uppercase',
             }}>
               {job.role}
             </span>
           </div>
           <span style={{
             fontFamily: theme.fonts.mono, fontSize: '0.68rem',
-            color: isDark ? '#99CCFF' : fg2,
+            color: p.metaInk,
           }}>
             {job.period}
           </span>
@@ -91,10 +89,10 @@ function CompactJob({ job, index, visible, theme, isDark }: {
                 {job.tags.map(tag => (
                   <span key={tag} style={{
                     fontFamily: theme.fonts.mono, fontSize: '0.65rem',
-                    color: isDark ? '#CC99FF' : c.accent,
-                    background: isDark ? 'rgba(204,153,255,0.08)' : 'rgba(255,159,28,0.08)',
+                    color: p.jobTagInk,
+                    background: p.jobTagBg,
                     padding: '2px 8px', borderRadius: theme.radii.sm,
-                    border: `1px solid ${isDark ? 'rgba(204,153,255,0.15)' : 'rgba(255,159,28,0.15)'}`,
+                    border: `1px solid ${p.jobTagEdge}`,
                   }}>
                     {tag}
                   </span>
@@ -110,11 +108,9 @@ function CompactJob({ job, index, visible, theme, isDark }: {
 
 export default function ExperienceTimeline({ data = defaultSectionData.experience, anchorId = 'experience' }: { data?: ExperienceData; anchorId?: string }) {
   const { jobs, education, certifications } = data;
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, isDark, palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -127,9 +123,8 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
     return () => observer.disconnect();
   }, []);
 
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : '#FFFFFF';
+  const panelBg = p.panelBg;
+  const eduEdge = p.flourish ? tint(p.tertiary, 8) : p.jobEdge;
 
   return (
     <section
@@ -137,20 +132,13 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
       ref={ref}
       style={{
         padding: '60px 24px',
-        backgroundImage: isDark
-          ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-          : undefined,
-        background: isDark ? undefined : c.background.light,
+        backgroundImage: p.flourish ? p.sectionBg : undefined,
+        background: p.flourish ? undefined : p.sectionBg,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: '#FF9F1C', opacity: 0.6,
-        }} />
-      )}
+      {p.flourish && <div style={p.rail(p.accent)} />}
 
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{
@@ -168,10 +156,10 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
         {/* Postings — compact expandable */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-            <Briefcase size={16} color={c.accent} />
+            <Briefcase size={16} color={p.accentInk} />
             <span style={{
               fontFamily: theme.fonts.display, fontSize: '0.95rem',
-              color: c.accent, textTransform: 'uppercase', letterSpacing: '0.08em',
+              color: p.accentInk, textTransform: 'uppercase', letterSpacing: '0.08em',
             }}>
               Postings
             </span>
@@ -187,10 +175,10 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-              <GraduationCap size={16} color="#99CCFF" />
+              <GraduationCap size={16} color={p.tertiaryInk} />
               <span style={{
                 fontFamily: theme.fonts.display, fontSize: '0.9rem',
-                color: '#99CCFF', textTransform: 'uppercase', letterSpacing: '0.08em',
+                color: p.tertiaryInk, textTransform: 'uppercase', letterSpacing: '0.08em',
               }}>
                 Academy
               </span>
@@ -203,18 +191,18 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.3, delay: 0.5 + i * 0.08 }}
                   style={{
-                    background: isDark ? undefined : panelBg,
-                    backgroundImage: isDark ? panelBg : undefined,
+                    background: p.flourish ? undefined : panelBg,
+                    backgroundImage: p.flourish ? panelBg : undefined,
                     borderRadius: theme.radii.md,
                     padding: '10px 14px',
-                    border: `1px solid ${isDark ? 'rgba(153,204,255,0.08)' : border}`,
+                    border: `1px solid ${eduEdge}`,
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
                     <span style={{ fontFamily: theme.fonts.sans, fontSize: '0.8rem', fontWeight: 600, color: fg }}>
                       {edu.institution}
                     </span>
-                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#CC99FF' : c.accent, opacity: 0.85 }}>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? p.secondaryInk : p.accentInk, opacity: p.isStarfleet && !isDark ? 1 : 0.85 }}>
                       {edu.degree}
                     </span>
                   </div>
@@ -223,7 +211,7 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
                       {edu.details}
                     </p>
                   )}
-                  <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#99CCFF' : fg2 }}>
+                  <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: p.metaInk }}>
                     {edu.period}
                   </span>
                 </motion.div>
@@ -233,10 +221,10 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-              <Award size={16} color="#E8655A" />
+              <Award size={16} color={p.highlightInk} />
               <span style={{
                 fontFamily: theme.fonts.display, fontSize: '0.9rem',
-                color: '#E8655A', textTransform: 'uppercase', letterSpacing: '0.08em',
+                color: p.highlightInk, textTransform: 'uppercase', letterSpacing: '0.08em',
               }}>
                 Commendations
               </span>
@@ -249,17 +237,17 @@ export default function ExperienceTimeline({ data = defaultSectionData.experienc
                   animate={visible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.3, delay: 0.6 + i * 0.06 }}
                   style={{
-                    background: isDark ? undefined : panelBg,
-                    backgroundImage: isDark ? panelBg : undefined,
+                    background: p.flourish ? undefined : panelBg,
+                    backgroundImage: p.flourish ? panelBg : undefined,
                     borderRadius: theme.radii.md,
                     padding: '10px 14px',
-                    border: `1px solid ${isDark ? 'rgba(153,204,255,0.08)' : border}`,
+                    border: `1px solid ${eduEdge}`,
                   }}
                 >
                   <span style={{ fontFamily: theme.fonts.sans, fontSize: '0.8rem', fontWeight: 600, color: fg }}>
                     {cert.name}
                   </span>
-                  <p style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: isDark ? '#99CCFF' : fg2, marginTop: 2 }}>
+                  <p style={{ fontFamily: theme.fonts.mono, fontSize: '0.65rem', color: p.metaInk, marginTop: 2 }}>
                     {cert.date}
                   </p>
                 </motion.div>

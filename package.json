@@ -10,6 +10,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
+    "tokens": "bun scripts/build-design-tokens.ts",
+    "tokens:contrast": "bun scripts/check-contrast.ts",
+    "tokens:diff": "bun scripts/diff-tokens.ts",
+    "tokens:sync": "bun scripts/sync-tokens.ts",
     "test:watch": "vitest"
   },
   "dependencies": {

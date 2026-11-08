@@ -3,18 +3,20 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { defaultSectionData } from '@/cms/defaults';
 import type { StatsData } from '@/cms/types';
+import { tint } from '@/design-system/palette';
+import { resolveCategoryColor } from '@/design-system/categoryColors';
 
 type Stat = StatsData['stats'][number];
 
 function StatBar({ stat, index, visible, accentColor }: {
   stat: Stat; index: number; visible: boolean; accentColor: string;
 }) {
-  const { theme } = useTheme();
+  const { theme, palette: p } = useTheme();
   const isHigh = stat.value >= 75;
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
-        <span style={{ color: '#D0D0D0', fontSize: '0.72rem', fontFamily: theme.fonts.mono }}>
+        <span style={{ color: p.statLabel, fontSize: '0.72rem', fontFamily: theme.fonts.mono }}>
           {stat.label}
         </span>
         <span style={{
@@ -22,15 +24,15 @@ function StatBar({ stat, index, visible, accentColor }: {
           fontSize: '0.72rem',
           fontFamily: theme.fonts.mono,
           fontWeight: 700,
-          textShadow: isHigh ? `0 0 8px ${accentColor}60` : undefined,
+          textShadow: isHigh ? `0 0 8px ${tint(accentColor, 38)}` : undefined,
         }}>
           {stat.value}
         </span>
       </div>
       <div style={{
         height: 6,
-        background: 'rgba(255,255,255,0.06)',
-        borderRadius: 3,
+        background: p.statTrack,
+        borderRadius: p.isStarfleet ? 'var(--radius-bar)' : 3,
         overflow: 'hidden',
         position: 'relative',
       }}>
@@ -41,12 +43,12 @@ function StatBar({ stat, index, visible, accentColor }: {
           style={{
             height: '100%',
             backgroundImage: isHigh
-              ? `linear-gradient(90deg, ${accentColor}AA, ${accentColor})`
-              : `linear-gradient(90deg, ${accentColor}, ${accentColor}99)`,
-            borderRadius: 3,
+              ? `linear-gradient(90deg, ${tint(accentColor, 67)}, ${accentColor})`
+              : `linear-gradient(90deg, ${accentColor}, ${tint(accentColor, 60)})`,
+            borderRadius: p.isStarfleet ? 'var(--radius-bar)' : 3,
             boxShadow: isHigh
-              ? `0 0 12px ${accentColor}80, 0 0 24px ${accentColor}40, 0 0 4px ${accentColor}`
-              : `0 0 6px ${accentColor}25`,
+              ? `0 0 12px ${tint(accentColor, 50)}, 0 0 24px ${tint(accentColor, 25)}, 0 0 4px ${accentColor}`
+              : `0 0 6px ${tint(accentColor, 15)}`,
             filter: isHigh ? `brightness(1.2)` : undefined,
           }}
         />
@@ -56,11 +58,9 @@ function StatBar({ stat, index, visible, accentColor }: {
 }
 
 export default function CharacterSheetFull({ data = defaultSectionData.stats, anchorId = 'character-sheet' }: { data?: StatsData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -77,14 +77,12 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
   const grouped = data.categories.map(cat => ({
     key: cat.key,
     label: cat.label,
-    color: cat.color,
+    color: resolveCategoryColor(cat.color, p),
     stats: data.stats.filter(s => s.category === cat.key),
   }));
 
   // Use a 3-column layout for 3 categories
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : theme.characterSheetTheme.panelBg;
+  const panelBg = p.statPanelBg;
 
   const now = new Date();
   const stardate = (now.getFullYear() - 2000) * 1000 + Math.floor((now.getMonth() * 30 + now.getDate()) / 365.25 * 1000);
@@ -94,18 +92,13 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
       id={anchorId}
       style={{
         padding: '60px 24px',
-        background: isDark ? undefined : c.background.light,
-        backgroundImage: isDark ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)' : undefined,
+        background: p.flourish ? undefined : p.sectionBg,
+        backgroundImage: p.flourish ? p.sectionBg : undefined,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: '#CC99FF', opacity: 0.6,
-        }} />
-      )}
+      {p.flourish && <div style={p.rail(p.secondary)} />}
 
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <h2 style={{
@@ -123,22 +116,22 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
         <div
           ref={ref}
           style={{
-            background: isDark ? undefined : panelBg,
-            backgroundImage: isDark ? panelBg : undefined,
+            background: p.flourish ? undefined : panelBg,
+            backgroundImage: p.flourish ? panelBg : undefined,
             borderRadius: theme.radii.lg,
             padding: '24px 22px',
-            boxShadow: isDark ? `0 0 25px rgba(255,159,28,0.06), ${theme.shadows.card}` : theme.shadows.card,
-            border: `1px solid ${isDark ? 'rgba(255,159,28,0.12)' : border}`,
+            boxShadow: p.shadowPanel,
+            border: `1px solid ${p.panelEdge}`,
             fontFamily: theme.fonts.sans,
             position: 'relative',
             overflow: 'hidden',
           }}
         >
           {/* Stardate */}
-          {isDark && (
+          {p.flourish && (
             <div style={{
               textAlign: 'right', fontFamily: theme.fonts.mono,
-              fontSize: '0.65rem', color: 'rgba(153,204,255,0.5)', marginBottom: 12,
+              fontSize: '0.65rem', color: tint(p.tertiary, 50), marginBottom: 12,
             }}>
               STARDATE {stardate.toFixed(1)}
             </div>
@@ -156,9 +149,9 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
                   display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10,
                 }}>
                   <div style={{
-                    width: 3, height: 16, borderRadius: 2,
+                    width: 3, height: 16, borderRadius: p.isStarfleet ? 'var(--radius-tick)' : 2,
                     background: group.color,
-                    boxShadow: isDark ? `0 0 6px ${group.color}40` : undefined,
+                    boxShadow: p.isDark ? `0 0 6px ${tint(group.color, 25)}` : undefined,
                   }} />
                   <span style={{
                     fontFamily: theme.fonts.display,
@@ -193,7 +186,7 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
             gap: 8,
             marginTop: 18,
             paddingTop: 14,
-            borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+            borderTop: `1px solid ${p.hairline}`,
           }}>
             <span style={{
               fontFamily: theme.fonts.mono,

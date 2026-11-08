@@ -39,10 +39,11 @@ export const categoryLabels: Record<string, string> = {
   'soft-skill': 'TECH & CODE',
 };
 
+// Default category colours: design-system token names, resolved at render time.
 export const categoryColors: Record<string, string> = {
-  'framework': '#99CCFF',
-  'tool': '#CC99FF',
-  'soft-skill': '#FF9F1C',
+  'framework': 'tertiary',
+  'tool': 'secondary',
+  'soft-skill': 'accent',
 };
 
 // Languages spoken — shown as flag icons

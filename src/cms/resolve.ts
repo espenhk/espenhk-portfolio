@@ -1,5 +1,29 @@
 import { defaultHeroParts, defaultSectionData, makeDefaultDoc, sectionAnchors } from './defaults';
-import type { CmsDoc, HeroPart, Section, SectionType } from './types';
+import type { CmsDoc, HeroPart, Section, SectionType, StatsCategory } from './types';
+import { isCategoryToken } from '@/design-system/categoryColors';
+
+/**
+ * Category colours used to be stored as fixed hex values (the Starfleet v2 colours at the time).
+ * Map those to token names so stored content follows the design system; other hex values are
+ * custom colours and kept. These are historical stored values, not design values.
+ */
+// design-tokens:allow-start — historical CMS values, frozen on purpose
+const LEGACY_CATEGORY_HEX: Record<string, string> = {
+  '#ff9f1c': 'accent',
+  '#cc99ff': 'secondary',
+  '#99ccff': 'tertiary',
+  '#e8655a': 'highlight',
+  '#ffcc99': 'warm',
+  '#66cc99': 'success',
+};
+// design-tokens:allow-end
+
+export function normalizeCategoryColor(color: unknown): string {
+  const c = typeof color === 'string' ? color.trim() : '';
+  if (!c) return 'tertiary';
+  if (isCategoryToken(c)) return c;
+  return LEGACY_CATEGORY_HEX[c.toLowerCase()] ?? c;
+}
 
 /** Keeps stored order/visibility, drops unknown or duplicate keys, appends parts added since (visible). */
 export function normalizeHeroParts(raw: unknown): HeroPart[] {
@@ -34,7 +58,10 @@ export function normalizeDoc(raw: unknown): CmsDoc {
         const data = { ...(defaultSectionData[type] as object), ...((s.data as object) ?? {}) } as any;
         if (type === 'hero') data.parts = normalizeHeroParts(data.parts);
         if (type === 'projects') delete data.titles; // legacy: repo names always come from GitHub
-        if (type === 'stats') data.stats = (data.stats ?? []).map((st: any) => ({ ...st, value: clampStat(Number(st.value)) }));
+        if (type === 'stats') {
+          data.stats = (data.stats ?? []).map((st: any) => ({ ...st, value: clampStat(Number(st.value)) }));
+          data.categories = (data.categories ?? []).map((cat: StatsCategory) => ({ ...cat, color: normalizeCategoryColor(cat.color) }));
+        }
         return { id: String(s.id || crypto.randomUUID()), type, visible: s.visible !== false, data } as Section;
       })
     : [];

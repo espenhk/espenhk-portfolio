@@ -1,29 +1,14 @@
 import { useTheme } from '@/context/ThemeContext';
 import { ExternalLink, Github, Star, GitFork } from 'lucide-react';
 import type { Project } from '@/lib/resolveProjects';
+import { languageColors } from '@/data/languageColors';
 
-const langColors: Record<string, string> = {
-  Python: '#3572A5',
-  Java: '#B07219',
-  JavaScript: '#F1E05A',
-  TypeScript: '#3178C6',
-  HTML: '#E34C26',
-  CSS: '#563D7C',
-  Shell: '#89E051',
-  Jupyter: '#DA5B0B',
-  'Jupyter Notebook': '#DA5B0B',
-  HCL: '#844FBA',
-};
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const cardBg = isDark
-    ? 'linear-gradient(145deg, #101830 0%, #141E3A 100%)'
-    : c.surface.light;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, palette: p } = useTheme();
+  const cardBg = p.cardBg;
+  const fg = p.fg;
+  const fg2 = p.fg2;
 
   const tags = project.topics.length > 0
     ? project.topics.slice(0, 4)
@@ -34,9 +19,9 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div
       style={{
-        background: isDark ? undefined : cardBg,
-        backgroundImage: isDark ? cardBg : undefined,
-        border: `1px solid ${isDark ? 'rgba(255,159,28,0.1)' : border}`,
+        background: p.flourish ? undefined : cardBg,
+        backgroundImage: p.flourish ? cardBg : undefined,
+        border: `1px solid ${p.cardEdge}`,
         borderRadius: theme.radii.lg,
         padding: 24,
         boxShadow: theme.shadows.card,
@@ -65,8 +50,8 @@ export default function ProjectCard({ project }: { project: Project }) {
           position: 'absolute',
           top: 12,
           right: 12,
-          background: `${c.accent}25`,
-          color: c.accent,
+          background: p.accentTintStrong,
+          color: p.accentInk,
           fontSize: '0.65rem',
           fontFamily: theme.fonts.mono,
           padding: '2px 8px',
@@ -105,8 +90,8 @@ export default function ProjectCard({ project }: { project: Project }) {
               <span
                 key={t}
                 style={{
-                  background: `${c.accent}18`,
-                  color: c.accent,
+                  background: p.accentTint,
+                  color: p.accentInk,
                   padding: '2px 8px',
                   borderRadius: theme.radii.sm,
                   fontSize: '0.7rem',
@@ -127,7 +112,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         alignItems: 'center',
         marginTop: 8,
         paddingTop: 12,
-        borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+        borderTop: `1px solid ${p.hairline}`,
       }}>
         <div style={{ display: 'flex', gap: 14, color: fg2, fontSize: '0.78rem', fontFamily: theme.fonts.mono }}>
           {project.stars > 0 && (
@@ -144,7 +129,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{
                 width: 10, height: 10, borderRadius: '50%',
-                background: langColors[project.language] ?? '#888',
+                background: languageColors[project.language] ?? fg2,
                 display: 'inline-block',
               }} />
               {project.language}

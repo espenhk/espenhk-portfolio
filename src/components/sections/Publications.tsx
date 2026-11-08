@@ -7,25 +7,25 @@ import { fetchMediumArticles, fetchYouTubeVideos } from '@/lib/feeds';
 import { defaultSectionData } from '@/cms/defaults';
 import type { PublicationsData } from '@/cms/types';
 import { ExternalLink, BookOpen, Layers, ThumbsUp, MessageCircle } from 'lucide-react';
+import { tint, type Palette } from '@/design-system/palette';
 
 function getYouTubeId(url: string): string | null {
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
   return match ? match[1] : null;
 }
 
-const typeColor: Record<string, string> = {
-  article: '#FF9F1C',
-  video: '#E8655A',
-  series: '#CC99FF',
-};
+/** Category colour per publication type: `flat` for tints/surfaces, `ink` for text and icons. */
+const typeColor = (p: Palette, type: string) =>
+  type === 'video' ? { flat: p.highlight, ink: p.highlightInk }
+  : type === 'series' ? { flat: p.secondary, ink: p.secondaryInk }
+  : { flat: p.accent, ink: p.accentInk };
 
-const liTypeColor: Record<string, string> = {
-  post: '#0A66C2',
-  comment: '#57A773',
-  article: '#E7A33E',
-};
+const liTypeColor = (p: Palette, type: string) =>
+  type === 'comment' ? { flat: p.success, ink: p.success }
+  : type === 'article' ? { flat: p.accent, ink: p.accentInk }
+  : { flat: p.linkedin, ink: p.linkedin };
 
-function LinkedInIcon({ size = 14, color = '#0A66C2' }: { size?: number; color?: string }) {
+function LinkedInIcon({ size = 14, color = 'currentColor' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -44,11 +44,13 @@ const SCROLL_HIDE_CSS = `
 `;
 
 export default function Publications({ data = defaultSectionData.publications, anchorId = 'publications' }: { data?: PublicationsData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, isDark, palette: p } = useTheme();
+  const fg = p.fg;
+  const fg2 = p.fg2;
+  const border = p.border;
+  const arrowBg = tint(p.fg, isDark ? 15 : 12);
+  const arrowInk = tint(p.fg, isDark ? 80 : 60);
+  const linkedInInk = isDark ? p.tertiaryInk : p.linkedin;
   const [visible, setVisible] = useState(false);
   const [publications, setPublications] = useState<Publication[]>(fallbackPubs);
   const ref = useRef<HTMLDivElement>(null);
@@ -110,9 +112,7 @@ export default function Publications({ data = defaultSectionData.publications, a
     .filter(p => (p.type === 'video' ? data.showYouTube : data.showMedium))
     .slice(0, Math.max(1, data.maxItems || 20));
 
-  const panelBg = isDark
-    ? 'linear-gradient(145deg, #0C1228 0%, #101A38 50%, #0C1228 100%)'
-    : '#FFFFFF';
+  const panelBg = p.panelBg;
 
   return (
     <>
@@ -122,20 +122,13 @@ export default function Publications({ data = defaultSectionData.publications, a
         ref={ref}
         style={{
           padding: '60px 24px',
-          backgroundImage: isDark
-            ? 'linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)'
-            : undefined,
-          background: isDark ? undefined : c.background.light,
+          backgroundImage: p.flourish ? p.sectionBg : undefined,
+          background: p.flourish ? undefined : p.sectionBg,
           position: 'relative',
           overflow: 'visible',
         }}
       >
-      {isDark && (
-        <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: 6,
-          background: '#E8655A', opacity: 0.6,
-        }} />
-      )}
+      {p.flourish && <div style={p.rail(p.highlight)} />}
 
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{
@@ -169,7 +162,7 @@ export default function Publications({ data = defaultSectionData.publications, a
           scrollbarWidth: 'none',
         }}>
           {shownPubs.map((pub, i) => {
-            const color = typeColor[pub.type];
+            const { flat: color, ink: colorInk } = typeColor(p, pub.type);
             const ytId = pub.type === 'video' ? getYouTubeId(pub.url) : null;
             const isVideo = !!ytId;
             const hasHero = !!pub.heroImage;
@@ -181,11 +174,11 @@ export default function Publications({ data = defaultSectionData.publications, a
                 animate={visible ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 style={{
-                  background: isDark ? undefined : panelBg,
-                  backgroundImage: isDark ? panelBg : undefined,
+                  background: p.flourish ? undefined : panelBg,
+                  backgroundImage: p.flourish ? panelBg : undefined,
                   borderRadius: theme.radii.md,
-                  border: `1px solid ${isDark ? `${color}15` : border}`,
-                  boxShadow: isDark ? theme.shadows.card : '0 1px 4px rgba(0,0,0,0.06)',
+                  border: `1px solid ${p.flourish ? tint(color, 8) : border}`,
+                  boxShadow: p.shadowJob,
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -236,20 +229,18 @@ export default function Publications({ data = defaultSectionData.publications, a
                       left: 0,
                       right: 0,
                       height: 40,
-                      background: isDark
-                        ? 'linear-gradient(transparent, #0C1228)'
-                        : 'linear-gradient(transparent, #FFFFFF)',
+                      background: `linear-gradient(transparent, ${p.panelSolid})`,
                     }} />
                     <div style={{
                       position: 'absolute',
                       top: 8, right: 8,
                       width: 24, height: 24,
                       borderRadius: '50%',
-                      background: 'rgba(0,0,0,0.4)',
+                      background: p.scrim,
                       backdropFilter: 'blur(4px)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <ExternalLink size={12} color="#fff" />
+                      <ExternalLink size={12} color={p.onScrim} />
                     </div>
                   </a>
                 ) : (
@@ -260,16 +251,16 @@ export default function Publications({ data = defaultSectionData.publications, a
                     style={{
                       display: 'block', height: 120,
                       background: isDark
-                        ? `linear-gradient(135deg, ${color}15, ${color}08)`
-                        : `linear-gradient(135deg, ${color}10, ${color}05)`,
+                        ? `linear-gradient(135deg, ${tint(color, 8)}, ${tint(color, 3)})`
+                        : `linear-gradient(135deg, ${tint(color, 6)}, ${tint(color, 2)})`,
                       position: 'relative', overflow: 'hidden',
                     }}
                   >
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {pub.type === 'series' ? <Layers size={32} color={color} style={{ opacity: 0.4 }} /> : <BookOpen size={32} color={color} style={{ opacity: 0.4 }} />}
+                      {pub.type === 'series' ? <Layers size={32} color={colorInk} style={{ opacity: 0.4 }} /> : <BookOpen size={32} color={colorInk} style={{ opacity: 0.4 }} />}
                     </div>
-                    <div style={{ position: 'absolute', top: 8, right: 8, width: 24, height: 24, borderRadius: '50%', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <ExternalLink size={12} color="#fff" />
+                    <div style={{ position: 'absolute', top: 8, right: 8, width: 24, height: 24, borderRadius: '50%', background: p.scrim, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <ExternalLink size={12} color={p.onScrim} />
                     </div>
                   </a>
                 )}
@@ -277,7 +268,7 @@ export default function Publications({ data = defaultSectionData.publications, a
                 {/* Info */}
                 <div style={{ padding: '12px 14px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color, textTransform: 'uppercase', letterSpacing: '0.05em', background: `${color}12`, padding: '2px 6px', borderRadius: theme.radii.sm }}>{pub.type}</span>
+                    <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: colorInk, textTransform: 'uppercase', letterSpacing: '0.05em', background: tint(color, 7), padding: '2px 6px', borderRadius: theme.radii.sm }}>{pub.type}</span>
                     <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>{pub.date}</span>
                     {pub.readTimeMin && <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>· {pub.readTimeMin} min read</span>}
                     {pub.durationSec && <span style={{ fontFamily: theme.fonts.mono, fontSize: '0.6rem', color: fg2 }}>· {Math.floor(pub.durationSec / 60)}:{String(pub.durationSec % 60).padStart(2, '0')}</span>}
@@ -299,10 +290,10 @@ export default function Publications({ data = defaultSectionData.publications, a
           style={{
             position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+            background: arrowBg,
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            color: arrowInk, transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
@@ -316,10 +307,10 @@ export default function Publications({ data = defaultSectionData.publications, a
           style={{
             position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
-            background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+            background: arrowBg,
             border: 'none', cursor: 'pointer', display: 'none',
             alignItems: 'center', justifyContent: 'center',
-            color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+            color: arrowInk, transition: 'opacity 0.2s',
           }}
           className="scroll-arrow"
           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
@@ -333,11 +324,11 @@ export default function Publications({ data = defaultSectionData.publications, a
         {data.showLinkedIn && (<>
         <div style={{ marginTop: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, justifyContent: 'center' }}>
-            <LinkedInIcon size={18} color={isDark ? '#5B9BD5' : '#0A66C2'} />
+            <LinkedInIcon size={18} color={linkedInInk} />
             <h3 style={{
               fontFamily: theme.fonts.display,
               fontSize: '1.1rem',
-              color: isDark ? '#5B9BD5' : '#0A66C2',
+              color: linkedInInk,
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
             }}>
@@ -363,7 +354,7 @@ export default function Publications({ data = defaultSectionData.publications, a
             scrollbarWidth: 'none',
           }}>
             {linkedInPosts.map((post, i) => {
-              const typeCol = liTypeColor[post.type];
+              const { flat: typeCol, ink: typeInk } = liTypeColor(p, post.type);
               return (
                 <motion.a
                   key={i}
@@ -375,11 +366,11 @@ export default function Publications({ data = defaultSectionData.publications, a
                   transition={{ duration: 0.3, delay: 0.3 + i * 0.06 }}
                   whileHover={{ y: -2 }}
                   style={{
-                    background: isDark ? undefined : panelBg,
-                    backgroundImage: isDark ? panelBg : undefined,
+                    background: p.flourish ? undefined : panelBg,
+                    backgroundImage: p.flourish ? panelBg : undefined,
                     borderRadius: theme.radii.md,
-                    border: `1px solid ${isDark ? `${typeCol}18` : border}`,
-                    boxShadow: isDark ? theme.shadows.card : '0 1px 3px rgba(0,0,0,0.05)',
+                    border: `1px solid ${p.flourish ? tint(typeCol, 9.4) : border}`,
+                    boxShadow: p.shadowJob,
                     padding: '12px 14px',
                     minWidth: 180,
                     maxWidth: 180,
@@ -394,9 +385,9 @@ export default function Publications({ data = defaultSectionData.publications, a
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{
-                      fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: typeCol,
+                      fontFamily: theme.fonts.mono, fontSize: '0.55rem', color: typeInk,
                       textTransform: 'uppercase', letterSpacing: '0.06em',
-                      background: `${typeCol}12`, padding: '1px 5px', borderRadius: theme.radii.sm,
+                      background: tint(typeCol, 7), padding: '1px 5px', borderRadius: theme.radii.sm,
                     }}>
                       {post.type === 'comment' ? '💬 comment' : post.type === 'article' ? '📝 article' : '📣 post'}
                     </span>
@@ -413,7 +404,7 @@ export default function Publications({ data = defaultSectionData.publications, a
 
                   <div style={{
                     display: 'flex', gap: 10, alignItems: 'center',
-                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
+                    borderTop: `1px solid ${p.hairline}`,
                     paddingTop: 6,
                   }}>
                     {post.likes != null && (
@@ -439,10 +430,10 @@ export default function Publications({ data = defaultSectionData.publications, a
             style={{
               position: 'absolute', left: -4, top: '50%', transform: 'translateY(-50%)',
               width: 28, height: 28, borderRadius: '50%',
-              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              background: arrowBg,
               border: 'none', cursor: 'pointer', display: 'none',
               alignItems: 'center', justifyContent: 'center',
-              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+              color: arrowInk, transition: 'opacity 0.2s',
             }}
             className="li-arrow"
             onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
@@ -456,10 +447,10 @@ export default function Publications({ data = defaultSectionData.publications, a
             style={{
               position: 'absolute', right: -4, top: '50%', transform: 'translateY(-50%)',
               width: 28, height: 28, borderRadius: '50%',
-              background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+              background: arrowBg,
               border: 'none', cursor: 'pointer', display: 'none',
               alignItems: 'center', justifyContent: 'center',
-              color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)', transition: 'opacity 0.2s',
+              color: arrowInk, transition: 'opacity 0.2s',
             }}
             className="li-arrow"
             onMouseEnter={e => (e.currentTarget.style.opacity = '1')}

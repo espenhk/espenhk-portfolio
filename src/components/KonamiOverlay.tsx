@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
+import { tint } from '@/design-system/palette';
 
 const messages = [
   '🎮 Achievement Unlocked: Found the Secret!',
@@ -10,7 +11,7 @@ const messages = [
 ];
 
 export default function KonamiOverlay({ active }: { active: boolean }) {
-  const { theme } = useTheme();
+  const { theme, palette: p } = useTheme();
   const msg = messages[Math.floor(Math.random() * messages.length)];
 
   return (
@@ -33,8 +34,8 @@ export default function KonamiOverlay({ active }: { active: boolean }) {
             fontSize: '0.9rem',
             fontWeight: 600,
             background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
-            color: '#000',
-            boxShadow: `0 8px 32px rgba(255,159,28,0.4)`,
+            color: p.onAccent,
+            boxShadow: `0 8px 32px ${tint(p.accent, 40)}`,
             textAlign: 'center',
             whiteSpace: 'nowrap',
           }}

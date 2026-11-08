@@ -1,24 +1,21 @@
 import { useTheme } from '@/context/ThemeContext';
 import { ExternalLink, Github } from 'lucide-react';
+import { languageColors } from '@/data/languageColors';
 
 export default function ProjectCard() {
-  const { theme, isDark } = useTheme();
-  const c = theme.colors;
-  const cardBg = isDark
-    ? 'linear-gradient(145deg, #101830 0%, #141E3A 100%)'
-    : c.surface.light;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
-  const border = isDark ? c.border.dark : c.border.light;
+  const { theme, palette: p } = useTheme();
+  const cardBg = p.cardBg;
+  const fg = p.fg;
+  const fg2 = p.fg2;
 
   const tags = ['Python', 'CLI', 'NFL', 'Fantasy'];
 
   return (
     <div
       style={{
-        background: isDark ? undefined : cardBg,
-        backgroundImage: isDark ? cardBg : undefined,
-        border: `${theme.borders.width} ${theme.borders.style} ${isDark ? `${c.accent}15` : border}`,
+        background: p.flourish ? undefined : cardBg,
+        backgroundImage: p.flourish ? cardBg : undefined,
+        border: `${theme.borders.width} ${theme.borders.style} ${p.cardEdge}`,
         borderRadius: theme.radii.lg,
         padding: 24,
         boxShadow: theme.shadows.card,
@@ -63,8 +60,8 @@ export default function ProjectCard() {
           <span
             key={t}
             style={{
-              background: `${c.accent}20`,
-              color: c.accent,
+              background: p.accentTint,
+              color: p.accentInk,
               padding: '3px 10px',
               borderRadius: theme.radii.sm,
               fontSize: '0.75rem',
@@ -79,7 +76,7 @@ export default function ProjectCard() {
       <div style={{ marginTop: 16, display: 'flex', gap: 16, color: fg2, fontSize: '0.8rem', fontFamily: theme.fonts.mono }}>
         <span>⭐ 3</span>
         <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#3572A5', display: 'inline-block' }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: languageColors.Python, display: 'inline-block' }} />
           Python
         </span>
       </div>

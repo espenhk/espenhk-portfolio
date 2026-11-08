@@ -6,9 +6,22 @@ import { useSiteSettings, useResumeUrl } from '@/cms/api';
 import type { HeroData, HeroPartKey } from '@/cms/types';
 import { normalizeHeroParts } from '@/cms/resolve';
 import NowPlaying from './NowPlaying';
+import { tint } from '@/design-system/palette';
+
+// Starfield star positions/sizes are layout data, not design tokens (see design system README,
+// "Ikke synkronisert"); the colours come from tokens. `--stat-label` is the near-white star colour.
+const STARS: [size: number, x: number, y: number, color: string, alpha: number][] = [
+  [1, 10, 20, 'var(--stat-label)', 60], [1, 30, 60, 'var(--stat-label)', 40], [1, 50, 10, 'var(--stat-label)', 30],
+  [1, 70, 80, 'var(--stat-label)', 50], [1, 90, 40, 'var(--stat-label)', 40], [2, 20, 90, 'var(--accent)', 50],
+  [2, 80, 15, 'var(--tertiary)', 50], [1.5, 45, 45, 'var(--secondary)', 40], [1, 65, 25, 'var(--stat-label)', 40],
+  [1.5, 15, 75, 'var(--highlight)', 40],
+];
+const starfield = STARS
+  .map(([s, x, y, color, a]) => `radial-gradient(${s}px ${s}px at ${x}% ${y}%, ${tint(color, a)} 0%, transparent 100%)`)
+  .join(', ');
 
 export default function HeroSection({ data = defaultSectionData.hero, anchorId = 'hero' }: { data?: HeroData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, palette: p } = useTheme();
   const settings = useSiteSettings();
   const resumeUrl = useResumeUrl();
   const socialLinks = useMemo(() => buildSocialLinks(settings.socials), [settings.socials]);
@@ -16,12 +29,9 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
     const t = data.taglines.filter(Boolean);
     return t.length ? t[Math.floor(Math.random() * t.length)] : '';
   }, [data.taglines]);
-  const c = theme.colors;
-  const bg = isDark
-    ? `linear-gradient(180deg, #060A18 0%, #0C1230 30%, #14102A 55%, #0A0E20 80%, #060A18 100%)`
-    : c.background.light;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
+  const bg = p.heroBg;
+  const fg = p.fg;
+  const fg2 = p.fg2;
 
   const visibleParts = normalizeHeroParts(data.parts).filter(p => p.visible).map(p => p.key);
   const renderPart = (key: HeroPartKey, isLast: boolean): ReactNode => {
@@ -40,8 +50,8 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
             objectFit: 'cover',
             objectPosition: 'center 25%',
             margin: '0 auto 24px',
-            border: `2px solid ${c.accent}`,
-            boxShadow: isDark ? `0 0 20px rgba(255,159,28,0.2)` : theme.shadows.card,
+            border: `2px solid ${p.accent}`,
+            boxShadow: p.shadowAvatar,
           }}
         />
       );
@@ -53,7 +63,7 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
           marginBottom: 12,
           letterSpacing: '0.05em',
           textTransform: 'uppercase',
-          textShadow: isDark ? '0 0 20px rgba(255,159,28,0.15)' : undefined,
+          textShadow: p.flourish ? `0 0 20px ${tint(p.accent, 15)}` : undefined,
         }}>
           {settings.name}
         </h1>
@@ -78,15 +88,15 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
           <a
             href="#projects"
             style={{
-              background: isDark ? `linear-gradient(135deg, ${c.accent}, #E08A0C)` : c.accent,
-              color: isDark ? '#000' : '#fff',
+              background: isDark ? `linear-gradient(135deg, ${p.accent}, ${p.accentHover})` : p.accent,
+              color: p.onAccent,
               padding: '12px 28px',
               borderRadius: theme.radii.sm,
               fontFamily: theme.fonts.sans,
               fontWeight: 600,
               fontSize: '0.95rem',
               textDecoration: 'none',
-              boxShadow: isDark ? `0 0 15px rgba(255,159,28,0.3)` : theme.shadows.card,
+              boxShadow: p.shadowButton,
               transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
             }}
           >
@@ -96,14 +106,14 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
             href={resumeUrl}
             style={{
               background: 'transparent',
-              color: c.accent,
+              color: p.accentInk,
               padding: '12px 28px',
               borderRadius: theme.radii.sm,
               fontFamily: theme.fonts.sans,
               fontWeight: 600,
               fontSize: '0.95rem',
               textDecoration: 'none',
-              border: `1px solid ${c.accent}`,
+              border: `1px solid ${p.accentInk}`,
               transition: `all ${theme.motion.durationFast} ${theme.motion.timingFunction}`,
             }}
           >
@@ -120,7 +130,7 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: fg2, transition: `color ${theme.motion.durationFast}` }}
-              onMouseEnter={e => (e.currentTarget.style.color = c.accent)}
+              onMouseEnter={e => (e.currentTarget.style.color = p.accentInk)}
               onMouseLeave={e => (e.currentTarget.style.color = fg2)}
             >
               <s.icon size={20} />
@@ -135,8 +145,8 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
     <section
       id={anchorId}
       style={{
-        background: isDark ? undefined : bg,
-        backgroundImage: isDark ? bg : undefined,
+        background: p.flourish ? undefined : bg,
+        backgroundImage: p.flourish ? bg : undefined,
         color: fg,
         fontFamily: theme.fonts.sans,
         padding: '80px 24px',
@@ -150,34 +160,23 @@ export default function HeroSection({ data = defaultSectionData.hero, anchorId =
         transition: `all ${theme.motion.durationNormal} ${theme.motion.timingFunction}`,
       }}
     >
-      {isDark && (
+      {p.flourish && (
         <>
           <div style={{
             position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.6,
-            backgroundImage: `radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
-              radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
-              radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
-              radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
-              radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
-              radial-gradient(2px 2px at 20% 90%, rgba(255,159,28,0.5) 0%, transparent 100%),
-              radial-gradient(2px 2px at 80% 15%, rgba(153,204,255,0.5) 0%, transparent 100%),
-              radial-gradient(1.5px 1.5px at 45% 45%, rgba(204,153,255,0.4) 0%, transparent 100%),
-              radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
-              radial-gradient(1.5px 1.5px at 15% 75%, rgba(232,101,90,0.4) 0%, transparent 100%)`,
+            backgroundImage: starfield,
           }} />
           <div style={{
-            position: 'absolute', left: 0, top: 0, bottom: 0, width: 6, zIndex: 2,
-            background: `linear-gradient(180deg, #FF9F1C 0%, #CC99FF 40%, #99CCFF 70%, #E8655A 100%)`,
-            opacity: 0.8,
+            ...p.rail(`linear-gradient(180deg, ${p.accent} 0%, ${p.secondary} 40%, ${p.tertiary} 70%, ${p.highlight} 100%)`, true),
           }} />
           <div style={{
             position: 'absolute', top: '-10%', right: '20%', width: 300, height: 300,
-            background: 'radial-gradient(circle, rgba(255,159,28,0.08) 0%, transparent 70%)',
+            background: `radial-gradient(circle, ${tint(p.accent, 8)} 0%, transparent 70%)`,
             borderRadius: '50%', filter: 'blur(50px)', zIndex: 0, pointerEvents: 'none',
           }} />
           <div style={{
             position: 'absolute', bottom: '5%', left: '15%', width: 250, height: 250,
-            background: 'radial-gradient(circle, rgba(204,153,255,0.08) 0%, transparent 70%)',
+            background: `radial-gradient(circle, ${tint(p.secondary, 8)} 0%, transparent 70%)`,
             borderRadius: '50%', filter: 'blur(40px)', zIndex: 0, pointerEvents: 'none',
           }} />
         </>

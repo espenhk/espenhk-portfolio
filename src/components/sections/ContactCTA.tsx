@@ -15,42 +15,30 @@ function MediumIcon({ size = 18, color = "currentColor" }: { size?: number; colo
 }
 
 export default function ContactCTA({ data = defaultSectionData.contact, anchorId = "contact" }: { data?: ContactData; anchorId?: string }) {
-  const { theme, isDark } = useTheme();
+  const { theme, palette: p } = useTheme();
   const { socials } = useSiteSettings();
+  // Social tiles: icon colour (ink), tile background and edge – all design tokens.
   const links = [
-    { icon: Linkedin, label: "LinkedIn", href: socials.linkedin, color: "#0A66C2" },
-    { icon: Github, label: "GitHub", href: socials.github, color: "#CC99FF" },
-    { icon: MediumIcon, label: "Medium", href: socials.medium, color: "#FF9F1C" },
+    { icon: Linkedin, label: "LinkedIn", href: socials.linkedin, color: p.linkedin, bg: p.linkedinTint, edge: p.linkedinEdge },
+    { icon: Github, label: "GitHub", href: socials.github, color: p.secondaryInk, bg: p.secondaryTint, edge: p.secondaryEdge },
+    { icon: MediumIcon, label: "Medium", href: socials.medium, color: p.accentInk, bg: p.accentTint, edge: p.accentEdge },
   ].filter((l) => l.href);
-  const c = theme.colors;
-  const fg = isDark ? c.textPrimary.dark : c.textPrimary.light;
-  const fg2 = isDark ? c.textSecondary.dark : c.textSecondary.light;
+  const fg = p.fg;
+  const fg2 = p.fg2;
 
   return (
     <section
       id={anchorId}
       style={{
         padding: "80px 24px",
-        backgroundImage: isDark ? "linear-gradient(180deg, #060A18 0%, #0C1030 50%, #060A18 100%)" : undefined,
-        background: isDark ? undefined : c.background.light,
+        backgroundImage: p.flourish ? p.sectionBg : undefined,
+        background: p.flourish ? undefined : p.sectionBg,
         position: "relative",
         overflow: "hidden",
         textAlign: "center",
       }}
     >
-      {isDark && (
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: 6,
-            background: "#FF9F1C",
-            opacity: 0.6,
-          }}
-        />
-      )}
+      {p.flourish && <div style={p.rail(p.accent)} />}
 
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
         <motion.h2
@@ -100,13 +88,13 @@ export default function ContactCTA({ data = defaultSectionData.contact, anchorId
             gap: 10,
             padding: "12px 28px",
             borderRadius: theme.radii.md,
-            background: isDark ? "linear-gradient(135deg, #FF9F1C, #E08A0C)" : "#1A1A2E",
-            color: isDark ? "#0A0E1A" : "#F0EDDF",
+            background: p.ctaBg,
+            color: p.ctaInk,
             fontFamily: theme.fonts.sans,
             fontWeight: 600,
             fontSize: "0.9rem",
             textDecoration: "none",
-            boxShadow: isDark ? "0 0 20px rgba(255,159,28,0.3)" : "0 2px 8px rgba(0,0,0,0.15)",
+            boxShadow: p.shadowCta,
             cursor: "pointer",
           }}
         >
@@ -139,8 +127,8 @@ export default function ContactCTA({ data = defaultSectionData.contact, anchorId
                   width: 42,
                   height: 42,
                   borderRadius: theme.radii.md,
-                  background: isDark ? `${link.color}10` : `${link.color}15`,
-                  border: `1px solid ${isDark ? `${link.color}25` : `${link.color}30`}`,
+                  background: link.bg,
+                  border: `1px solid ${link.edge}`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",

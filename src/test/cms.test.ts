@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { clampStat, normalizeDoc, normalizeHeroParts, visibleSections, moveSection } from "@/cms/resolve";
+import { clampStat, normalizeCategoryColor, normalizeDoc, normalizeHeroParts, visibleSections, moveSection } from "@/cms/resolve";
+import { resolveCategoryColor } from "@/design-system/categoryColors";
+import { resolvePalette } from "@/design-system/palette";
+import { themes } from "@/config/themes";
 import { makeDefaultDoc } from "@/cms/defaults";
 import { configToOverrides, resolveProjects } from "@/lib/resolveProjects";
 
@@ -44,5 +47,36 @@ describe("cms", () => {
     expect(out.slice(0, 2)).toEqual([{ key: "buttons", visible: true }, { key: "nowPlaying", visible: false }]);
     expect(out.map(p => p.key).sort()).toEqual(["avatar", "bio", "buttons", "name", "nowPlaying", "socials", "tagline"]);
     expect(normalizeHeroParts(undefined).map(p => p.key)).toEqual(["avatar", "name", "tagline", "nowPlaying", "bio", "buttons", "socials"]);
+  });
+
+  it("stores stats category colours as design-system token names", () => {
+    // legacy hex values (Starfleet v2 at the time) become token names, case-insensitively
+    expect(normalizeCategoryColor("#99CCFF")).toBe("tertiary");
+    expect(normalizeCategoryColor("#cc99ff")).toBe("secondary");
+    expect(normalizeCategoryColor("#FF9F1C")).toBe("accent");
+    // token names and custom colours are kept; missing → a sensible default
+    expect(normalizeCategoryColor("highlight")).toBe("highlight");
+    expect(normalizeCategoryColor("#123456")).toBe("#123456");
+    expect(normalizeCategoryColor(undefined)).toBe("tertiary");
+
+    const stored = makeDefaultDoc();
+    const stats = stored.sections.find(s => s.type === "stats")!;
+    (stats.data as any).categories = [{ key: "a", label: "A", color: "#99CCFF" }, { key: "b", label: "B", color: "#abcdef" }];
+    const normalized = normalizeDoc(JSON.parse(JSON.stringify(stored)));
+    const cats = (normalized.sections.find(s => s.type === "stats")!.data as any).categories;
+    expect(cats.map((c: any) => c.color)).toEqual(["tertiary", "#abcdef"]);
+  });
+
+  it("defaults use token names", () => {
+    const stats = makeDefaultDoc().sections.find(s => s.type === "stats")!;
+    expect((stats.data as any).categories.map((c: any) => c.color)).toEqual(["tertiary", "secondary", "accent"]);
+  });
+
+  it("resolves category colours through the active theme", () => {
+    const starfleet = resolvePalette(themes.find(t => t.id === "starfleet")!, true);
+    const cupertino = resolvePalette(themes.find(t => t.id === "cupertino")!, true);
+    expect(resolveCategoryColor("tertiary", starfleet)).toBe("var(--tertiary)");
+    expect(resolveCategoryColor("tertiary", cupertino)).toBe(themes.find(t => t.id === "cupertino")!.colors.tertiary);
+    expect(resolveCategoryColor("#abcdef", starfleet)).toBe("#abcdef");
   });
 });

@@ -13,7 +13,12 @@ export interface HeroData {
   cvButtonLabel: string;
 }
 
-export interface StatsCategory { key: string; label: string; color: string }
+export interface StatsCategory {
+  key: string;
+  label: string;
+  /** A design-system token name (see CATEGORY_TOKENS, e.g. "tertiary") or a custom CSS colour. */
+  color: string;
+}
 export interface StatsData {
   heading: string;
   categories: StatsCategory[];

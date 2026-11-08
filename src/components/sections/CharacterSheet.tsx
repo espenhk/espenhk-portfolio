@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { defaultSectionData } from '@/cms/defaults';
 import type { StatsData } from '@/cms/types';
 import { tint } from '@/design-system/palette';
+import { resolveCategoryColor } from '@/design-system/categoryColors';
 
 type Stat = StatsData['stats'][number];
 
@@ -76,7 +77,7 @@ export default function CharacterSheetFull({ data = defaultSectionData.stats, an
   const grouped = data.categories.map(cat => ({
     key: cat.key,
     label: cat.label,
-    color: cat.color,
+    color: resolveCategoryColor(cat.color, p),
     stats: data.stats.filter(s => s.category === cat.key),
   }));
 

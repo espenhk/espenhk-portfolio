@@ -14,7 +14,8 @@
 - Text, icons and control borders use the `-ink` tokens (`--accent-ink`, `--secondary-ink`, …); `accent`/`secondary`/`tertiary`/`highlight` are surfaces only — the flat colours fail WCAG contrast as text in light mode.
 - Text on an accent button uses `--on-accent`, nav items `--nav-ink` — these are the contrast-checked pairs from the design system.
 - Starfleet flourishes (rails, starfield, orange glow, stardate, deep-space gradients) render only when `palette.flourish` (Starfleet + dark); other themes take values from their own `Theme` object — keeps the alternative themes from inheriting Starfleet's look.
-- Light/dark switch via `data-theme` on `<html>` (set by `ThemeContext`, plus `.dark` for shadcn); use `tokens.generated.ts` only where CSS variables cannot work (framer-motion colour targets, SVG fill attributes, values stored in the CMS).
+- Light/dark switch via `data-theme` on `<html>` (set by `ThemeContext`, plus `.dark` for shadcn); use `tokens.generated.ts` only where CSS variables cannot work (framer-motion colour targets, SVG fill attributes, the browser's `theme-color`).
+- The CMS stores design colours as token names (`"tertiary"`, see `src/design-system/categoryColors.ts`) and resolves them at render time; `normalizeDoc` maps old stored hex values to names — so design-system changes reach published content without re-saving it.
 - CI (`.github/workflows/ci.yml`) runs build, tests, token regeneration and `bun run tokens:contrast` on every PR and push to `main` — Lovable commits straight to `main` untested, so CI is what notices when its changes break the rules.
 - Install with `./scripts/install-deps.sh`, never by committing a rewritten `bun.lock` — the lockfile belongs to Lovable and points at its private npm cache.
 - Never run `/design-sync` for Starfleet — it goes code → design system and would lock the system read-only; the flow is design system → generated code → GitHub → Lovable.

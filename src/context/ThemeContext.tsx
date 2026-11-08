@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import { themes, type Theme } from '@/config/themes';
 import { resolvePalette, type Palette } from '@/design-system/palette';
+import { tokens } from '@/design-system/starfleet/tokens.generated';
 
 interface ThemeContextValue {
   theme: Theme;
@@ -48,7 +49,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     html.setAttribute('data-theme', isDark ? 'dark' : 'light');
     html.setAttribute('data-site-theme', theme.id);
     html.classList.toggle('dark', isDark);
-  }, [isDark, theme.id]);
+
+    // Page ground behind the app (overscroll, gaps) and the browser UI colour follow the
+    // active site theme: Starfleet from its tokens, other themes from their own Theme object.
+    const mode = isDark ? 'dark' : 'light';
+    const isStarfleet = theme.id === 'starfleet';
+    if (isStarfleet) html.style.removeProperty('--site-ground');
+    else html.style.setProperty('--site-ground', theme.colors.background[mode]);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    meta?.setAttribute('content', isStarfleet ? tokens.color[mode]['ground-deep'] : theme.colors.background[mode]);
+  }, [isDark, theme]);
 
   const palette = useMemo(() => resolvePalette(theme, isDark), [theme, isDark]);
 

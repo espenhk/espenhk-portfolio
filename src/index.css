@@ -61,7 +61,8 @@
 
   html, body {
     @apply text-foreground;
-    background-color: var(--ground-deep);
+    /* --site-ground is set by ThemeContext for the non-Starfleet site themes */
+    background-color: var(--site-ground, var(--ground-deep));
   }
 }
 

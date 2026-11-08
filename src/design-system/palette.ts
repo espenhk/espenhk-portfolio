@@ -13,13 +13,27 @@ import { tokens } from './starfleet/tokens.generated';
 export const tint = (color: string, percent: number) =>
   `color-mix(in srgb, ${color} ${percent}%, transparent)`;
 
-/** Concrete rgba() from a hex colour – for framer-motion targets, which cannot interpolate var(). */ // design-tokens:allow (builds rgba from a token value)
-export function hexAlpha(hex: string, alpha: number): string {
-  const h = hex.replace('#', '');
-  const full = h.length <= 4 ? h.split('').map(ch => ch + ch).join('') : h;
-  const [r, g, b] = [0, 2, 4].map(i => parseInt(full.slice(i, i + 2), 16));
-  return `rgba(${r},${g},${b},${alpha})`; // design-tokens:allow (builds rgba from a token value)
+// design-tokens:allow-start — this helper builds rgba() from token values
+/**
+ * Concrete rgba() from a concrete colour (hex or rgb()/rgba()) – for framer-motion targets,
+ * which cannot interpolate var() or color-mix(). Anything else is returned unchanged
+ * (opaque, but never `rgba(NaN…)`).
+ */
+export function hexAlpha(color: string, alpha: number): string {
+  const c = color.trim();
+  let rgb: number[] | undefined;
+  const hex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.exec(c);
+  if (hex) {
+    const h = hex[1].length <= 4 ? hex[1].split('').map(ch => ch + ch).join('') : hex[1];
+    rgb = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
+  } else {
+    const fn = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(c);
+    if (fn) rgb = [fn[1], fn[2], fn[3]].map(Number);
+  }
+  if (!rgb || rgb.some(n => Number.isNaN(n))) return color;
+  return `rgba(${rgb.join(',')},${alpha})`;
 }
+// design-tokens:allow-end
 
 const v = (name: string) => `var(--${name})`;
 

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { themes } from '@/config/themes';
 import { tint, inkFor } from '@/design-system/palette';
 import { languageColors } from '@/data/languageColors';
-import { tokens } from '@/design-system/starfleet/tokens.generated';
+import { tokens } from '@/design-system/starfleet/resolved';
 
 /* ── tiny inline previews of site components ────────────── */
 

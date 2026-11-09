@@ -1,4 +1,4 @@
-/* Design tokens from the Claude Design system «Starfleet» (generated – run `bun run tokens`). */
+/* Design tokens from the Claude Design system «Starfleet» (synced by design-sync). */
 @import './design-system/starfleet/tokens.css';
 
 @tailwind base;

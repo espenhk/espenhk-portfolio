@@ -1,15 +1,14 @@
 /**
  * Guards that keep the Claude Design system «Starfleet» the single source of truth.
  * See AGENTS.md → "Design system". CI runs this on every push (.github/workflows/ci.yml).
+ * tokens.json / tokens.css drift and WCAG contrast are guarded by src/test/test_starfleet_tokens.py (design-sync).
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { generate, PATHS, type TokensJson } from '../../scripts/build-design-tokens';
-import { checkContrast } from '../../scripts/check-contrast';
+import { tokens, tokenThemes } from '../design-system/starfleet/resolved';
 
 const ROOT = resolve(__dirname, '../..');
-const tokensJson = JSON.parse(readFileSync(PATHS.json, 'utf8')) as TokensJson;
 
 // ---------------------------------------------------------------------------
 // 1. No colour literals anywhere in src/
@@ -22,7 +21,7 @@ const tokensJson = JSON.parse(readFileSync(PATHS.json, 'utf8')) as TokensJson;
  * `design-tokens:allow-start` … `design-tokens:allow-end` block over adding a path here.
  */
 const ALLOWED: { path: string; reason: string; kinds?: 'tailwind' }[] = [
-  { path: 'src/design-system/starfleet/', reason: 'generated from tokens.json (bun run tokens)' },
+  { path: 'src/design-system/starfleet/', reason: 'verbatim design-system copy and its design-sync output' },
   { path: 'src/config/themes/', reason: "the other site themes' own palettes and their neutral fallbacks" },
   { path: 'src/data/languageColors.ts', reason: "GitHub's language colours (data, not design)" },
   { path: 'src/data/brandColors.ts', reason: 'third-party brand colours (data, not design)' },
@@ -125,56 +124,28 @@ describe('design tokens: no colour literals', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 2. Generated files match tokens.json
+// 2. Runtime tokens (resolved.ts) – read straight from tokens.json
 // ---------------------------------------------------------------------------
 
-describe('design tokens: generated files are in sync', () => {
-  const { css, ts } = generate(tokensJson);
-
-  it('tokens.css matches `bun run tokens` output', () => {
-    expect(readFileSync(PATHS.css, 'utf8'), 'tokens.css is stale or hand-edited – run `bun run tokens`').toBe(css);
+describe('design tokens: resolved.ts', () => {
+  it('has both themes with the same colour tokens', () => {
+    expect([...tokenThemes]).toEqual(['light', 'dark']);
+    expect(Object.keys(tokens.color.dark)).toEqual(Object.keys(tokens.color.light));
+    expect(tokens.color.light).toHaveProperty('accent-ink');
   });
 
-  it('tokens.generated.ts matches `bun run tokens` output', () => {
-    expect(readFileSync(PATHS.ts, 'utf8'), 'tokens.generated.ts is stale or hand-edited – run `bun run tokens`').toBe(ts);
+  it('resolves every alias to a concrete value', () => {
+    const values = [
+      ...Object.values(tokens.color).flatMap(Object.values),
+      ...Object.values(tokens.shadow).flatMap(Object.values),
+      ...Object.values(tokens.length),
+      ...Object.values(tokens.opacity),
+    ];
+    expect(values.length).toBeGreaterThan(50);
+    expect(values.filter(v => v.includes('{') || v.includes('var('))).toEqual([]);
   });
 
-  it('generator rejects unknown aliases, duplicates and invalid values', () => {
-    const base = structuredClone(tokensJson);
-    const withTokens = (extra: { name: string; value: unknown }[]) => {
-      const j = structuredClone(base);
-      j.color.tokens.push(...(extra as TokensJson['color']['tokens']));
-      return j;
-    };
-    expect(() => generate(withTokens([{ name: 'x', value: '{does-not-exist}' }]))).toThrow(/unknown alias/);
-    expect(() => generate(withTokens([{ name: 'accent', value: '#000000' }]))).toThrow(/duplicate/);
-    expect(() => generate(withTokens([{ name: 'x', value: 'banana' }]))).toThrow(/invalid color/);
-    expect(() => generate(withTokens([{ name: 'x', value: { light: '#fff', sepia: '#000' } }]))).toThrow(/unknown theme/);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 3. Contrast (WCAG 2.x) – rules live in scripts/check-contrast.ts, shared with the sync skill
-// ---------------------------------------------------------------------------
-
-describe('design tokens: contrast', () => {
-  const results = checkContrast(tokensJson);
-
-  it('checks the -ink tokens in both themes', () => {
-    for (const theme of ['light', 'dark']) {
-      const inks = results.filter(r => r.theme === theme).map(r => r.token);
-      expect(inks).toEqual(expect.arrayContaining(['accent-ink', 'secondary-ink', 'tertiary-ink', 'highlight-ink', 'on-accent']));
-    }
-  });
-
-  it.each(results.map(r => [`${r.theme} ${r.token} on ${r.on}`, r] as const))('%s ≥ 4.5:1', (_label, r) => {
-    expect(r.ratio, `${r.token} ${r.fg} is ${r.ratio.toFixed(2)}:1 on ${r.on} (${r.theme})`).toBeGreaterThanOrEqual(r.min);
-  });
-
-  it('flags a token that breaks contrast', () => {
-    const j = structuredClone(tokensJson);
-    const ink = j.color.tokens.find(t => t.name === 'accent-ink')!;
-    ink.value = { light: '#ff9f1c', dark: '{accent}' };
-    expect(checkContrast(j).some(r => r.token === 'accent-ink' && !r.ok)).toBe(true);
+  it('exposes the font families', () => {
+    expect(Object.keys(tokens.font)).toEqual(expect.arrayContaining(['display', 'sans', 'mono']));
   });
 });

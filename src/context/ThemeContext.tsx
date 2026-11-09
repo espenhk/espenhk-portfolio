@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import { themes, type Theme } from '@/config/themes';
 import { resolvePalette, type Palette } from '@/design-system/palette';
-import { tokens } from '@/design-system/starfleet/tokens.generated';
+import { tokens } from '@/design-system/starfleet/resolved';
 
 interface ThemeContextValue {
   theme: Theme;

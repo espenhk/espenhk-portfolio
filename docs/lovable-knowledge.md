@@ -10,7 +10,7 @@ This project's visual design (colours, fonts, spacing, radii, shadows) comes fro
 
 Rules:
 
-1. **Never edit these files:** `src/design-system/starfleet/tokens.json`, `src/design-system/starfleet/tokens.css`, `src/design-system/starfleet/tokens.generated.ts`. They are generated from the design system. A test (`src/test/design-tokens.test.ts`) fails if they are hand-edited.
+1. **Never edit these files:** `src/design-system/starfleet/tokens.json`, `src/design-system/starfleet/tokens.css`, `src/design-system/starfleet/design-sync.json`. They are synced from the design system. A test (`src/test/test_starfleet_tokens.py`) fails if they are hand-edited.
 2. **No colour literals anywhere in `src/`.** Do not write hex (`#FF9F1C`), `rgb()`/`hsl()`/`oklch()` values, named colours (`'white'`, `'red'`) or Tailwind palette classes (`text-white`, `bg-red-500`, `border-gray-200`). Use CSS variables from the tokens (`var(--accent)`, `var(--surface)`, `var(--card-edge)` …), normally through `const { palette } = useTheme()` or the theme object. The test fails on literals.
 3. **Surfaces and ink are different.** `accent`, `secondary`, `tertiary` and `highlight` are for surfaces only (buttons, rails, bars, tinted backgrounds). Text, icons and control borders use the `-ink` versions: `--accent-ink`, `--secondary-ink`, `--tertiary-ink`, `--highlight-ink`. Text on an orange button uses `--on-accent`; navigation text uses `--nav-ink`.
 4. **Fonts, spacing, radii and shadows** also come from tokens (`--font-display`, `--font-sans`, `--font-mono`, `--space-*`, `--radius-*`, `--shadow-*`, `--rail-width` …). Don't add new font families or hard-coded shadows.

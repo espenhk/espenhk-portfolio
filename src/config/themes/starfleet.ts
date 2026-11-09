@@ -3,7 +3,7 @@ import type { Theme } from './types';
 /**
  * Starfleet is driven entirely by the Claude Design system «Starfleet»:
  * every value is a CSS variable from src/design-system/starfleet/tokens.css
- * (generated from tokens.json – run `bun run tokens`). Light/dark switch via
+ * (synced from tokens.json by design-sync). Light/dark switch via
  * `data-theme` on <html>, so the {light, dark} pairs point at the same variable.
  */
 const v = (name: string) => `var(--${name})`;

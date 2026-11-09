@@ -10,7 +10,7 @@ import { clampStat, STAT_MAX, STAT_MIN } from '@/cms/resolve';
 import { AreaField, Field, LinesField, ListEditor, NumberField, TextField, ToggleField } from './fields';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { tokens } from '@/design-system/starfleet/tokens.generated';
+import { tokens } from '@/design-system/starfleet/resolved';
 import { CATEGORY_TOKENS, isCategoryToken } from '@/design-system/categoryColors';
 import { supabase } from '@/integrations/supabase/client';
 import { CMS_BUCKET, useFileUrl } from '@/cms/api';

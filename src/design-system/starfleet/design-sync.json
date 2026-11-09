@@ -1,0 +1,77 @@
+{
+  "_note": "Written by the design-sync skill. Do not edit; re-run the sync instead.",
+  "system": "Starfleet",
+  "artifact": "https://claude.ai/artifact/FA1pGo3SvMXS6nvMmRqpa9",
+  "artifact_version": "1794089613-6bd2",
+  "tokens_version": 2,
+  "sha256": "e551ebdfc93136c65991e7fc42e1c811cd0c0fab6d69aceb1d2bc9e7f8538043",
+  "synced": "2026-11-09",
+  "generator_version": 1,
+  "prefers_dark": false,
+  "outputs": [
+    {
+      "kind": "css",
+      "path": "tokens.css"
+    }
+  ],
+  "contrast": {
+    "base": "background",
+    "min": 4.5,
+    "auto": true,
+    "pairs": [
+      [
+        "text-primary",
+        "background"
+      ],
+      [
+        "text-primary",
+        "surface"
+      ],
+      [
+        "text-secondary",
+        "background"
+      ],
+      [
+        "text-secondary",
+        "surface"
+      ],
+      [
+        "accent-ink",
+        "surface"
+      ],
+      [
+        "accent-ink",
+        "accent-tint"
+      ],
+      [
+        "secondary-ink",
+        "surface"
+      ],
+      [
+        "tertiary-ink",
+        "surface"
+      ],
+      [
+        "highlight-ink",
+        "surface"
+      ],
+      [
+        "success",
+        "background"
+      ],
+      [
+        "warning",
+        "background"
+      ],
+      [
+        "error",
+        "background"
+      ],
+      [
+        "stat-label",
+        "stat-panel"
+      ]
+    ],
+    "waive": []
+  }
+}

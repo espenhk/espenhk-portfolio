@@ -1,6 +1,6 @@
 import type { Theme } from '@/config/themes/types';
 import { legacyNeutrals as N } from '@/config/themes/shared';
-import { tokens } from './starfleet/tokens.generated';
+import { tokens } from './starfleet/resolved';
 
 /**
  * One place that maps the active theme + mode to the semantic slots components use.

@@ -1,6 +1,6 @@
 # Build + tests on every PR and on every push to main.
 # Lovable commits straight to main without running tests, so this is the guard that catches
-# colour literals, hand-edited design tokens and broken contrast (src/test/design-tokens.test.ts).
+# colour literals, hand-edited design tokens and broken contrast (src/test/design-tokens.test.ts, src/test/test_starfleet_tokens.py).
 name: CI
 
 # Skip runs when only files that can't affect the build or tests changed (docs, plans, skills,
@@ -61,14 +61,10 @@ jobs:
       - name: Install dependencies
         run: ./scripts/install-deps.sh
 
-      - name: Design tokens are generated from tokens.json
-        run: |
-          bun run tokens
-          git diff --exit-code -- src/design-system/starfleet \
-            || { echo "::error::tokens.css / tokens.generated.ts are out of date or hand-edited. Run 'bun run tokens' (and never edit them by hand)."; exit 1; }
-
-      - name: Contrast
-        run: bun run tokens:contrast
+      # design-sync drift test (standard-library Python): tokens.json is the verbatim design-system
+      # copy, tokens.css matches what the generator makes from it, and every contrast pair passes.
+      - name: Design tokens match the design system (drift + contrast)
+        run: bun run tokens:test
 
       - name: Build
         run: bun run build

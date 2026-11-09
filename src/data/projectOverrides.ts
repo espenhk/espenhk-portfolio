@@ -12,7 +12,8 @@ export const projectOverrides: ProjectOverride[] = [
   { repoName: "gamer-ai", featured: true, sortOrder: 2 },
   { repoName: "tromsoflaggfotball", featured: true, sortOrder: 3 },
   { repoName: "espenhk-hobby-projects", featured: true, sortOrder: 4 },
-  { repoName: "random-twitch-clip", featured: true, sortOrder: 5 },
+  { repoName: "season-scheduler", featured: true, sortOrder: 5 },
+  { repoName: "random-twitch-clip", featured: true, sortOrder: 6 },
   // === HIDDEN ===
   { repoName: "bicep-training", hidden: true },
   { repoName: "espenhk", hidden: true },
